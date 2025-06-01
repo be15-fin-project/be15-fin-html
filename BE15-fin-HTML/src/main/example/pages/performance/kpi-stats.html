@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KPI</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 48px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 32px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .filters select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .chart-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .chart-card {
+      background: #f9fbfe;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.03);
+    }
+
+    .chart-card h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .ranking {
+      background: #f6f8fc;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .ranking ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .ranking li {
+      padding: 6px 0;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .material-icons {
+      font-size: 18px;
+      color: #395886;
+    }
+  </style>
+</head>
+<body>
+
+<main class="main">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+    <div class="container">
+      <h1>KPI 통계 대시보드</h1>
+
+      <div class="filters">
+        <select>
+          <option>2025년</option>
+          <option>2024년</option>
+        </select>
+        <select>
+          <option>1분기</option>
+          <option>2분기</option>
+          <option>3분기</option>
+          <option>4분기</option>
+        </select>
+        <select>
+          <option>전체 팀</option>
+          <option>개발팀</option>
+          <option>영업팀</option>
+        </select>
+      </div>
+
+      <div class="chart-section">
+        <div class="chart-card">
+          <h3>개인 KPI 평균 달성률</h3>
+          <canvas id="personalKPIChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>팀 KPI 평균 달성률</h3>
+          <canvas id="teamKPIChart"></canvas>
+        </div>
+      </div>
+
+      <div class="ranking">
+        <h3>우수 KPI 달성자</h3>
+        <ul>
+          <li><span class="material-icons">check_circle</span> 김혜진 - 고객 유지율 95%</li>
+          <li><span class="material-icons">whatshot</span> 이준호 - 신규 확보율 140%</li>
+          <li><span class="material-icons">rocket_launch</span> 박민지 - 전환율 개선 120%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+<script>
+  const personalKPIChart = new Chart(
+          document.getElementById('personalKPIChart'), {
+            type: 'bar',
+            data: {
+              labels: ['김영희', '이준호', '박민지', '최지훈'],
+              datasets: [{
+                label: '달성률 (%)',
+                data: [85, 95, 100, 70],
+                backgroundColor: '#395886'
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: { beginAtZero: true, max: 120 }
+              }
+            }
+          }
+  );
+
+  const teamKPIChart = new Chart(
+          document.getElementById('teamKPIChart'), {
+            type: 'line',
+            data: {
+              labels: ['1월', '2월', '3월', '4월'],
+              datasets: [{
+                label: '달성률 평균',
+                data: [78, 82, 88, 91],
+                borderColor: '#395886',
+                backgroundColor: 'rgba(57,88,134,0.1)',
+                fill: true,
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: { beginAtZero: true, max: 100 }
+              }
+            }
+          }
+  );
+</script>
+</body>
+</html>

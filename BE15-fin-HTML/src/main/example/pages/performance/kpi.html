@@ -6,8 +6,79 @@
     <title>KPI</title>
     <link rel="stylesheet" href="../../assets/style.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <script type="module" src="../../assets/common.js"></script>
     <style>
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 32px;
+        }
+
+        .kpi-box {
+            border: 1px solid #d8dee9;
+            border-radius: 12px;
+            padding: 24px;
+            background: #f9fbfe;
+            margin-bottom: 24px;
+        }
+
+        .kpi-box p {
+            margin-bottom: 12px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .kpi-box textarea {
+            width: 100%;
+            height: 80px;
+            border: 1px solid #d0d7e2;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .actions button {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .approve {
+            background: #395886;
+            color: #fff;
+        }
+
+        .reject {
+            background: #fff;
+            color: #d03c3c;
+            border: 1px solid #d03c3c;
+        }
+
+        .cancel {
+            background: #e5e8eb;
+            color: #555;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 40px 0 16px;
+            border-left: 4px solid #395886;
+            padding-left: 12px;
+        }
     </style>
 </head>
 <body>
@@ -16,7 +87,32 @@
     <div id="sidebar-container"></div>
 
     <div class="main-content">
-        <h1>KPI</h1>
+        <div class="container">
+            <h1><span class="material-icons-outlined" style="vertical-align: middle; margin-right: 8px;">assignment_turned_in</span>KPI 승인/반려 관리</h1>
+
+            <div class="section-title">개인 KPI 승인 요청</div>
+            <div class="kpi-box">
+                <p><strong>사원:</strong> 홍길동<br><strong>목표:</strong> 월 매출 1,000만원<br><strong>단위:</strong> 만원<br><strong>진척도:</strong> 70%</p>
+                <textarea placeholder="반려 사유를 입력하세요"></textarea>
+                <div class="actions">
+                    <button class="approve">승인</button>
+                    <button class="reject">반려</button>
+                    <button class="cancel">취소</button>
+                </div>
+            </div>
+
+            <div class="section-title">팀 KPI 승인 요청</div>
+            <div class="kpi-box">
+                <p><strong>팀장:</strong> 김민수<br><strong>목표:</strong> 분기 고객 만족도 95% 달성<br><strong>단위:</strong> %<br><strong>진척도:</strong> 90%</p>
+                <textarea placeholder="반려 사유를 입력하세요"></textarea>
+                <div class="actions">
+                    <button class="approve">승인</button>
+                    <button class="reject">반려</button>
+                    <button class="cancel">취소</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </main>
 

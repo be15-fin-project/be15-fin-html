@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>평가 내역 조회</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .filters select {
+      appearance: none;
+      padding: 8px 14px;
+      border: 1px solid #d3d7de;
+      border-radius: 8px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath fill='%23999' d='M4 6l4 4 4-4z'/%3E%3C/svg%3E") no-repeat right 10px center;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid #e5e8ec;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #f4f6fa;
+      font-weight: 600;
+    }
+
+    .avatar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .avatar img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ccc;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .material-icons {
+      font-size: 20px;
+      color: #42526e;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+
+    .summary-bar {
+      display: flex;
+      gap: 40px;
+      padding: 18px 24px;
+      border: 1px solid #e2e5ed;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e1e1e;
+    }
+
+    .summary-item .material-icons {
+      font-size: 18px;
+      color: #395886;
+    }
+  </style>
+</head>
+<body>
+
+<main class="main">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+    <div class="container">
+      <h1>평가 내역 조회</h1>
+
+      <div class="filters">
+        <select><option>2025년</option><option>2024년</option></select>
+        <select><option>1분기</option><option>2분기</option><option>3분기</option><option>4분기</option></select>
+        <select><option>전체 팀</option><option>개발팀</option><option>영업팀</option></select>
+        <select><option>전체 평가</option><option>동료 평가</option><option>하향 평가</option><option>조직 평가</option></select>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>평가자</th>
+          <th>피평가자</th>
+          <th>평가 종류</th>
+          <th>점수</th>
+          <th>AI 요약</th>
+          <th>상세 보기</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><div class="avatar"><img src="https://via.placeholder.com/28" alt="">김영수</div></td>
+          <td><div class="avatar"><img src="https://via.placeholder.com/28" alt="">이지은</div></td>
+          <td>동료 평가</td>
+          <td>88</td>
+          <td><span class="material-icons">summarize</span></td>
+          <td><span class="material-icons">visibility</span></td>
+        </tr>
+        <tr>
+          <td><div class="avatar"><img src="https://via.placeholder.com/28" alt="">김영수</div></td>
+          <td><div class="avatar"><img src="https://via.placeholder.com/28" alt="">홍길동</div></td>
+          <td>하향 평가</td>
+          <td>92</td>
+          <td><span class="material-icons">summarize</span></td>
+          <td><span class="material-icons">visibility</span></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="summary-bar">
+        <div class="summary-item">
+          <span class="material-icons">insights</span>
+          평균 점수: <strong>90.2</strong>
+        </div>
+        <div class="summary-item">
+          <span class="material-icons">bar_chart</span>
+          최고 점수자: <strong>홍길동</strong>
+        </div>
+        <div class="summary-item">
+          <span class="material-icons">leaderboard</span>
+          최저 점수자: <strong>이지은</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+</body>
+</html>
