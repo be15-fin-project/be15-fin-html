@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>근태 관리</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+    h2 {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(230px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+    .card p {
+      font-size: 22px;
+      font-weight: 600;
+      color: #007aff;
+    }
+  </style>
+</head>
+<body>
+
+<main class="main">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+
+    <div class="container">
+      <h2>📊 이번 달 근태 요약</h2>
+      <div class="summary-grid">
+        <div class="card">
+          <h3>근무일수</h3>
+          <p>20일</p>
+        </div>
+        <div class="card">
+          <h3>총 근무시간</h3>
+          <p>160시간</p>
+        </div>
+        <div class="card">
+          <h3>연장/야간 근무</h3>
+          <p>12시간</p>
+        </div>
+        <div class="card">
+          <h3>초과 휴일 근무</h3>
+          <p>1일</p>
+        </div>
+        <div class="card">
+          <h3>외근 일수</h3>
+          <p>3일</p>
+        </div>
+        <div class="card">
+          <h3>출장 일수</h3>
+          <p>2일</p>
+        </div>
+        <div class="card">
+          <h3>잔여 연차</h3>
+          <p>5일</p>
+        </div>
+        <div class="card">
+          <h3>잔여 반차</h3>
+          <p>2회</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+</body>
+</html>

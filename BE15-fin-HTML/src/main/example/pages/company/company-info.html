@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회사 정보</title>
+    <link rel="stylesheet" href="../../assets/style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+        :root {
+            --main-color: #395886;
+            --gray-100: #f7f9fc;
+            --gray-300: #d7dce5;
+            --gray-500: #9aa6be;
+            --font-color: #222;
+            --label-color: #555;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .main {
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 60px 80px;
+        }
+
+        .profile-header {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 36px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 40px;
+            border: 1px solid var(--gray-300);
+            position: relative;
+        }
+
+        .profile-icon {
+            background-color: var(--gray-500);
+            color: white;
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+        }
+
+        .profile-info h2 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .profile-info p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .change-cover {
+            position: absolute;
+            top: 52px;
+            right: 16px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #395886;
+            cursor: pointer;
+            gap: 4px;
+            padding: 6px 10px;
+            background-color: #f3f4f9;
+            border: 1px solid #ccd3e0;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+        .change-cover:hover {
+            background-color: #e7ebf2;
+        }
+
+        .company-info-card {
+            background-color: #fff;
+            border: 1px solid var(--gray-300);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .company-info-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 32px;
+            color: var(--font-color);
+        }
+
+        .company-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .form-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-item label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--label-color);
+            margin-bottom: 6px;
+        }
+
+        .form-item input,
+        .form-item select {
+            padding: 13px 14px;
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #fff;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-item input:focus,
+        .form-item select:focus {
+            border-color: var(--main-color);
+            outline: none;
+        }
+
+        .form-submit {
+            margin-top: 40px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .submit-btn {
+            background-color: var(--main-color);
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #2e466f;
+        }
+    </style>
+</head>
+<body>
+<main class="main">
+    <div id="sidebar-container"></div>
+    <div class="main-content">
+        <div class="profile-header">
+            <div class="profile-icon">
+                <span class="material-icons">apartment</span>
+                <div class="change-cover">
+                    <span class="material-icons" style="vertical-align: middle;">photo_camera</span>
+                    커버 사진 변경
+                </div>
+            </div>
+            <div class="profile-info">
+                <h2>회사</h2>
+                <p>대표 정유진 · 구성원 6명</p>
+            </div>
+        </div>
+
+        <section class="company-info-card">
+            <h3 class="company-info-title">회사 기본 정보</h3>
+            <form class="company-form">
+                <div class="company-form-grid">
+                    <div class="form-item">
+                        <label for="company-name">회사명</label>
+                        <input type="text" id="company-name" placeholder="예: LinkUp Inc." />
+                    </div>
+                    <div class="form-item">
+                        <label for="ceo">대표자</label>
+                        <select id="ceo">
+                            <option selected>정유진</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label for="founded">설립일</label>
+                        <input type="date" id="founded" />
+                    </div>
+                    <div class="form-item">
+                        <label for="biznum">사업자등록번호</label>
+                        <input type="text" id="biznum" placeholder="예: 123-45-67890" />
+                    </div>
+                    <div class="form-item">
+                        <label for="address">주소</label>
+                        <input type="text" id="address" placeholder="예: 서울시 성동구 왕십리로 222" />
+                    </div>
+                    <div class="form-item">
+                        <label for="email">이메일</label>
+                        <input type="email" id="email" placeholder="예: hello@linkup.co.kr" />
+                    </div>
+                    <div class="form-item">
+                        <label for="phone">대표 전화번호</label>
+                        <input type="tel" id="phone" placeholder="예: 02-123-4567" />
+                    </div>
+                    <div class="form-item">
+                        <label for="salary-day">월급일</label>
+                        <input type="number" id="salary-day" min="1" max="31" placeholder="예: 25" />
+                    </div>
+                    <div class="form-item">
+                        <label for="work-start">출근 시간</label>
+                        <input type="time" id="work-start" />
+                    </div>
+                    <div class="form-item">
+                        <label for="work-end">퇴근 시간</label>
+                        <input type="time" id="work-end" />
+                    </div>
+                </div>
+
+                <div class="form-submit">
+                    <button type="submit" class="submit-btn">저장하기</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+<script>
+    const editBtn = document.querySelector('.btn-edit');
+    const saveBtn = document.querySelector('.btn-save');
+    const cancelBtn = document.querySelector('.btn-cancel');
+    const inputs = document.querySelectorAll('input');
+
+    function toggleEditMode() {
+        inputs.forEach(input => input.removeAttribute('readonly'));
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
+    }
+
+    function cancelEdit() {
+        window.location.reload();
+    }
+
+    function saveCompanyInfo() {
+        alert('저장되었습니다.');
+        inputs.forEach(input => input.setAttribute('readonly', true));
+        editBtn.style.display = 'inline-block';
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+    }
+</script>
+</body>
+</html>

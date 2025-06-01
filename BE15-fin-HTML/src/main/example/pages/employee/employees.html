@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사원 정보</title>
+    <link rel="stylesheet" href="../../assets/style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+        .section-card {
+            background-color: #fff;
+            border: 1px solid #d7dce5;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #222;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar select,
+        .filter-bar input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .employee-table th,
+        .employee-table td {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .employee-table th {
+            background-color: #f9fafb;
+            color: #444;
+        }
+
+        .btn-detail {
+            background-color: #395886;
+            color: #fff;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main">
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        <h1>사원 정보</h1>
+
+        <div class="section-card">
+            <div class="section-title">사원 목록 및 상세 조회</div>
+            <div class="filter-bar">
+                <select><option>부서 전체</option></select>
+                <select><option>직위 전체</option></select>
+                <select><option>권한 전체</option></select>
+                <input type="date" placeholder="입사일 시작" />
+                <input type="date" placeholder="입사일 종료" />
+                <button class="btn-detail">검색</button>
+            </div>
+            <table class="employee-table">
+                <thead>
+                <tr>
+                    <th>사번</th>
+                    <th>이름</th>
+                    <th>부서</th>
+                    <th>직위</th>
+                    <th>입사일</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>2024001</td>
+                    <td>정유진</td>
+                    <td>기획팀</td>
+                    <td>대리</td>
+                    <td>2023-01-15</td>
+                    <td><button class="btn-detail">상세보기</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+</body>
+</html>

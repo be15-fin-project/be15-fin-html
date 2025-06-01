@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>근태 관리</title>
+    <link rel="stylesheet" href="../../assets/style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: #007aff;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 400px;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .modal-content .actions {
+            text-align: right;
+            margin-top: 16px;
+        }
+
+        .modal-content .actions button {
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<main class="main">
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+
+        <h2>🕒 출퇴근 내역 조회</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>출근 시각</th>
+                <th>퇴근 시각</th>
+                <th>근무 시간</th>
+                <th>IP</th>
+                <th>정정 신청</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2025-05-29</td>
+                <td>09:01</td>
+                <td>18:05</td>
+                <td>8시간 4분</td>
+                <td>192.168.0.12</td>
+                <td><button onclick="openModal()">신청</button></td>
+            </tr>
+            <!-- 반복 행 -->
+            </tbody>
+        </table>
+
+        <!-- 정정 신청 모달 -->
+        <div class="modal" id="correctionModal">
+            <div class="modal-content">
+                <h3>출퇴근 정정 신청</h3>
+                <p>정정 사유를 입력하세요.</p>
+                <textarea placeholder="예: 출근 버튼을 누르지 못했습니다."></textarea>
+                <div class="actions">
+                    <button onclick="closeModal()">취소</button>
+                    <button>제출</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+<script>
+    function openModal() {
+        document.getElementById('correctionModal').style.display = 'block';
+    }
+    function closeModal() {
+        document.getElementById('correctionModal').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

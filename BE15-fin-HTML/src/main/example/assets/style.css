@@ -1,0 +1,26 @@
+
+:root {
+    --blue-50: #f0f3fa;
+    --blue-100: #d5deef;
+    --blue-200: #b1c9ef;
+    --blue-300: #8aaee0;
+    --blue-400: #628ecb;
+    --blue-500: #395886;
+}
+
+.main {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: space-evenly;
+}
+.sidebar {
+    position: fixed;
+}
+.main-content {
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    padding: 40px 40px 40px 340px;
+    background: var(--blue-50);
+}

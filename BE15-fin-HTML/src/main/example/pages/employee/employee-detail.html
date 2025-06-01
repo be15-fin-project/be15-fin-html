@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>사원 상세 정보</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+
+    .profile-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      display: flex;
+      padding: 40px;
+      gap: 40px;
+    }
+
+    .profile-left, .profile-right {
+      flex: 1;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .profile-header img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+    }
+
+    .profile-header h2 {
+      font-size: 20px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin: 24px 0 12px;
+      font-size: 16px;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .info-table tr {
+      border-top: 1px solid #eee;
+    }
+
+    .info-table td {
+      padding: 12px 8px;
+      vertical-align: top;
+      color: #444;
+    }
+
+    .info-table td:first-child {
+      width: 120px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .material-icons {
+      font-size: 16px;
+      vertical-align: middle;
+      margin-right: 4px;
+      color: #888;
+    }
+
+    .tags {
+      margin-top: 20px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: #f0f3fa;
+      color: #395886;
+      margin: 4px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+<main class="main">
+  <div id="sidebar-container"></div>
+  <div class="main-content">
+
+    <div class="profile-container">
+      <div class="profile-left">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/64" alt="avatar" />
+          <div>
+            <h2><strong>mijuckboon (곽진웅)</strong></h2>
+            <div style="font-size: 14px; color: #888;">개발자 · 개발팀</div>
+          </div>
+        </div>
+
+        <div class="section-title">인사 정보</div>
+        <table class="info-table">
+          <tr>
+            <td><span class="material-icons">apartment</span>조직 · 직책</td>
+            <td>개발팀 · ○○</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">work_outline</span>직무</td>
+            <td>개발자</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">badge</span>직위 · 직급</td>
+            <td>직위 없음 · 사원</td>
+          </tr>
+        </table>
+
+        <div class="section-title">기본 정보</div>
+        <table class="info-table">
+          <tr>
+            <td><span class="material-icons">person</span>이름</td>
+            <td>곽진웅 (mijuckboon)</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">email</span>이메일</td>
+            <td>tarak0520@naver.com</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">event</span>입사일</td>
+            <td>2025년 5월 28일 (5일 재직)</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">flag</span>국적</td>
+            <td>대한민국(KOR)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="profile-right">
+        <div class="section-title">프로필</div>
+        <table class="info-table">
+          <tr>
+            <td><span class="material-icons">phone</span>전화</td>
+            <td>없음</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">email</span>이메일</td>
+            <td>tarak0520@naver.com</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">group</span>부서</td>
+            <td>개발팀</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">location_on</span>주소</td>
+            <td>없음</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">calendar_today</span>입사일</td>
+            <td>2025. 5. 30~현재</td>
+          </tr>
+          <tr>
+            <td><span class="material-icons">schedule</span>근무 시간</td>
+            <td>28시간 30분</td>
+          </tr>
+        </table>
+
+        <div class="tags">
+          <div class="tag">인사</div>
+          <div class="tag">기본</div>
+          <div class="tag">근로 계약</div>
+          <div class="tag">임금 계약</div>
+          <div class="tag">급여 지급</div>
+          <div class="tag">근무</div>
+          <div class="tag">초과 근무 보상</div>
+          <div class="tag">휴가</div>
+          <div class="tag">쉬는 날</div>
+          <div class="tag">휴직 이력</div>
+          <div class="tag">경력</div>
+          <div class="tag">학력</div>
+          <div class="tag">기록사항</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>문서 관리</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .documents {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .documents h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: var(--blue-500);
+    }
+
+    .documents table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .documents th, .documents td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid var(--blue-100);
+      font-size: 14px;
+    }
+
+    .documents th {
+      background: var(--blue-100);
+      color: var(--blue-500);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+
+    .date-filter {
+      border: 1px solid var(--blue-200);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+  </style>
+</head>
+<body>
+
+<main class="main">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+
+      <div class="header">
+        <h1>문서 관리</h1>
+        <div class="topbar">
+          <input type="text" class="date-filter" value="2023년 1월 1일 - 2023년 3월 10일" />
+          <button class="btn">+ 새 폴더</button>
+        </div>
+      </div>
+
+    <section class="documents">
+      <h3>업로드된 문서 목록</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>문서명</th>
+          <th>작성자</th>
+          <th>작성일</th>
+          <th>설명</th>
+          <th>파일 수</th>
+          <th>크기</th>
+          <th>공유 대상</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>세금 안내서</td>
+          <td><img src="https://i.pravatar.cc/24?img=1" class="avatar"> 제니퍼 로우</td>
+          <td>2023-03-24</td>
+          <td>필수 업무에 대한 설명</td>
+          <td>5</td>
+          <td>22 mb</td>
+          <td>전체</td>
+        </tr>
+        <tr>
+          <td>프로젝트 매니저 가이드</td>
+          <td><img src="https://i.pravatar.cc/24?img=2" class="avatar"> 둘시 필립스</td>
+          <td>2023-01-21</td>
+          <td>-</td>
+          <td>3</td>
+          <td>15 mb</td>
+          <td>전체</td>
+        </tr>
+        <tr>
+          <td>UI/UX 디자인 프로세스</td>
+          <td><img src="https://i.pravatar.cc/24?img=3" class="avatar"> 미라클 프란시</td>
+          <td>2023-01-10</td>
+          <td>디자인팀 절차 문서</td>
+          <td>2</td>
+          <td>11 mb</td>
+          <td>전체</td>
+        </tr>
+        <tr>
+          <td>IT 개발 매뉴얼</td>
+          <td><img src="https://i.pravatar.cc/24?img=4" class="avatar"> 데이비스 커티스</td>
+          <td>2022-01-01</td>
+          <td>IT 팀 업무 매뉴얼</td>
+          <td>4</td>
+          <td>20 mb</td>
+          <td>전체</td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+</body>
+</html>
