@@ -37,6 +37,11 @@
     justify-content: space-between;
     gap: 12px;
   }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
 
   .sidebar .top-icons {
     display: flex;
@@ -142,7 +147,10 @@
 <aside class="sidebar">
   <div>
     <h2>
-      Momentum
+      <a class="logo">
+        <img src="../../assets/images/logo.png" alt="Momentum Logo" style="height: 28px;" />
+        Momentum
+      </a>
       <span class="top-icons">
         <button class="btn" style="padding: 4px 10px; font-size: 13px;">출근</button>
         <span class="material-icons notification-icon">notifications</span>
@@ -152,6 +160,7 @@
       <li>
         <a href="../common/dashboard.html"><span class="material-icons">dashboard</span>대시보드</a>
       </li>
+      <!-- 회사 정보 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">business</span>회사 정보<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
@@ -162,6 +171,7 @@
           <li><a href="../company/duty.html">직책 관리</a></li>
         </ul>
       </li>
+      <!-- 사원 관리 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">groups</span>사원 관리<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
@@ -171,42 +181,51 @@
           <li><a href="../employee/employee-csv.html">CSV 등록</a></li>
         </ul>
       </li>
+      <!-- 근태 관리 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">schedule</span>근태 관리<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
           <li><a href="../attendance/attendance.html">근태 내역</a></li>
           <li><a href="../attendance/commute.html">출퇴근 관리</a></li>
+          <li><a href="../attendance/overtime.html">초과 근무</a></li>
           <li><a href="../attendance/fieldwork.html">외근 관리</a></li>
           <li><a href="../attendance/remote.html">재택 근무</a></li>
-          <li><a href="../attendance/overtime.html">초과 근무</a></li>
-          <li><a href="../attendance/vacation.html">휴가 관리</a></li>
           <li><a href="../attendance/business-trip.html">출장 관리</a></li>
           <li><a href="../attendance/halfday.html">연반차 관리</a></li>
+          <li><a href="../attendance/vacation.html">휴가 관리</a></li>
         </ul>
       </li>
+      <!-- 결재 관리 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">task</span>결재 관리<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
           <li><a href="../approval/approval-list.html">결재 문서 목록</a></li>
           <li><a href="../approval/approval-create.html">결재 문서 작성</a></li>
+          <li><a href="../approval/form-list.html">문서 양식 관리</a></li>
         </ul>
       </li>
+      <!-- 성과 평가 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">bar_chart</span>성과 평가<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
-          <li><a href="../performance/kpi.html">KPI 관리</a></li>
-          <li><a href="../performance/kpi-stats.html">KPI 통계 관리</a></li>
-          <li><a href="../performance/kpi-history.html">KPI 내역 관리</a></li>
+          <li><a href="../performance/kpi-stats.html">KPI 관리</a></li>
+          <li><a href="../performance/kpi-personal.html">개인 KPI</a></li>
+          <li><a href="../performance/kpi-team.html">팀 KPI</a></li>
           <li><a href="../performance/evaluation-history.html">평가 관리</a></li>
+          <li><a href="../performance/evaluation-multifaceted.html">다면 평가</a></li>
+          <li><a href="../performance/evaluation-result.html">인사 평가</a></li>
+          <li><a href="../performance/evaluation-settings.html">평가 설정</a></li>
         </ul>
       </li>
+      <!-- 이탈 위험 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">warning</span>이탈 위험<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
           <li><a href="../breakaway/risk-stats.html">통계 보기</a></li>
-          <li><a href="../breakaway/risk-contact.html">상급자 알림</a></li>
+          <li><a href="../breakaway/risk-contact.html">이탈 위험 알림</a></li>
         </ul>
       </li>
+      <!-- 공지 관리 -->
       <li>
         <a href="#" class="sidebar-toggle"><span class="material-icons">campaign</span>공지 관리<span class="material-icons expand">chevron_right</span></a>
         <ul class="submenu">
@@ -217,7 +236,7 @@
     </ul>
   </div>
   <div class="bottom-sidebar ">
-    <a href="../common/settings.html" class="settings">
+    <a href="../common/setting.html" class="settings">
       <span class="material-icons">settings</span>설정
     </a>
     <a href="#" class="logout">
@@ -225,30 +244,3 @@
     </a>
   </div>
 </aside>
-
-<!--
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // 메뉴 토글
-    document.querySelectorAll('.sidebar-toggle').forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        const li = toggle.closest('li');
-        li.classList.toggle('active');
-      });
-    });
-
-    // 현재 파일명만 추출
-    const currentFile = window.location.pathname.split('/').filter(Boolean).pop();
-
-    document.querySelectorAll('.sidebar a').forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && href.includes(currentFile)) {
-        link.classList.add('active');
-        const parentLi = link.closest('ul')?.closest('li');
-        if (parentLi) parentLi.classList.add('active');
-      }
-    });
-  });
-</script>
--->

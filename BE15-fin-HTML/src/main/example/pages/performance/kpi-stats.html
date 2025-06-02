@@ -79,6 +79,54 @@
       font-size: 18px;
       color: #395886;
     }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .actions button {
+      background: #395886;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid #e2e6ee;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #f4f6fa;
+      font-weight: 600;
+    }
+
+    td .material-icons {
+      cursor: pointer;
+      color: #395886;
+    }
+
+    .highlight-success {
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    .highlight-warning {
+      color: #d32f2f;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -127,6 +175,72 @@
           <li><span class="material-icons">rocket_launch</span> 박민지 - 전환율 개선 120%</li>
         </ul>
       </div>
+    </div>
+    <div class="container">
+      <h1>KPI 내역 조회</h1>
+      <div class="actions">
+        <div>
+          <select>
+            <option>2025년</option>
+            <option>2024년</option>
+          </select>
+          <select>
+            <option>1분기</option>
+            <option>2분기</option>
+            <option>3분기</option>
+            <option>4분기</option>
+          </select>
+          <select>
+            <option>전체 팀</option>
+            <option>개발팀</option>
+            <option>영업팀</option>
+          </select>
+        </div>
+        <button><span class="material-icons" style="vertical-align: middle; font-size: 18px;">add</span> KPI 등록</button>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>항목</th>
+          <th>목표 (%)</th>
+          <th>실적 (%)</th>
+          <th>달성률</th>
+          <th>분기</th>
+          <th>메모</th>
+          <th>수정</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>고객 유지율</td>
+          <td>90%</td>
+          <td>95%</td>
+          <td class="highlight-success">105%</td>
+          <td>1분기</td>
+          <td>우수 달성</td>
+          <td><span class="material-icons">edit</span></td>
+        </tr>
+        <tr>
+          <td>신규 확보율</td>
+          <td>120%</td>
+          <td>100%</td>
+          <td class="highlight-warning">83%</td>
+          <td>1분기</td>
+          <td>도전 필요</td>
+          <td><span class="material-icons">edit</span></td>
+        </tr>
+        <tr>
+          <td>전환율 개선</td>
+          <td>85%</td>
+          <td>90%</td>
+          <td class="highlight-success">106%</td>
+          <td>1분기</td>
+          <td>성과 우수</td>
+          <td><span class="material-icons">edit</span></td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </main>
