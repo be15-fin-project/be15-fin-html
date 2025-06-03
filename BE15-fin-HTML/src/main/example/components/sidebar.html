@@ -2,23 +2,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
 <style>
-  :root {
-    --blue-50: #f0f3fa;
-    --blue-100: #d5deef;
-    --blue-200: #b1c9ef;
-    --blue-300: #8aaee0;
-    --blue-400: #628ecb;
-    --blue-500: #395886;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Pretendard', sans-serif;
-    text-decoration: none;
-  }
-
   .sidebar {
     width: 300px;
     background: #fff;
@@ -26,9 +9,24 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden; /* 전체 스크롤 방지 */
   }
 
+
+  .sidebar-scroll {
+    flex: 1;
+    overflow-y: auto; /* 이 영역만 스크롤 */
+    padding: 20px 0;
+  }
+  /* 선택사항: 스크롤바 예쁘게 */
+  .sidebar-scroll::-webkit-scrollbar {
+    width: 3px;
+  }
+  .sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
   .sidebar h2 {
     font-size: 20px;
     margin-bottom: 30px;
@@ -94,25 +92,13 @@
     color: var(--blue-500);
     border-radius: 0 !important;
   }
-  .sidebar .bottom-sidebar {
+  .sidebar .bottom-sidebar ul {
     padding-top: 20px;
     border-top: 1px solid #cccccc;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-  }
-  .settings {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--blue-500);
-  }
-  .logout {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--blue-500);
+    gap: 5px;
   }
   .btn {
     background: var(--blue-400);
@@ -156,6 +142,8 @@
         <span class="material-icons notification-icon">notifications</span>
       </span>
     </h2>
+  </div>
+  <div class="sidebar-scroll">
     <ul>
       <li>
         <a href="../common/dashboard.html"><span class="material-icons">dashboard</span>대시보드</a>
@@ -236,11 +224,13 @@
     </ul>
   </div>
   <div class="bottom-sidebar ">
-    <a href="../common/setting.html" class="settings">
-      <span class="material-icons">settings</span>설정
-    </a>
-    <a href="#" class="logout">
-      <span class="material-icons">logout</span>로그아웃
-    </a>
+    <ul>
+      <li>
+        <a href="../common/setting.html"><span class="material-icons">settings</span>설정</a>
+      </li>
+      <li>
+        <a href="#"><span class="material-icons">logout</span>로그아웃</a>
+      </li>
+    </ul>
   </div>
 </aside>
