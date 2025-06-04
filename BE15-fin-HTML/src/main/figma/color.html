@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>Momentum 컬러 팔레트</title>
+    <style>
+        :root {
+            --main-color: #395886;
+            --blue-50: #f0f3fa;
+            --blue-100: #d5deef;
+            --blue-200: #b1c9ef;
+            --blue-400: #628ecb;
+            --blue-500: #395886;
+            --gray-100: #f7f9fc;
+            --gray-300: #d7dce5;
+            --gray-500: #9aa6be;
+            --font-color: #222;
+            --label-color: #555;
+            --label-pending: #f6e3a3;
+            --label-approved: #a3cfc2;
+            --label-rejected: #e7aaaa;
+            --text-link: #4c74ff;
+            --border-subtle: #e0e4eb;
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: #f9fafc;
+            padding: 60px;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .color-swatch {
+            width: 160px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+            background: #fff;
+        }
+
+        .color-box {
+            height: 86px;
+        }
+
+        .color-label {
+            padding: 10px 12px;
+            font-size: 12px;
+            color: #333;
+            background: #fff;
+            border-top: 1px solid #eee;
+        }
+
+        .color-label small {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎨 Momentum 디자인 시스템 컬러 팔레트</h1>
+
+<!-- Background -->
+<section>
+    <div class="section-title">Background</div>
+    <div class="palette">
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--gray-100);"></div>
+            <div class="color-label">gray-100<small>#f7f9fc</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--gray-300);"></div>
+            <div class="color-label">gray-300<small>#d7dce5</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--gray-500);"></div>
+            <div class="color-label">gray-500<small>#9aa6be</small></div>
+        </div>
+    </div>
+</section>
+
+<!-- Primary -->
+<section>
+    <div class="section-title">Primary</div>
+    <div class="palette">
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--blue-50);"></div>
+            <div class="color-label">blue-50<small>#f0f3fa</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--blue-100);"></div>
+            <div class="color-label">blue-100<small>#d5deef</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--blue-200);"></div>
+            <div class="color-label">blue-200<small>#b1c9ef</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--blue-400);"></div>
+            <div class="color-label">blue-400<small>#628ecb</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--blue-500);"></div>
+            <div class="color-label">main-color<small>#395886</small></div>
+        </div>
+    </div>
+</section>
+
+<!-- Label Status -->
+<section>
+    <div class="section-title">Label Status</div>
+    <div class="palette">
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--label-pending);"></div>
+            <div class="color-label">label-pending<small>#f6c762</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--label-approved);"></div>
+            <div class="color-label">label-approved<small>#4caf82</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--label-rejected);"></div>
+            <div class="color-label">label-rejected<small>#ef5a5a</small></div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Text -->
+<section>
+    <div class="section-title">Text</div>
+    <div class="palette">
+        <div class="color-swatch">
+            <div class="color-box" style="background: #222;"></div>
+            <div class="color-label">font-color<small>#222</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--gray-500);"></div>
+            <div class="color-label">label-color<small>#555</small></div>
+        </div>
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--text-link);"></div>
+            <div class="color-label">text-link<small>#4c74ff</small></div>
+        </div>
+    </div>
+</section>
+
+<!-- Border -->
+<section>
+    <div class="section-title">Border</div>
+    <div class="palette">
+        <div class="color-swatch">
+            <div class="color-box" style="background: var(--border-subtle);"></div>
+            <div class="color-label">border-subtle<small>#e0e4eb</small></div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

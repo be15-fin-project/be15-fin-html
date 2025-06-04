@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>이탈 위험 통계</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Pretendard, sans-serif;
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h2 {
+            margin-top: 60px;
+            margin-bottom: 16px;
+        }
+        canvas {
+            max-width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f6fa;
+        }
+    </style>
+</head>
+<body>
+
+<h1>이탈 위험 통계 대시보드</h1>
+
+<!-- 도넛 차트: 이탈 예측 지수 분포 -->
+<h2>📊 이탈 예측 지수 분포</h2>
+<canvas id="donutChart"></canvas>
+
+<!-- 선 차트 1: 부서별 이탈 위험 평균 -->
+<h2>📈 부서별 이탈 위험 평균 지수</h2>
+<canvas id="deptLineChart"></canvas>
+
+<!-- 선 차트 2: 직급별 이탈 위험 평균 지수 -->
+<h2>📉 직급별 이탈 위험 평균 지수</h2>
+<canvas id="rankLineChart"></canvas>
+
+<!-- 위험 사원 테이블 -->
+<h2>🚨 이탈 위험 높은 사원 목록</h2>
+<table>
+    <thead>
+    <tr>
+        <th>사원 ID</th>
+        <th>이름</th>
+        <th>부서</th>
+        <th>직급</th>
+        <th>이탈 지수</th>
+        <th>평가 점수</th>
+        <th>출근율</th>
+        <th>연봉 만족도</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>E1023</td>
+        <td>김수현</td>
+        <td>영업팀</td>
+        <td>사원</td>
+        <td>91%</td>
+        <td>63점</td>
+        <td>82%</td>
+        <td>낮음</td>
+    </tr>
+    <tr>
+        <td>E1044</td>
+        <td>박지훈</td>
+        <td>마케팅팀</td>
+        <td>사원</td>
+        <td>87%</td>
+        <td>58점</td>
+        <td>78%</td>
+        <td>낮음</td>
+    </tr>
+    <tr>
+        <td>E1090</td>
+        <td>이지윤</td>
+        <td>디자인팀</td>
+        <td>주임</td>
+        <td>85%</td>
+        <td>70점</td>
+        <td>90%</td>
+        <td>중간</td>
+    </tr>
+    <tr>
+        <td>E1009</td>
+        <td>정하늘</td>
+        <td>개발팀</td>
+        <td>사원</td>
+        <td>83%</td>
+        <td>66점</td>
+        <td>75%</td>
+        <td>낮음</td>
+    </tr>
+    <tr>
+        <td>E1066</td>
+        <td>최민수</td>
+        <td>영업팀</td>
+        <td>대리</td>
+        <td>81%</td>
+        <td>72점</td>
+        <td>88%</td>
+        <td>낮음</td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    // 도넛 차트 데이터
+    new Chart(document.getElementById('donutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['0~20%', '21~40%', '41~60%', '61~80%', '81~100%'],
+            datasets: [{
+                data: [52, 68, 38, 24, 18],
+                backgroundColor: ['#d2e3f5', '#a6c8f0', '#7aacdd', '#528bc6', '#2a6db4']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                title: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // 부서별 선 차트
+    new Chart(document.getElementById('deptLineChart'), {
+        type: 'line',
+        data: {
+            labels: ['마케팅팀', '개발팀', '영업팀', '디자인팀', '인사팀'],
+            datasets: [{
+                label: '평균 이탈 지수 (%)',
+                data: [65.3, 38.7, 71.1, 42.5, 27.8],
+                borderColor: '#395886',
+                backgroundColor: 'rgba(57, 88, 134, 0.2)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    // 직급별 선 차트
+    new Chart(document.getElementById('rankLineChart'), {
+        type: 'line',
+        data: {
+            labels: ['사원', '주임', '대리', '과장', '팀장'],
+            datasets: [{
+                label: '평균 이탈 지수 (%)',
+                data: [64.8, 55.2, 42.1, 31.9, 26.5],
+                borderColor: '#ff6b6b',
+                backgroundColor: 'rgba(255, 107, 107, 0.2)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

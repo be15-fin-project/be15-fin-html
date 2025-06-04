@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>엑셀 미리보기</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: Pretendard, sans-serif; max-width: 900px; margin: 40px auto; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f0f2f5; }
+        input[type="file"] { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h2>📄 엑셀 미리보기</h2>
+<input type="file" id="excelFile" accept=".xlsx, .xls" />
+
+<div id="preview"></div>
+
+<script>
+    document.getElementById('excelFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const html = XLSX.utils.sheet_to_html(sheet);
+
+            document.getElementById('preview').innerHTML = html;
+        };
+        reader.readAsArrayBuffer(file);
+    });
+</script>
+
+</body>
+</html>

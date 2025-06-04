@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>하나의 바에서 가중치 & 등급 설정</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Pretendard, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .slider-container {
+      margin: 20px 0;
+    }
+
+    .label-box {
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    .label-box span {
+      display: inline-block;
+      min-width: 100px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="section">
+  <h2>📊 가중치 설정</h2>
+  <div class="slider-container" id="weightSlider"></div>
+  <div class="label-box">
+    <span>업무 성과: <strong id="w1">40</strong>%</span><br>
+    <span>협업 태도: <strong id="w2">30</strong>%</span><br>
+    <span>출석률: <strong id="w3">30</strong>%</span>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🏷️ 등급 비율 설정</h2>
+  <div class="slider-container" id="gradeSlider"></div>
+  <div class="label-box">
+    <span>S 등급: <strong id="g1">10</strong>%</span><br>
+    <span>A 등급: <strong id="g2">20</strong>%</span><br>
+    <span>B 등급: <strong id="g3">30</strong>%</span><br>
+    <span>C 등급: <strong id="g4">30</strong>%</span><br>
+    <span>D 등급: <strong id="g5">10</strong>%</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+<script>
+  // ✅ 가중치 슬라이더 (3구간)
+  const weightSlider = document.getElementById('weightSlider');
+  noUiSlider.create(weightSlider, {
+    start: [40, 70], // 두 핸들 = 세 구간
+    connect: [true, true, true],
+    range: { min: 0, max: 100 },
+    step: 1,
+    behaviour: 'drag'
+  });
+
+  const w1 = document.getElementById('w1');
+  const w2 = document.getElementById('w2');
+  const w3 = document.getElementById('w3');
+
+  weightSlider.noUiSlider.on('update', (values) => {
+    const a = Math.round(values[0]);
+    const b = Math.round(values[1]);
+    w1.textContent = a;
+    w2.textContent = b - a;
+    w3.textContent = 100 - b;
+  });
+
+  // ✅ 등급 비율 슬라이더 (5구간 = 4 핸들)
+  const gradeSlider = document.getElementById('gradeSlider');
+  noUiSlider.create(gradeSlider, {
+    start: [10, 30, 60, 90], // 4 핸들 = 5 구간
+    connect: [true, true, true, true, true],
+    range: { min: 0, max: 100 },
+    step: 1,
+    behaviour: 'drag'
+  });
+
+  const g1 = document.getElementById('g1');
+  const g2 = document.getElementById('g2');
+  const g3 = document.getElementById('g3');
+  const g4 = document.getElementById('g4');
+  const g5 = document.getElementById('g5');
+
+  gradeSlider.noUiSlider.on('update', (values) => {
+    const v = values.map(v => Math.round(v));
+    g1.textContent = v[0];
+    g2.textContent = v[1] - v[0];
+    g3.textContent = v[2] - v[1];
+    g4.textContent = v[3] - v[2];
+    g5.textContent = 100 - v[3];
+  });
+</script>
+</body>
+</html>

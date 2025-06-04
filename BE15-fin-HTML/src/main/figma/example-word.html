@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>Word 파일 미리보기</title>
+    <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+    <style>
+        body {
+            font-family: Pretendard, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        #output {
+            border: 1px solid #ccc;
+            background: #fdfdfd;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>📄 Word (.docx) 미리보기</h2>
+<input type="file" id="upload" accept=".docx" />
+
+<div id="output">파일을 선택하면 이곳에 미리보기가 표시됩니다.</div>
+
+<script>
+    document.getElementById("upload").addEventListener("change", function(event) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const arrayBuffer = reader.result;
+            mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                .then(function(result) {
+                    document.getElementById("output").innerHTML = result.value;
+                })
+                .catch(function(err) {
+                    document.getElementById("output").innerHTML = "<p>문서 렌더링에 실패했습니다.</p>";
+                });
+        };
+        reader.readAsArrayBuffer(event.target.files[0]);
+    });
+</script>
+
+</body>
+</html>

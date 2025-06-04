@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>직위 순서 변경</title>
+    <style>
+        body {
+            font-family: Pretendard, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background-color: #f0f2f5;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        tr.dragging {
+            opacity: 0.5;
+        }
+        tr {
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+
+<h2>직위 순서 변경 (드래그 앤 드롭)</h2>
+<table>
+    <thead>
+    <tr>
+        <th>직위번호</th>
+        <th>직위명</th>
+    </tr>
+    </thead>
+    <tbody id="positionTable">
+    <tr draggable="true">
+        <td>1</td><td>인턴</td>
+    </tr>
+    <tr draggable="true">
+        <td>2</td><td>사원</td>
+    </tr>
+    <tr draggable="true">
+        <td>3</td><td>대리</td>
+    </tr>
+    <tr draggable="true">
+        <td>4</td><td>과장</td>
+    </tr>
+    <tr draggable="true">
+        <td>5</td><td>부장</td>
+    </tr>
+    <tr draggable="true">
+        <td>6</td><td>팀장</td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    const tableBody = document.getElementById('positionTable');
+    let draggingEle;
+    let nextSibling;
+
+    tableBody.addEventListener('dragstart', (e) => {
+        draggingEle = e.target;
+        nextSibling = draggingEle.nextElementSibling;
+        draggingEle.classList.add('dragging');
+    });
+
+    tableBody.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const afterElement = [...tableBody.querySelectorAll('tr:not(.dragging)')]
+            .find(row => {
+                return e.clientY <= row.getBoundingClientRect().top + row.offsetHeight / 2;
+            });
+        if (afterElement) {
+            tableBody.insertBefore(draggingEle, afterElement);
+        } else {
+            tableBody.appendChild(draggingEle);
+        }
+    });
+
+    tableBody.addEventListener('drop', () => {
+        draggingEle.classList.remove('dragging');
+    });
+</script>
+
+</body>
+</html>
