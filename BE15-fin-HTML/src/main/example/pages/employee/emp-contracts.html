@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>계약서 내역 조회</title>
+    <link rel="stylesheet" href="../../assets/style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+        :root {
+            --gray-100: #f7f9fc;
+            --gray-300: #d7dce5;
+            --gray-500: #9aa6be;
+            --blue-50: #f0f3fa;
+            --blue-100: #d5deef;
+            --blue-400: #628ecb;
+            --main-color: #395886;
+            --font-color: #222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        body {
+            background-color: var(--blue-50);
+        }
+
+        .main-content {
+            padding: 40px 40px 40px 320px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 32px;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            background: var(--blue-400);
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .section-card {
+            background-color: #fff;
+            border: 1px solid var(--gray-300);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 24px;
+            margin-bottom: 32px;
+        }
+
+        .filter-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 140px;
+        }
+
+        .filter-item label {
+            font-size: 13px;
+            color: var(--label-color);
+            padding-left: 2px;
+        }
+
+        .filter-item select,
+        .filter-item input {
+            padding: 7px 9px;
+            border: 1px solid #ccc;
+            width: 70%;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .date-range-group .date-range {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .range-separator {
+            color: var(--label-color);
+            font-size: 14px;
+        }
+
+        .filter-button {
+            min-width: auto;
+        }
+
+
+        .btn-search {
+            padding: 9px 13px;
+            background-color: var(--blue-400);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .employee-table th,
+        .employee-table td {
+            border-bottom: 1px solid var(--gray-300);
+            padding: 14px 12px;
+            text-align: left;
+        }
+
+        .employee-table th {
+            background-color: var(--gray-100);
+            color: #333;
+            font-weight: 500;
+        }
+
+        .btn-detail {
+            background-color: var(--blue-400);
+            color: #fff;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 40px;
+        }
+
+        .pagination button {
+            background: #fff;
+            border: 1px solid var(--gray-300);
+            color: #444;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 32px;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover {
+            background-color: var(--blue-100);
+        }
+
+        .pagination .active {
+            background-color: var(--blue-400);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<main class="main">
+    <div id="sidebar-container"></div>
+    <div class="main-content">
+        <div class="title">
+            <h1>계약서 내역 조회</h1>
+            <button class="btn-primary" onclick="location.href='emp-contracts-form.html'">계약서 등록</button>
+        </div>
+
+        <div class="section-card">
+            <div class="filter-title">
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label>사번</label>
+                        <input type="text" placeholder="--"/>
+                    </div>
+                    <div class="filter-item">
+                        <label>사원명</label>
+                        <input type="text" placeholder="--"/>
+                    </div>
+                    <div class="filter-item">
+                        <label>계약서명</label>
+                        <input type="text" placeholder="--"/>
+                    </div>
+                    <div class="filter-item date-range-group">
+                        <label>등록일</label>
+                        <div class="date-range">
+                            <input type="date"/>
+                            <span class="range-separator">~</span>
+                            <input type="date"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-item filter-button">
+                    <label>&nbsp;</label> <!-- 공간 맞춤용 -->
+                    <button class="btn-search">검색</button>
+                </div>
+            </div>
+
+            <div>
+                <table class="employee-table">
+                    <thead>
+                    <tr>
+                        <th>사번</th>
+                        <th>사원명</th>
+                        <th>계약서명</th>
+                        <th>등록일</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2024001</td><td>김유진</td><td>근로계약서</td><td>2024-06-03</td>
+                        <td><button class="btn-detail"  onclick="location.href='emp-contracts-form.html'">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024002</td><td>이서준</td><td>비밀유지계약서</td><td>2024-05-28</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024003</td><td>박지후</td><td>프리랜서계약서</td><td>2024-05-20</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024004</td><td>최윤아</td><td>인턴계약서</td><td>2024-05-15</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024005</td><td>장도윤</td><td>정규직전환계약서</td><td>2024-05-01</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024006</td><td>윤하진</td><td>업무협약서</td><td>2024-04-25</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024007</td><td>정서현</td><td>용역계약서</td><td>2024-04-10</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024008</td><td>한승우</td><td>근로계약서</td><td>2024-03-31</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024009</td><td>임다은</td><td>파트타임계약서</td><td>2024-03-15</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    <tr>
+                        <td>2024010</td><td>배지훈</td><td>근속연장계약서</td><td>2024-03-01</td>
+                        <td><button class="btn-detail">다운로드</button></td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+                <div class="pagination">
+                    <button>&laquo;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>...</button>
+                    <button>10</button>
+                    <button>&raquo;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="chatbot-container"></div>
+</main>
+</body>
+</html>

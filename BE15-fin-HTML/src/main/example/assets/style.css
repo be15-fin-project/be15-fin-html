@@ -1,12 +1,29 @@
-
 :root {
+    /* Background */
+    --gray-100: #f7f9fc;
+    --gray-300: #d7dce5;
+    --gray-500: #9aa6be;
+
+    /* Primary */
     --blue-50: #f0f3fa;
     --blue-100: #d5deef;
     --blue-200: #b1c9ef;
-    --blue-300: #8aaee0;
     --blue-400: #628ecb;
-    --blue-500: #395886;
+    --main-color: #395886;
+
+    /* Label Status */
+    --label-pending: #F6E3A3;
+    --label-approved: #A3CFC2;
+    --label-rejected: #E7AAAA;
+
+    /* Text */
+    --font-color: #222;
+    --label-color: #555;
+
+    /* Border */
+    --border-subtle: #e0e4eb;
 }
+
 
 * {
     margin: 0;
@@ -31,4 +48,35 @@
     height: 100%;
     padding: 40px 40px 40px 340px;
     background: var(--blue-50);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 40px;
+}
+
+.pagination button {
+    background: #fff;
+    border: 1px solid var(--gray-300);
+    color: #444;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    min-width: 32px;
+    transition: all 0.2s;
+}
+
+.pagination button:hover {
+    background-color: var(--blue-100);
+}
+
+.pagination .active {
+    background-color: var(--blue-400);
+    color: #fff;
+    font-weight: bold;
+    border: none;
 }

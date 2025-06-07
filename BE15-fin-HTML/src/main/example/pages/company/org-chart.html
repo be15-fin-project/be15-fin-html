@@ -8,71 +8,186 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script type="module" src="../../assets/common.js"></script>
     <style>
+        :root {
+            /* Background */
+            --gray-100: #f7f9fc;
+            --gray-300: #d7dce5;
+            --gray-500: #9aa6be;
+
+            /* Primary */
+            --blue-50: #f0f3fa;
+            --blue-100: #d5deef;
+            --blue-200: #b1c9ef;
+            --blue-400: #628ecb;
+            --main-color: #395886;
+
+            /* Label Status */
+            --label-pending: #F6E3A3;
+            --label-approved: #A3CFC2;
+            --label-rejected: #E7AAAA;
+
+            /* Text */
+            --font-color: #222;
+            --label-color: #555;
+
+            /* Border */
+            --border-subtle: #e0e4eb;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
+            text-decoration: none;
+        }
+
+        .main {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+        .sidebar {
+            position: fixed;
+        }
+        .main-content {
+            width: 100%;
+            min-height: 100vh;
+            height: 100%;
+            padding: 40px 40px 40px 340px;
+            background: var(--blue-50);
+        }
         h1 {
             font-size: 24px;
             margin-bottom: 30px;
         }
 
-        .org-chart {
+        .org-layout {
+            display: flex;
+            gap: 80px;
+            padding: 60px;
+            width: 100%;
+            align-items: flex-start;
+            background-color: var(--blue-50);
+            overflow-x: hidden;
+        }
+
+        /* 트리뷰 영역 */
+        .tree-view {
+            flex: 1;
+            max-width: 600px;
+            background: #fff;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--gray-300);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .tree-view h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--blue-500);
+        }
+
+        .tree-root, .tree-root ul {
+            list-style: none;
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        .tree-root ul {
+            border-left: 2px solid var(--blue-100);
+            padding-left: 16px;
+            margin-top: 8px;
+        }
+
+        .tree-node {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .tree-node:hover {
+            background-color: var(--blue-100);
+            color: var(--blue-500);
+        }
+
+        .tree-node .material-icons {
+            font-size: 18px;
+            color: var(--gray-500);
+        }
+        /* 프로필 카드 구획 */
+        .profile-list-wrapper {
+            flex: 1;
+            min-width: 400px;
+            max-width: 600px;
+            background: #fff;
+            padding: 24px;
+            border-radius: 18px;
+            border: 1px solid var(--gray-300);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-list {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 24px;
         }
 
-        .org-node {
-            background: #fff;
-            border: 1px solid #dce1e7;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-            text-align: center;
-            min-width: 180px;
-        }
-
-        .org-node .title {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .org-node .name {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .org-level {
+        .profile-card {
             display: flex;
-            gap: 40px;
-            margin-top: 40px;
-            position: relative;
+            gap: 20px;
+            align-items: center;
+            background: #fff;
+            padding: 20px 24px;
+            border-radius: 16px;
+            border: 1px solid var(--gray-300);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
         }
 
-        .org-branch::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            width: 2px;
-            height: 20px;
-            background-color: #ccc;
-            transform: translateX(-50%);
+        .photo {
+            width: 64px;
+            height: 64px;
+            background: var(--gray-300);
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
-        .connector-horizontal {
-            width: 100%;
-            height: 20px;
-            border-top: 2px solid #ccc;
-            position: relative;
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .connector-horizontal::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            height: 20px;
-            width: 2px;
-            background-color: #ccc;
-            transform: translateX(-50%);
+        .profile-header {
+            display: flex;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .profile-header .id {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .email {
+            font-size: 14px;
+            color: var(--font-color);
+        }
+
+        .meta-line {
+            font-size: 13px;
+            color: var(--label-color);
         }
     </style>
 </head>
@@ -80,61 +195,91 @@
 <main class="main">
     <div id="sidebar-container"></div>
     <div class="main-content">
-        <div class="container">
-            <h1>조직도</h1>
+        <section class="org-layout">
+            <!-- 좌측 조직도 트리뷰 -->
+            <aside class="tree-view">
+                <h2>조직도</h2>
+                <ul class="tree-root">
+                    <li>
+            <span class="tree-node" data-group="마케팅부">
+              <span class="material-icons">business</span>마케팅부
+            </span>
+                        <ul>
+                            <li>
+                <span class="tree-node" data-group="마케팅 --과">
+                  <span class="material-icons">folder</span>마케팅 --과
+                </span>
+                                <ul>
+                                    <li><span class="tree-node" data-group="마케팅 --과 1팀"><span class="material-icons">group</span>1팀</span></li>
+                                    <li><span class="tree-node" data-group="마케팅 --과 2팀"><span class="material-icons">group</span>2팀</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+            <span class="tree-node" data-group="인사부">
+              <span class="material-icons">people</span>인사부
+            </span>
+                        <ul>
+                            <li>
+                <span class="tree-node" data-group="인사부 --과">
+                  <span class="material-icons">folder</span>인사부 --과
+                </span>
+                                <ul>
+                                    <li><span class="tree-node" data-group="인사부 --과 1팀"><span class="material-icons">group</span>1팀</span></li>
+                                    <li><span class="tree-node" data-group="인사부 --과 2팀"><span class="material-icons">group</span>2팀</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </aside>
 
-            <div class="org-chart">
-                <!-- 최고 관리자 -->
-                <div class="org-node">
-                    <div class="title">CEO</div>
-                    <div class="name">정유진</div>
-                </div>
+            <!-- 우측 프로필 카드 구획 -->
+            <section class="profile-list-wrapper">
+                <div class="profile-list">
+                    <div class="profile-card">
+                        <div class="photo"></div>
+                        <div class="profile-main">
+                            <div class="profile-header">
+                                <span class="name">김소현</span>
+                                <span class="id">대리 · 팀원</span>
+                            </div>
+                            <div class="email">yeojin@example.com</div>
+                            <div class="meta-line">마케팅부 --과 1팀 · 010-1234-5678</div>
+                        </div>
+                    </div>
 
-                <!-- 1차 레벨 -->
-                <div class="connector-horizontal"></div>
-                <div class="org-level">
-                    <div class="org-branch">
-                        <div class="org-node">
-                            <div class="title">HR팀</div>
-                            <div class="name">이민재</div>
-                        </div>
-                    </div>
-                    <div class="org-branch">
-                        <div class="org-node">
-                            <div class="title">개발팀</div>
-                            <div class="name">박지성</div>
-                        </div>
-                    </div>
-                    <div class="org-branch">
-                        <div class="org-node">
-                            <div class="title">디자인팀</div>
-                            <div class="name">최수정</div>
+                    <div class="profile-card">
+                        <div class="photo"></div>
+                        <div class="profile-main">
+                            <div class="profile-header">
+                                <span class="name">이상희</span>
+                                <span class="id">과장 · 팀장</span>
+                            </div>
+                            <div class="email">yujin@example.com</div>
+                            <div class="meta-line">마케팅부 --과 1팀 · 010-9876-5432</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 2차 레벨 예시 (개발팀 하위) -->
-                <div class="connector-horizontal" style="margin-top: 60px;"></div>
-                <div class="org-level">
-                    <div class="org-branch">
-                        <div class="org-node">
-                            <div class="title">프론트엔드파트</div>
-                            <div class="name">한지우</div>
-                        </div>
-                    </div>
-                    <div class="org-branch">
-                        <div class="org-node">
-                            <div class="title">백엔드파트</div>
-                            <div class="name">서강준</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </section>
+        </section>
     </div>
+    <div id="chatbot-container"></div>
 </main>
 
-<div id="chatbot-container"></div>
-
+<script>
+    const nodes = document.querySelectorAll('.tree-node');
+    nodes.forEach(node => {
+        node.addEventListener('click', () => {
+            const group = node.dataset.group;
+            const cards = document.querySelectorAll('.profile-card');
+            cards.forEach(card => {
+                const meta = card.querySelector('.meta-line').textContent;
+                card.style.display = meta.includes(group) ? 'flex' : 'none';
+            });
+        });
+    });
+</script>
 </body>
 </html>

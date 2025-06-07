@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="globals.css" />
+  <link rel="stylesheet" href="styleguide.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .aside {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      height: 1200px;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 20px;
+      position: relative;
+      background-color: #ffffff;
+    }
+
+    .aside .container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px 0px 30px;
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .aside .heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .aside .link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .aside .momentum-logo {
+      position: relative;
+      width: 28px;
+      height: 28px;
+    }
+
+    .aside .logo-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .aside .logo {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      object-fit: cover;
+    }
+
+    .aside .text-wrapper {
+      position: relative;
+      width: fit-content;
+      font-family: "Pretendard-Bold", Helvetica;
+      font-weight: 700;
+      color: #000000;
+      font-size: 20px;
+      white-space: nowrap;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .div {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .aside .button {
+      all: unset;
+      box-sizing: border-box;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px 6px;
+      position: relative;
+      flex: 0 0 auto;
+      background-color: var(--blue-400);
+      border-radius: 6px;
+    }
+
+    .aside .text-wrapper-2 {
+      position: relative;
+      width: fit-content;
+      margin-top: -1.00px;
+      font-family: "Pretendard-Regular", Helvetica;
+      font-weight: 400;
+      color: #ffffff;
+      font-size: 13px;
+      text-align: center;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .service-icon {
+      position: relative;
+      flex: 0 0 auto;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .aside .text-wrapper-3 {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      margin-top: -1.00px;
+      font-family: "Material Icons-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 24px;
+      letter-spacing: 0;
+      line-height: 28px;
+      white-space: nowrap;
+    }
+
+    .aside .list-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px 0px;
+      position: relative;
+      flex: 1;
+      align-self: stretch;
+      width: 100%;
+      flex-grow: 1;
+      overflow: scroll;
+    }
+
+    .aside .list-wrapper::-webkit-scrollbar {
+      width: 0;
+      display: none;
+    }
+
+    .aside .div-2 {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .aside .sidebar-menu {
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      height: 40px;
+      background-color: #ffffff;
+      border-radius: 6px;
+    }
+
+    .aside .div-wrapper {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: absolute;
+      top: 8px;
+      left: 13px;
+    }
+
+    .aside .text-wrapper-4 {
+      position: relative;
+      width: fit-content;
+      margin-top: -1.00px;
+      font-family: "Material Icons-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 24px;
+      letter-spacing: 0;
+      line-height: 24px;
+      white-space: nowrap;
+    }
+
+    .aside .text-wrapper-5 {
+      position: absolute;
+      width: 69px;
+      height: 17px;
+      top: 10px;
+      left: 44px;
+      font-family: "Pretendard-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 16px;
+      white-space: nowrap;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .sidebar-menu-2 {
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      height: 40px;
+      background-color: var(--blue-100);
+      border-radius: 6px;
+    }
+
+    .aside .service-icon-2 {
+      position: absolute;
+      top: 7px;
+      left: 12px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .aside .text-wrapper-6 {
+      position: absolute;
+      width: 69px;
+      height: 17px;
+      top: 10px;
+      left: 44px;
+      font-family: "Pretendard-Bold", Helvetica;
+      font-weight: 700;
+      color: var(--blue-500);
+      font-size: 16px;
+      white-space: nowrap;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .container-2 {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: absolute;
+      top: 8px;
+      left: 224px;
+      transform: rotate(90deg);
+    }
+
+    .aside .list {
+      padding: 0px 0px 0px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .aside .sidebar-deatil-menu {
+      display: flex;
+      width: 232px;
+      height: 39px;
+      align-items: center;
+      padding: 9px 12px 11px;
+      position: relative;
+      background-color: var(--blue-50);
+    }
+
+    .aside .text-wrapper-7 {
+      position: relative;
+      flex: 1;
+      margin-top: -1.00px;
+      font-family: "Pretendard-Medium", Helvetica;
+      font-weight: 500;
+      color: var(--blue-500);
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .sidebar-deatil-menu-2 {
+      display: flex;
+      width: 232px;
+      height: 39px;
+      align-items: center;
+      padding: 9px 12px 11px;
+      position: relative;
+      background-color: #ffffff;
+    }
+
+    .aside .text-wrapper-8 {
+      position: relative;
+      flex: 1;
+      margin-top: -1.00px;
+      font-family: "Pretendard-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .text-wrapper-9 {
+      transform: rotate(-90deg);
+      position: relative;
+      width: fit-content;
+      margin-top: -1.00px;
+      font-family: "Material Icons-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 24px;
+      letter-spacing: 0;
+      line-height: 24px;
+      white-space: nowrap;
+    }
+
+    .aside .list-2 {
+      gap: 5px;
+      padding: 21px 0px 0px;
+      border-top-width: 1px;
+      border-top-style: solid;
+      border-color: #cccccc;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+      flex: 0 0 auto;
+    }
+
+    .aside .item-link {
+      height: 40px;
+      border-radius: 6px;
+      position: relative;
+      align-self: stretch;
+      width: 100%;
+    }
+
+    .aside .container-3 {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: absolute;
+      top: 8px;
+      left: 12px;
+    }
+
+    .aside .text-wrapper-10 {
+      position: absolute;
+      width: 32px;
+      height: 17px;
+      top: 10px;
+      left: 44px;
+      font-family: "Pretendard-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 16px;
+      white-space: nowrap;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+
+    .aside .text-wrapper-11 {
+      position: absolute;
+      width: 64px;
+      height: 17px;
+      top: 10px;
+      left: 44px;
+      font-family: "Pretendard-Regular", Helvetica;
+      font-weight: 400;
+      color: var(--blue-500);
+      font-size: 16px;
+      white-space: nowrap;
+      letter-spacing: 0;
+      line-height: normal;
+    }
+  </style>
+</head>
+<body>
+<div class="aside">
+  <div class="container">
+    <div class="heading">
+      <div class="link">
+        <div class="momentum-logo">
+          <div class="logo-icon"><img class="logo" src="img/logo-1.png" /></div>
+        </div>
+        <div class="text-wrapper">회사명</div>
+      </div>
+      <div class="div">
+        <button class="button"><div class="text-wrapper-2">출근</div></button>
+        <div class="service-icon"><div class="text-wrapper-3">notifications</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="list-wrapper">
+    <div class="div-2">
+      <div class="sidebar-menu">
+        <div class="div-wrapper"><div class="text-wrapper-4">dashboard</div></div>
+        <div class="text-wrapper-5">대시 보드</div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu-2">
+          <div class="service-icon-2"><div class="text-wrapper-4">business</div></div>
+          <div class="text-wrapper-6">회사 정보</div>
+          <div class="container-2"><div class="text-wrapper-4">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu"><div class="text-wrapper-7">회사 정보</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">조직도</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">groups</div></div>
+          <div class="text-wrapper-5">사원 관리</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">사원 목록 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">인사 발령 내역 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">계약서 내역 조회</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">groups</div></div>
+          <div class="text-wrapper-5">내 정보</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">대시 보드</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">개인 정보 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">인사 정보 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">계약서 내역 조회</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">schedule</div></div>
+          <div class="text-wrapper-5">근태 관리</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">전체 근태 내역 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">근무 신청 내역 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">정정 요청 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">근무 관리</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">휴가 관리</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">task</div></div>
+          <div class="text-wrapper-5">결재 관리</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">전체 결재 내역 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">문서함</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">결재 문서 양식</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">fact_check</div></div>
+          <div class="text-wrapper-5">성과 평가</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">전체 KPI 분석</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">사원별 KPI 분석</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">KPI 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">KPI 요청 관리</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">평가 관리</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">다면 평가 제출</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">leaderboard</div></div>
+          <div class="text-wrapper-5">인사 분석</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">전체 인사 평가 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">인사 평가 조회</div></div>
+          <div class="sidebar-deatil-menu-2"><p class="text-wrapper-8">인사 이의 제기 신청 조회</p></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">인사 평가 관리</div></div>
+        </div>
+      </div>
+      <div class="div-2">
+        <div class="sidebar-menu">
+          <div class="div-wrapper"><div class="text-wrapper-4">warning</div></div>
+          <div class="text-wrapper-5">근속 지원</div>
+          <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+        </div>
+        <div class="list">
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">통계 보기</div></div>
+          <div class="sidebar-deatil-menu-2"><div class="text-wrapper-8">이탈 위험 알림 내역</div></div>
+        </div>
+      </div>
+      <div class="sidebar-menu">
+        <div class="div-wrapper"><div class="text-wrapper-4">campaign</div></div>
+        <div class="text-wrapper-5">공지 사항</div>
+        <div class="container-2"><div class="text-wrapper-9">chevron_right</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="list-2">
+    <div class="item-link">
+      <div class="container-3"><div class="text-wrapper-4">settings</div></div>
+      <div class="text-wrapper-10">설정</div>
+    </div>
+    <div class="item-link">
+      <div class="container-3"><div class="text-wrapper-4">logout</div></div>
+      <div class="text-wrapper-11">로그아웃</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

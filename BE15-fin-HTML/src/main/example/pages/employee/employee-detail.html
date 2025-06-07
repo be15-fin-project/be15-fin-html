@@ -8,85 +8,168 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <script type="module" src="../../assets/common.js"></script>
   <style>
+    :root {
+      --gray-100: #f7f9fc;
+      --gray-300: #d7dce5;
+      --gray-500: #9aa6be;
+      --blue-50: #f0f3fa;
+      --blue-100: #d5deef;
+      --blue-200: #b1c9ef;
+      --blue-400: #628ecb;
+      --main-color: #395886;
+      --label-pending: #F6E3A3;
+      --label-approved: #A3CFC2;
+      --label-rejected: #E7AAAA;
+      --font-color: #222;
+      --label-color: #555;
+      --border-subtle: #e0e4eb;
+    }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Pretendard', sans-serif;
+      text-decoration: none;
+    }
+
+    .main {
+      display: flex;
+      align-items: flex-start;
+      width: 100%;
+      justify-content: space-evenly;
+    }
+    .sidebar {
+      position: fixed;
+    }
+    .main-content {
+      width: 100%;
+      min-height: 100vh;
+      height: 100%;
+      padding: 40px 40px 40px 340px;
+      background: var(--blue-50);
+    }
+    .back-button {
+      margin-bottom: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      color: var(--main-color);
+      cursor: pointer;
+    }
     .profile-container {
+      display: flex;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
       max-width: 1200px;
       margin: 0 auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      display: flex;
-      padding: 40px;
-      gap: 40px;
     }
-
-    .profile-left, .profile-right {
-      flex: 1;
+    .profile-left {
+      flex: 0 0 320px;
+      background: #fafafa;
+      padding: 60px 32px;
+      border-right: 1px solid #eee;
     }
-
     .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 32px;
+      text-align: center;
+      margin-bottom: 48px;
     }
-
     .profile-header img {
-      width: 64px;
-      height: 64px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 14px;
     }
-
     .profile-header h2 {
-      font-size: 20px;
+      font-size: 21px;
+      margin-bottom: 6px;
     }
-
+    .profile-header .subtitle {
+      font-size: 14px;
+      color: #888;
+    }
     .section-title {
-      font-weight: bold;
-      margin: 24px 0 12px;
-      font-size: 16px;
+      font-weight: 600;
+      font-size: 15px;
+      color: #444;
+      margin: 36px 0 16px;
     }
-
+    .section-info {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 12px;
+      gap: 8px;
+    }
     .info-table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 15px;
     }
-
-    .info-table tr {
-      border-top: 1px solid #eee;
+    .info-table tr + tr {
+      border-top: 1px solid #f0f0f0;
     }
+    .info-table tr + tr td {
+       padding-top: 18px;
+     }
 
     .info-table td {
-      padding: 12px 8px;
-      vertical-align: top;
+      padding: 12px 0;
       color: #444;
+      vertical-align: top;
     }
-
     .info-table td:first-child {
-      width: 120px;
       font-weight: 500;
       color: #666;
+      width: 130px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-
-    .material-icons {
+    .profile-right {
+      flex: 1;
+      padding: 60px;
+    }
+    .tabs {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 40px;
+      border-bottom: 1px solid #ddd;
+    }
+    .tab {
+      padding-bottom: 14px;
       font-size: 16px;
-      vertical-align: middle;
-      margin-right: 4px;
+      font-weight: 500;
       color: #888;
+      cursor: pointer;
     }
-
+    .tab.active {
+      color: var(--main-color);
+      border-bottom: 2px solid var(--main-color);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
     .tags {
-      margin-top: 20px;
+      margin-top: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-
     .tag {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 8px;
-      background: #f0f3fa;
-      color: #395886;
-      margin: 4px;
-      font-size: 12px;
+      padding: 8px 14px;
+      font-size: 13px;
+      background: var(--gray-100);
+      border-radius: 999px;
+      color: var(--main-color);
+      border: 1px solid var(--blue-100);
+    }
+    .profile-icons {
+      font-family: 'Material Icons';
+      font-size: 18px;
+      color: var(--main-color);
     }
   </style>
 </head>
@@ -94,104 +177,87 @@
 <main class="main">
   <div id="sidebar-container"></div>
   <div class="main-content">
-
+    <div class="back-button"><a href="employees.html"> <span class="profile-icons">arrow_back</span> 목록으로</a></div>
     <div class="profile-container">
       <div class="profile-left">
         <div class="profile-header">
-          <img src="https://via.placeholder.com/64" alt="avatar" />
-          <div>
-            <h2><strong>mijuckboon (곽진웅)</strong></h2>
-            <div style="font-size: 14px; color: #888;">개발자 · 개발팀</div>
-          </div>
+          <img src="https://via.placeholder.com/96" alt="avatar" />
+          <h2>이수진</h2>
+          <div class="subtitle">designqueen · 디자이너</div>
         </div>
-
-        <div class="section-title">인사 정보</div>
-        <table class="info-table">
-          <tr>
-            <td><span class="material-icons">apartment</span>조직 · 직책</td>
-            <td>개발팀 · ○○</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">work_outline</span>직무</td>
-            <td>개발자</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">badge</span>직위 · 직급</td>
-            <td>직위 없음 · 사원</td>
-          </tr>
-        </table>
-
-        <div class="section-title">기본 정보</div>
-        <table class="info-table">
-          <tr>
-            <td><span class="material-icons">person</span>이름</td>
-            <td>곽진웅 (mijuckboon)</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">email</span>이메일</td>
-            <td>tarak0520@naver.com</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">event</span>입사일</td>
-            <td>2025년 5월 28일 (5일 재직)</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">flag</span>국적</td>
-            <td>대한민국(KOR)</td>
-          </tr>
-        </table>
+        <div class="section-info">
+          <div class="section-title">사원 정보</div>
+          <table class="info-table">
+            <tr><td><span class="profile-icons">apartment</span>부서</td><td>디자인팀</td></tr>
+            <tr><td><span class="profile-icons">work_outline</span>직무</td><td>UX 디자이너</td></tr>
+          </table>
+        </div>
+        <div class="section-info">
+          <div class="section-title">연락처</div>
+          <table class="info-table">
+            <tr><td><span class="profile-icons">mail</span>이메일</td><td>suji_lee@company.com</td></tr>
+            <tr><td><span class="profile-icons">phone</span>전화</td><td>010-5678-1234</td></tr>
+          </table>
+        </div>
       </div>
-
       <div class="profile-right">
-        <div class="section-title">프로필</div>
-        <table class="info-table">
-          <tr>
-            <td><span class="material-icons">phone</span>전화</td>
-            <td>없음</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">email</span>이메일</td>
-            <td>tarak0520@naver.com</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">group</span>부서</td>
-            <td>개발팀</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">location_on</span>주소</td>
-            <td>없음</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">calendar_today</span>입사일</td>
-            <td>2025. 5. 30~현재</td>
-          </tr>
-          <tr>
-            <td><span class="material-icons">schedule</span>근무 시간</td>
-            <td>28시간 30분</td>
-          </tr>
-        </table>
-
-        <div class="tags">
-          <div class="tag">인사</div>
-          <div class="tag">기본</div>
-          <div class="tag">근로 계약</div>
-          <div class="tag">임금 계약</div>
-          <div class="tag">급여 지급</div>
-          <div class="tag">근무</div>
-          <div class="tag">초과 근무 보상</div>
-          <div class="tag">휴가</div>
-          <div class="tag">쉬는 날</div>
-          <div class="tag">휴직 이력</div>
-          <div class="tag">경력</div>
-          <div class="tag">학력</div>
-          <div class="tag">기록사항</div>
+        <div class="tabs">
+          <div class="tab">기본정보</div>
+          <div class="tab active">인사 정보</div>
         </div>
+        <div class="tab-content">
+          <div class="section-title">기본 정보</div>
+          <table class="info-table">
+            <tr><td><span class="profile-icons">badge</span>사번</td><td>EMP-20240602</td></tr>
+            <tr><td><span class="profile-icons">wc</span>성별</td><td>여성</td></tr>
+            <tr><td><span class="profile-icons">mail</span>이메일</td><td>suji_lee@company.com</td></tr>
+            <tr><td><span class="profile-icons">phone</span>연락처</td><td>010-5678-1234</td></tr>
+            <tr><td><span class="profile-icons">location_on</span>주소</td><td>서울특별시 마포구</td></tr>
+            <tr><td><span class="profile-icons">calendar_today</span>입사일</td><td>2023.11.15</td></tr>
+            <tr><td><span class="profile-icons">how_to_reg</span>재직 상태</td><td>휴직</td></tr>
+          </table>
+        </div>
+        <div class="tab-content active">
+          <div class="section-title">인사 정보</div>
+          <table class="info-table">
+            <tr>
+              <td><span class="profile-icons">school</span>학력</td>
+              <td>
+                연월, 학교명, 학과, 졸업여부, 성적<br />
+                연월, 학교명, 학과, 졸업여부, 성적
+              </td>
+            </tr>
+            <tr>
+              <td><span class="profile-icons">workspace_premium</span>자격증</td>
+              <td>자격증이름, 취득 시기</td>
+            </tr>
+            <tr>
+              <td><span class="profile-icons">emoji_events</span>수상이력</td>
+              <td>수상명, 수상시기</td>
+            </tr>
+            <tr>
+              <td><span class="profile-icons">history_edu</span>경력</td>
+              <td>근무지, 기간</td>
+            </tr>
+          </table>
+        </div>
+
       </div>
     </div>
   </div>
 </main>
-
 <div id="chatbot-container"></div>
-
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach((tab, idx) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      contents[idx].classList.add('active');
+    });
+  });
+</script>
 </body>
 </html>

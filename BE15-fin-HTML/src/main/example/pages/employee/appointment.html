@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>인사 발령 내역 조회</title>
+    <link rel="stylesheet" href="../../assets/style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+        :root {
+            --gray-100: #f7f9fc;
+            --gray-300: #d7dce5;
+            --gray-500: #9aa6be;
+            --blue-50: #f0f3fa;
+            --blue-100: #d5deef;
+            --blue-200: #b1c9ef;
+            --blue-400: #628ecb;
+            --main-color: #395886;
+            --label-pending: #F6E3A3;
+            --label-approved: #A3CFC2;
+            --label-rejected: #E7AAAA;
+            --font-color: #222;
+            --label-color: #555;
+            --border-subtle: #e0e4eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
+            text-decoration: none;
+        }
+
+        .main {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+
+        .sidebar {
+            position: fixed;
+        }
+
+        .main-content {
+            width: 100%;
+            min-height: 100vh;
+            height: 100%;
+            padding: 40px 40px 40px 340px;
+            background: var(--blue-50);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            background: var(--blue-400);
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .section-card {
+            background-color: #fff;
+            border: 1px solid var(--gray-300);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 24px;
+            margin-bottom: 32px;
+        }
+        .filter-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 140px;
+        }
+
+        .filter-item label {
+            font-size: 13px;
+            color: var(--label-color);
+            padding-left: 2px;
+        }
+
+        .filter-item select,
+        .filter-item input {
+            padding: 7px 9px;
+            border: 1px solid #ccc;
+            width: 70%;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .btn-search {
+            padding: 9px 13px;
+            background-color: var(--blue-400);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .date-range-group .date-range {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .range-separator {
+            color: var(--label-color);
+            font-size: 14px;
+        }
+
+        .filter-button {
+            min-width: auto;
+        }
+
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .employee-table th,
+        .employee-table td {
+            border-bottom: 1px solid var(--gray-300);
+            padding: 14px 12px;
+            text-align: left;
+        }
+
+        .employee-table th {
+            background-color: var(--gray-100);
+            color: #333;
+            font-weight: 500;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 40px;
+        }
+
+        .pagination button {
+            background: #fff;
+            border: 1px solid var(--gray-300);
+            color: #444;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 32px;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover {
+            background-color: var(--blue-100);
+        }
+
+        .pagination .active {
+            background-color: var(--blue-400);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<main class="main">
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+
+        <div class="title">
+            <h1>인사 발령 내역 조회</h1>
+            <a href="appointment-form.html">
+                <button class="btn-primary">인사 발령 등록</button>
+            </a>
+        </div>
+
+        <div class="section-card">
+
+            <div class="filter-title">
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label for="search-name">사원명</label>
+                        <input type="text" id="search-name" placeholder="이름 입력"/>
+                    </div>
+                    <div class="filter-item">
+                        <label for="search-position">직위</label>
+                        <select id="search-position">
+                            <option>전체</option>
+                            <option>사원</option>
+                            <option>대리</option>
+                            <option>과장</option>
+                            <option>차장</option>
+                            <option>부장</option>
+                        </select>
+                    </div>
+                    <div class="filter-item date-range-group">
+                        <label>발령일자</label>
+                        <div class="date-range">
+                            <input type="date"/>
+                            <span class="range-separator">~</span>
+                            <input type="date"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-item filter-button">
+                    <label>&nbsp;</label> <!-- 공간 맞춤용 -->
+                    <button type="submit" class="btn-search">검색</button>
+                </div>
+            </div>
+
+                <div>
+                    <table class="employee-table">
+                        <thead>
+                        <tr>
+                            <th>사번</th>
+                            <th>사원명</th>
+                            <th>발령 종류</th>
+                            <th>기존 직위</th>
+                            <th>변경 직위</th>
+                            <th>기존 부서</th>
+                            <th>변경 부서</th>
+                            <th>전임자</th>
+                            <th>발령일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2024002</td>
+                            <td>이수민</td>
+                            <td>전보</td>
+                            <td>사원</td>
+                            <td>사원</td>
+                            <td>영업팀</td>
+                            <td>고객지원팀</td>
+                            <td>김성훈</td>
+                            <td>2024-05-12</td>
+                        </tr>
+                        <tr>
+                            <td>2024003</td>
+                            <td>김지호</td>
+                            <td>승진</td>
+                            <td>사원</td>
+                            <td>대리</td>
+                            <td>기획팀</td>
+                            <td>기획팀</td>
+                            <td>최미나</td>
+                            <td>2024-04-25</td>
+                        </tr>
+                        <tr>
+                            <td>2024004</td>
+                            <td>박하윤</td>
+                            <td>전보</td>
+                            <td>대리</td>
+                            <td>대리</td>
+                            <td>마케팅팀</td>
+                            <td>홍보팀</td>
+                            <td>유상준</td>
+                            <td>2024-03-10</td>
+                        </tr>
+                        <tr>
+                            <td>2024005</td>
+                            <td>정민석</td>
+                            <td>승진</td>
+                            <td>대리</td>
+                            <td>과장</td>
+                            <td>개발팀</td>
+                            <td>개발팀</td>
+                            <td>오세라</td>
+                            <td>2024-02-15</td>
+                        </tr>
+                        <tr>
+                            <td>2024006</td>
+                            <td>한서윤</td>
+                            <td>전보</td>
+                            <td>사원</td>
+                            <td>사원</td>
+                            <td>재무팀</td>
+                            <td>기획팀</td>
+                            <td>신정우</td>
+                            <td>2024-02-01</td>
+                        </tr>
+                        <tr>
+                            <td>2024007</td>
+                            <td>윤지훈</td>
+                            <td>승진</td>
+                            <td>과장</td>
+                            <td>차장</td>
+                            <td>개발팀</td>
+                            <td>개발팀</td>
+                            <td>문하영</td>
+                            <td>2024-01-20</td>
+                        </tr>
+                        <tr>
+                            <td>2024008</td>
+                            <td>최나영</td>
+                            <td>전보</td>
+                            <td>사원</td>
+                            <td>사원</td>
+                            <td>디자인팀</td>
+                            <td>UX팀</td>
+                            <td>이하나</td>
+                            <td>2024-01-10</td>
+                        </tr>
+                        <tr>
+                            <td>2024009</td>
+                            <td>서지우</td>
+                            <td>승진</td>
+                            <td>대리</td>
+                            <td>과장</td>
+                            <td>영업팀</td>
+                            <td>영업팀</td>
+                            <td>남태호</td>
+                            <td>2023-12-28</td>
+                        </tr>
+                        <tr>
+                            <td>2024010</td>
+                            <td>장도현</td>
+                            <td>전보</td>
+                            <td>차장</td>
+                            <td>차장</td>
+                            <td>기획팀</td>
+                            <td>전략팀</td>
+                            <td>백승윤</td>
+                            <td>2023-11-30</td>
+                        </tr>
+                        <tr>
+                            <td>2024011</td>
+                            <td>민예린</td>
+                            <td>승진</td>
+                            <td>사원</td>
+                            <td>대리</td>
+                            <td>인사팀</td>
+                            <td>인사팀</td>
+                            <td>정주아</td>
+                            <td>2023-11-01</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div class="pagination">
+                        <button>&laquo;</button>
+                        <button class="active">1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button>...</button>
+                        <button>10</button>
+                        <button>&raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="chatbot-container"></div>
+</main>
+</body>
+</html>
