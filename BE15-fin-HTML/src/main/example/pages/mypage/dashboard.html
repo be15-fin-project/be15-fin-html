@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>대시보드</title>
+    <link rel="stylesheet" href="../../assets/style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: var(--font-color);
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-toggle {
+            flex: 1;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-toggle.on {
+            background-color: orange;
+            color: white;
+        }
+
+        .btn-toggle.off {
+            background-color: var(--gray-300);
+            color: #444;
+        }
+
+        .section {
+            margin-top: 48px;
+        }
+
+        .section h4 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--main-color);
+        }
+
+        .holiday-list, .notice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .holiday-item {
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        table.kpi-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .kpi-table th, .kpi-table td {
+            padding: 10px;
+            border: 1px solid var(--gray-300);
+            text-align: center;
+        }
+
+        .card-columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .doc-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .doc-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--blue-400);
+            background: white;
+            color: var(--blue-400);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<main class="main">
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        <!-- 프로필 요약 -->
+        <div class="card profile-summary" style="display: flex; align-items: center; gap: 24px; padding: 24px; margin-bottom: 32px;">
+            <img src="https://via.placeholder.com/80" alt="avatar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;" />
+            <div>
+                <h2 style="margin: 0 0 6px; font-size: 20px;">이수진</h2>
+                <p style="margin: 0; font-size: 14px; color: var(--gray-500);">디자인팀 · UX 디자이너</p>
+                <p style="margin: 4px 0 0; font-size: 13px; color: var(--gray-500);">suji_lee@company.com · 010-5678-1234</p>
+            </div>
+        </div>
+
+        <!-- 상단 2단 구성: 좌측 정보 + 우측 캘린더 -->
+        <div style="display: flex; gap: 24px; margin-bottom: 40px;">
+            <!-- 좌측 근태 정보 -->
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+                <div class="card">
+                    <h3>출퇴근 정보</h3>
+                    <p><strong>출근 시간:</strong> 2025.06.08 오전 9:05<br><strong>예상 퇴근 시간:</strong> 오후 6:30 (초과근무 승인 반영)</p>
+                </div>
+                <div class="card">
+                    <h3>잔여 연차</h3>
+                    <p><strong>남은 일수:</strong> 15일</p>
+                    <div style="margin-top: 12px;">
+                        <h4 style="font-size: 14px; margin-bottom: 6px; color: var(--main-color);">이번달 연차/외근 일정</h4>
+                        <ul style="padding-left: 18px; font-size: 13px; color: #444;">
+                            <li>6월 12일 (수) - 연차</li>
+                            <li>6월 19일 (수) - 외근 (고객사 방문)</li>
+                            <li>6월 28일 (금) - 반차</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 우측 캘린더 -->
+            <div style="flex: 2;">
+                <div class="card">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--main-color);">월간 일정</h3>
+                    <iframe
+                            src="https://calendar.google.com/calendar/embed?src=ko.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul"
+                            style="border: 1px solid var(--gray-300); width: 100%; height: 500px; border-radius: 12px;"
+                            frameborder="0"
+                            scrolling="no">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 3열: 공지사항 / 결재문서 / KPI -->
+        <div class="dashboard">
+            <div class="card">
+                <h4>공지사항</h4>
+                <div class="notice-list">
+                    <div><strong>운영 보고서 안내</strong><br><small>운영팀 - 2024.12.30</small></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>결재문서</h4>
+                <div class="doc-buttons">
+                    <button>대기문서</button>
+                    <button>처리문서</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>KPI</h4>
+                <table class="kpi-table">
+                    <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>제목</th>
+                        <th>목표치</th>
+                        <th>진척도</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>업무</td>
+                        <td>매출 향상</td>
+                        <td>30%</td>
+                        <td>15%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="chatbot-container"></div>
+</main>
+</body>
+</html>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 :root {
     /* Background */
     --gray-100: #f7f9fc;
@@ -46,8 +48,12 @@
     width: 100%;
     min-height: 100vh;
     height: 100%;
-    padding: 40px 40px 40px 340px;
+    padding: 40px 40px 40px 25rem;
     background: var(--blue-50);
+    transition: padding-left 0.3s ease; /* ← 여기에 트랜지션 추가 */
+}
+.sidebar.collapsed ~ .main-content {
+    padding-left: 8rem; /* 예: collapsed 시 사이드바 너비만큼 줄이기 */
 }
 
 .filter-title {

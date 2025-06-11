@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인사평가 통계 대시보드</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .metric-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+        .stat-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- Header -->
+<header class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-chart-line text-2xl"></i>
+                <h1 class="text-2xl font-bold">인사평가 통계 대시보드</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm opacity-90">2024년 상반기 평가</span>
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto px-6 py-8">
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="metric-card bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">총 평가 인원</p>
+                    <p class="stat-number text-3xl font-bold mt-2">1,247</p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <i class="fas fa-users text-blue-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-green-600">
+                <i class="fas fa-arrow-up text-xs mr-1"></i>
+                <span class="text-sm">전년 대비 +8.3%</span>
+            </div>
+        </div>
+
+        <div class="metric-card bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">전체 평균 점수</p>
+                    <p class="stat-number text-3xl font-bold mt-2">82.5</p>
+                </div>
+                <div class="bg-green-100 p-3 rounded-lg">
+                    <i class="fas fa-trophy text-green-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-green-600">
+                <i class="fas fa-arrow-up text-xs mr-1"></i>
+                <span class="text-sm">전년 대비 +2.1점</span>
+            </div>
+        </div>
+
+        <div class="metric-card bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">S등급 비율</p>
+                    <p class="stat-number text-3xl font-bold mt-2">12.4%</p>
+                </div>
+                <div class="bg-yellow-100 p-3 rounded-lg">
+                    <i class="fas fa-star text-yellow-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-green-600">
+                <i class="fas fa-arrow-up text-xs mr-1"></i>
+                <span class="text-sm">전년 대비 +1.2%</span>
+            </div>
+        </div>
+
+        <div class="metric-card bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">평가 완료율</p>
+                    <p class="stat-number text-3xl font-bold mt-2">98.7%</p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-lg">
+                    <i class="fas fa-check-circle text-purple-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-green-600">
+                <i class="fas fa-arrow-up text-xs mr-1"></i>
+                <span class="text-sm">목표 달성</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Grade Distribution -->
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">등급별 인원 분포</h3>
+                <i class="fas fa-chart-pie text-gray-400"></i>
+            </div>
+            <div class="chart-container">
+                <canvas id="gradeChart"></canvas>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">S등급</span>
+                    </div>
+                    <p class="text-lg font-semibold mt-1">155명</p>
+                </div>
+                <div class="text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">A등급</span>
+                    </div>
+                    <p class="text-lg font-semibold mt-1">423명</p>
+                </div>
+                <div class="text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">B등급</span>
+                    </div>
+                    <p class="text-lg font-semibold mt-1">498명</p>
+                </div>
+                <div class="text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <span class="text-sm text-gray-600">C등급</span>
+                    </div>
+                    <p class="text-lg font-semibold mt-1">171명</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Department Performance -->
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">부서별 평균 점수</h3>
+                <i class="fas fa-chart-bar text-gray-400"></i>
+            </div>
+            <div class="chart-container">
+                <canvas id="departmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Analysis -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Trend Chart -->
+        <div class="lg:col-span-2 bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">월별 평가 점수 추이</h3>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">6개월</button>
+                    <button class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">1년</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Department Grade Distribution -->
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">부서별 등급 분포</h3>
+                <i class="fas fa-building text-gray-400"></i>
+            </div>
+            <div class="space-y-4">
+                <div class="department-item">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">마케팅부</span>
+                        <span class="text-sm text-gray-500">84.2점</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 via-blue-500 via-green-500 to-yellow-500 h-2 rounded-full" style="width: 88%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>S: 15%</span>
+                        <span>A: 38%</span>
+                        <span>B: 35%</span>
+                        <span>C: 12%</span>
+                    </div>
+                </div>
+
+                <div class="department-item">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">인사부</span>
+                        <span class="text-sm text-gray-500">81.7점</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 via-blue-500 via-green-500 to-yellow-500 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>S: 12%</span>
+                        <span>A: 33%</span>
+                        <span>B: 42%</span>
+                        <span>C: 13%</span>
+                    </div>
+                </div>
+
+                <div class="department-item">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">개발부</span>
+                        <span class="text-sm text-gray-500">85.9점</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 via-blue-500 via-green-500 to-yellow-500 h-2 rounded-full" style="width: 90%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>S: 18%</span>
+                        <span>A: 42%</span>
+                        <span>B: 32%</span>
+                        <span>C: 8%</span>
+                    </div>
+                </div>
+
+                <div class="department-item">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">영업부</span>
+                        <span class="text-sm text-gray-500">79.3점</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 via-blue-500 via-green-500 to-yellow-500 h-2 rounded-full" style="width: 82%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>S: 9%</span>
+                        <span>A: 29%</span>
+                        <span>B: 45%</span>
+                        <span>C: 17%</span>
+                    </div>
+                </div>
+
+                <div class="department-item">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">재무부</span>
+                        <span class="text-sm text-gray-500">83.1점</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 via-blue-500 via-green-500 to-yellow-500 h-2 rounded-full" style="width: 87%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>S: 14%</span>
+                        <span>A: 36%</span>
+                        <span>B: 38%</span>
+                        <span>C: 12%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Grade Distribution Pie Chart
+    const gradeCtx = document.getElementById('gradeChart').getContext('2d');
+    new Chart(gradeCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['S등급', 'A등급', 'B등급', 'C등급'],
+            datasets: [{
+                data: [155, 423, 498, 171],
+                backgroundColor: [
+                    '#EF4444',
+                    '#3B82F6',
+                    '#10B981',
+                    '#F59E0B'
+                ],
+                borderWidth: 0,
+                cutout: '70%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Department Performance Bar Chart
+    const deptCtx = document.getElementById('departmentChart').getContext('2d');
+    new Chart(deptCtx, {
+        type: 'bar',
+        data: {
+            labels: ['개발부', '마케팅부', '재무부', '인사부', '영업부'],
+            datasets: [{
+                label: '평균 점수',
+                data: [85.9, 84.2, 83.1, 81.7, 79.3],
+                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 75,
+                    max: 90,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Trend Line Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+            datasets: [{
+                label: '전체 평균',
+                data: [78.5, 79.2, 80.1, 81.3, 82.0, 82.5],
+                borderColor: 'rgba(59, 130, 246, 1)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'S등급 비율',
+                data: [10.2, 10.8, 11.1, 11.7, 12.0, 12.4],
+                borderColor: 'rgba(239, 68, 68, 1)',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                borderWidth: 3,
+                fill: false,
+                tension: 0.4,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    min: 75,
+                    max: 85,
+                    title: {
+                        display: true,
+                        text: '평균 점수'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    min: 8,
+                    max: 15,
+                    title: {
+                        display: true,
+                        text: 'S등급 비율 (%)'
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

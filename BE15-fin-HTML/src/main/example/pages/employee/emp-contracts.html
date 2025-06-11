@@ -9,31 +9,56 @@
     <script type="module" src="../../assets/common.js"></script>
     <style>
         :root {
+            /* Background */
             --gray-100: #f7f9fc;
             --gray-300: #d7dce5;
             --gray-500: #9aa6be;
+
+            /* Primary */
             --blue-50: #f0f3fa;
             --blue-100: #d5deef;
+            --blue-200: #b1c9ef;
             --blue-400: #628ecb;
             --main-color: #395886;
+
+            /* Label Status */
+            --label-pending: #F6E3A3;
+            --label-approved: #A3CFC2;
+            --label-rejected: #E7AAAA;
+
+            /* Text */
             --font-color: #222;
+            --label-color: #555;
+
+            /* Border */
+            --border-subtle: #e0e4eb;
         }
+
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Pretendard', sans-serif;
+            text-decoration: none;
         }
 
-        body {
-            background-color: var(--blue-50);
+        .main {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            justify-content: space-evenly;
         }
-
+        .sidebar {
+            position: fixed;
+        }
         .main-content {
-            padding: 40px 40px 40px 320px;
+            width: 100%;
+            min-height: 100vh;
+            height: 100%;
+            padding: 40px 40px 40px 340px;
+            background: var(--blue-50);
         }
-
         h1 {
             font-size: 24px;
             margin-bottom: 32px;
@@ -47,7 +72,7 @@
         }
 
         .btn-primary {
-            background: var(--blue-400);
+            background: var(--gray-500);
             color: white;
             padding: 10px 16px;
             border: none;

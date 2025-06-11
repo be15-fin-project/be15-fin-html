@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>전체 KPI 목록</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+    /* 기존 사원 정보 페이지 스타일 복붙 */
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-buttons button {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-500);
+      font-size: 13px;
+      font-weight: 500;
+      background-color: var(--gray-500);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-buttons button:hover {
+      background-color: var(--blue-100);
+      color: var(--main-color);
+    }
+
+    .material-icons {
+      font-size: 16px;
+      vertical-align: middle;
+    }
+    .dashboard-section {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .card-box {
+      flex: 1;
+      background-color: #fff;
+      border: 1px solid var(--gray-300);
+      border-radius: 16px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .card-box h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .placeholder-image {
+      width: 100%;
+      height: 240px;
+      background-color: var(--gray-100);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #888;
+      font-size: 14px;
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .section-card {
+      background-color: #fff;
+      border: 1px solid var(--gray-300);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 24px;
+      margin-bottom: 32px;
+    }
+
+    .filter-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 140px;
+    }
+
+    .filter-item label {
+      font-size: 13px;
+      color: var(--label-color);
+      padding-left: 2px;
+    }
+
+    .filter-item select,
+    .filter-item input {
+      padding: 7px 9px;
+      border: 1px solid #ccc;
+      width: 70%;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .date-range-group .date-range {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .range-separator {
+      color: var(--label-color);
+      font-size: 14px;
+    }
+
+    .filter-button {
+      min-width: auto;
+    }
+
+    .btn-search {
+      padding: 9px 13px;
+      background-color: var(--blue-400);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .employee-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .employee-table th,
+    .employee-table td {
+      border-bottom: 1px solid var(--gray-300);
+      padding: 14px 12px;
+      text-align: left;
+    }
+
+    .employee-table th {
+      background-color: var(--gray-100);
+      color: #333;
+      font-weight: 500;
+    }
+
+    .btn-detail {
+      background-color: var(--blue-400);
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<main class="main">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+    <div class="title">
+      <h1>전체 KPI 분석</h1>
+      <div class="action-buttons">
+        <button><span class="material-icons">file_download</span>엑셀 다운로드</button>
+      </div>
+    </div>
+
+    <div class="dashboard-section">
+      <div class="card-box">
+        <h2>전체 KPI 달성 현황 (부서별)</h2>
+        <div class="placeholder-image">[도넛 그래프 영역]</div>
+      </div>
+      <div class="card-box">
+        <h2>KPI 성취율 통계 그래프</h2>
+        <div class="placeholder-image">[바 그래프 영역]</div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="filter-title">
+        <div class="filter-bar">
+          <div class="filter-item">
+            <label>작성자</label>
+            <input type="text" placeholder="이름 또는 ID" />
+          </div>
+          <div class="filter-item">
+            <label>부서</label>
+            <select><option>전체</option></select>
+          </div>
+          <div class="filter-item">
+            <label>달성 여부</label>
+            <select>
+              <option>전체</option>
+              <option>달성</option>
+              <option>미달성</option>
+            </select>
+          </div>
+          <div class="filter-item date-range-group">
+            <label>작성일</label>
+            <div class="date-range">
+              <input type="date" />
+              <span class="range-separator">~</span>
+              <input type="date" />
+            </div>
+          </div>
+        </div>
+        <div class="filter-item filter-button">
+          <label>&nbsp;</label>
+          <button class="btn-search">검색</button>
+        </div>
+      </div>
+
+      <table class="employee-table">
+        <thead>
+        <tr>
+          <th>작성자</th>
+          <th>부서</th>
+          <th>목표</th>
+          <th>목표 수치</th>
+          <th>진척도</th>
+          <th>달성 여부</th>
+          <th>작성일</th>
+          <th>마감일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>김태훈</td><td>개발팀</td><td>서비스 안정성 향상</td><td>99%</td><td>95%</td><td>미달성</td><td>2023-10-01</td><td>2023-12-31</td>
+        </tr>
+        <tr>
+          <td>이하나</td><td>디자인팀</td><td>UI 개선율</td><td>100%</td><td>100%</td><td>달성</td><td>2023-08-21</td><td>2023-11-30</td>
+        </tr>
+        <tr>
+          <td>박지민</td><td>영업팀</td><td>고객 유지율</td><td>85%</td><td>90%</td><td>달성</td><td>2023-07-10</td><td>2023-12-31</td>
+        </tr>
+        <tr>
+          <td>최윤서</td><td>인사팀</td><td>직원 만족도 향상</td><td>90%</td><td>70%</td><td>미달성</td><td>2023-09-15</td><td>2023-12-15</td>
+        </tr>
+        <tr>
+          <td>정우진</td><td>기획팀</td><td>프로젝트 완료율</td><td>100%</td><td>100%</td><td>달성</td><td>2023-06-01</td><td>2023-10-31</td>
+        </tr>
+        <tr>
+          <td>한소민</td><td>디자인팀</td><td>디자인 QA 적합률</td><td>98%</td><td>96%</td><td>미달성</td><td>2023-09-18</td><td>2023-12-01</td>
+        </tr>
+        <tr>
+          <td>이준호</td><td>개발팀</td><td>버그 수정률</td><td>95%</td><td>97%</td><td>달성</td><td>2023-08-05</td><td>2023-11-30</td>
+        </tr>
+        <tr>
+          <td>김서연</td><td>영업팀</td><td>신규 고객 응답률</td><td>80%</td><td>78%</td><td>미달성</td><td>2023-09-01</td><td>2023-12-20</td>
+        </tr>
+        <tr>
+          <td>오지훈</td><td>기획팀</td><td>전략 실행률</td><td>90%</td><td>91%</td><td>달성</td><td>2023-08-10</td><td>2023-12-10</td>
+        </tr>
+        <tr>
+          <td>문지아</td><td>인사팀</td><td>교육 참여율</td><td>100%</td><td>85%</td><td>미달성</td><td>2023-07-22</td><td>2023-11-30</td>
+        </tr>
+        </tbody>
+
+      </table>
+
+      <div class="pagination">
+        <button>&laquo;</button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>...</button>
+        <button>10</button>
+        <button>&raquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="chatbot-container"></div>
+</main>
+</body>
+</html>

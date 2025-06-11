@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>다면평가 회차 관리</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="../../assets/common.js"></script>
+  <style>
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-buttons button {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-500);
+      font-size: 13px;
+      font-weight: 500;
+      background-color: var(--gray-500);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-buttons button:hover {
+      background-color: var(--blue-100);
+      color: var(--main-color);
+    }
+
+    .section-card {
+      background-color: #fff;
+      border: 1px solid var(--gray-300);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 24px;
+      margin-bottom: 32px;
+    }
+
+    .filter-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 140px;
+    }
+
+    .filter-item label {
+      font-size: 13px;
+      color: var(--label-color);
+      padding-left: 2px;
+    }
+
+    .filter-item select,
+    .filter-item input {
+      padding: 7px 9px;
+      border: 1px solid #ccc;
+      width: 70%;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .date-range-group .date-range {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .range-separator {
+      color: var(--label-color);
+      font-size: 14px;
+    }
+
+    .btn-search {
+      padding: 9px 13px;
+      background-color: var(--blue-400);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .employee-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .employee-table th,
+    .employee-table td {
+      border-bottom: 1px solid var(--gray-300);
+      padding: 14px 12px;
+      text-align: left;
+    }
+
+    .employee-table th {
+      background-color: var(--gray-100);
+      color: #333;
+      font-weight: 500;
+    }
+
+    .btn-edit {
+      background-color: var(--blue-400);
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-disabled {
+      background-color: var(--gray-300);
+      color: #888;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: not-allowed;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 40px;
+    }
+
+    .pagination button {
+      background: #fff;
+      border: 1px solid var(--gray-300);
+      color: #444;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      min-width: 32px;
+      transition: all 0.2s;
+    }
+
+    .pagination .active {
+      background-color: var(--blue-400);
+      color: #fff;
+      font-weight: bold;
+      border: none;
+    }
+
+    .pagination button:hover {
+      background-color: var(--blue-100);
+    }
+  </style>
+</head>
+<body>
+<main class="main">
+  <div id="sidebar-container"></div>
+
+  <div class="main-content">
+    <div class="title">
+      <h1>다면평가 회차 관리</h1>
+      <div class="action-buttons">
+        <a href="evaluation-create.html">
+          <button><span class="material-icons">add</span>회차 등록</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="filter-title">
+        <div class="filter-bar">
+          <div class="filter-item">
+            <label>상태</label>
+            <select>
+              <option>전체</option>
+              <option>진행 전</option>
+              <option>진행 중</option>
+              <option>완료</option>
+            </select>
+          </div>
+          <div class="filter-item date-range-group">
+            <label>평가 기간</label>
+            <div class="date-range">
+              <input type="date" />
+              <span class="range-separator">~</span>
+              <input type="date" />
+            </div>
+          </div>
+          <div class="filter-item">
+            <button class="btn-search">검색</button>
+          </div>
+        </div>
+      </div>
+
+      <table class="employee-table">
+        <thead>
+        <tr>
+          <th>회차 번호</th>
+          <th>평가 기간</th>
+          <th>참여자 수</th>
+          <th>상태</th>
+          <th>관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>1</td>
+          <td>2024-03-01 ~ 2024-03-31</td>
+          <td>120명</td>
+          <td>완료</td>
+          <td><button class="btn-disabled" disabled>수정 불가</button></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>2024-06-01 ~ 2024-06-30</td>
+          <td>98명</td>
+          <td>진행 중</td>
+          <td><button class="btn-disabled" disabled>수정 불가</button></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>2024-09-01 ~ 2024-09-30</td>
+          <td>예정</td>
+          <td>진행 전</td>
+          <td><a href="evaluation-edit.html"><button class="btn-edit">수정</button></a></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button>&laquo;</button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>...</button>
+        <button>10</button>
+        <button>&raquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="chatbot-container"></div>
+</main>
+</body>
+</html>

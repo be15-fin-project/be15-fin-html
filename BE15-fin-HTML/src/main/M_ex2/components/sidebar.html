@@ -1,0 +1,320 @@
+<link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
+
+<style>
+  .sidebar {
+    width: 22rem;
+    background: linear-gradient(180deg, #1f2937 0%, #374151 100%);
+    color: white;
+    height: 100vh;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    position: fixed;
+  }
+
+  .btn {
+    background: var(--main-color);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .sidebar .top-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+
+  .sidebar.collapsed {
+    width: 5rem;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebar-logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #3b82f6;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+  }
+
+  .sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .sidebar-toggle {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    overflow-y: auto; /* 이 영역만 스크롤 */
+    padding: 20px 0;
+  }
+  /* 선택사항: 스크롤바 예쁘게 */
+  .sidebar-nav::-webkit-scrollbar {
+    width: 3px;
+  }
+  .sidebar-nav::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    color: #d1d5db;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .sidebar-item:hover {
+    background-color: #4b5563;
+    color: #fff;
+  }
+
+  .sidebar-item.active {
+    background-color: #4b5563;
+    color: #fff;
+  }
+
+  .sidebar-item.highlighted {
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  /* 서브 메뉴의 active (더 연하게) */
+  .sidebar-indent .sidebar-item.active {
+    background-color: #374151; /* 좀 더 연한 회색 */
+    color: #f3f4f6; /* 연한 흰색 계열 */
+  }
+  .sidebar-indent {
+    padding-left: 1rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .sidebar-indent.open {
+    display: flex;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+  }
+
+  /* Collapsed 상태 처리 */
+  .sidebar.collapsed .sidebar-label,
+  .sidebar.collapsed .sidebar-title,
+  .sidebar.collapsed .sidebar-indent {
+    display: none;
+  }
+
+  .sidebar.collapsed .sidebar-item {
+    justify-content: center;
+  }
+
+  .sidebar.collapsed .sidebar-item i {
+    margin-right: 0;
+  }
+  /* 사이드바가 접혔을 때, 우측 화살표 아이콘만 숨김 */
+  .sidebar.collapsed .sidebar-sub-toggle {
+    display: none;
+  }
+  .sidebar.collapsed .sidebar-logo {
+    display: none;
+  }
+  .sidebar.collapsed .btn {
+    display: none;
+  }
+  .sidebar.collapsed .notification-icon {
+    display: none;
+  }
+
+  .sidebar-toggle .material-symbols-rounded {
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.collapsed .sidebar-toggle .material-symbols-rounded {
+    transform: rotate(180deg);
+  }
+
+  .sidebar-sub-toggle {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+    transform: rotate(0deg); /* 닫힌 상태 */
+  }
+
+  .sidebar-item.active .sidebar-sub-toggle {
+    transform: rotate(90deg); /* 열린 상태: 아래 방향 */
+  }
+
+
+</style>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">
+        <span class="material-symbols-rounded">domain</span>
+      </div>
+      <h2 class="sidebar-title">Momentum</h2>
+
+    </div>
+    <span class="top-icons">
+        <button class="btn" style="padding: 4px 10px; font-size: 13px;">출근</button>
+        <span class="material-symbols-rounded notification-icon">notifications</span>
+      </span>
+    <button id="toggleSidebar" class="sidebar-toggle">
+      <span class="material-symbols-rounded">menu</span>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <!-- 회사 정보 -->
+    <div>
+      <a href="#" class="sidebar-item">
+        <span class="material-symbols-rounded">apartment</span>
+        <span class="sidebar-label">회사 정보</span>
+        <span class="material-symbols-rounded sidebar-sub-toggle">chevron_right</span>
+      </a>
+      <div class="sidebar-indent">
+        <a href="../company/company-info.html" class="sidebar-item">회사 정보</a>
+        <a href="../company/org-chart.html" class="sidebar-item">조직도</a>
+      </div>
+    </div>
+
+    <!-- 사원 관리 -->
+    <div>
+      <a href="#" class="sidebar-item">
+        <span class="material-symbols-rounded">group</span>
+        <span class="sidebar-label">사원 관리</span>
+        <span class="material-symbols-rounded sidebar-sub-toggle">chevron_right</span>
+      </a>
+      <div class="sidebar-indent">
+        <a href="../employee/employees.html" class="sidebar-item">사원 목록 조회</a>
+        <a href="../employee/appointment.html" class="sidebar-item">인사 발령 내역</a>
+        <a href="../employee/emp-contracts.html" class="sidebar-item">계약서 내역</a>
+      </div>
+    </div>
+
+    <!-- 내 정보 -->
+    <div>
+      <a href="#" class="sidebar-item">
+        <span class="material-symbols-rounded">person</span>
+        <span class="sidebar-label">내 정보</span>
+        <span class="material-symbols-rounded sidebar-sub-toggle">chevron_right</span>
+      </a>
+      <div class="sidebar-indent">
+        <a href="../mypage/dashboard.html" class="sidebar-item">대시보드</a>
+        <a href="../mypage/profile.html" class="sidebar-item">개인 정보 조회</a>
+        <a href="../mypage/hr-info.html" class="sidebar-item">인사 정보 조회</a>
+        <a href="../mypage/contracts.html" class="sidebar-item">계약서 내역 조회</a>
+      </div>
+    </div>
+
+    <!-- 근태 관리 -->
+    <div>
+      <a href="../attendance/attendance.html" class="sidebar-item">
+        <span class="material-symbols-rounded">schedule</span>
+        <span class="sidebar-label">근태 관리</span>
+      </a>
+    </div>
+
+    <!-- 결재 관리 -->
+    <div>
+      <a href="#" class="sidebar-item">
+        <span class="material-symbols-rounded">task</span>
+        <span class="sidebar-label">결재 관리</span>
+        <span class="material-symbols-rounded sidebar-sub-toggle">chevron_right</span>
+      </a>
+      <div class="sidebar-indent">
+        <a href="../approval/history.html" class="sidebar-item">전체 결재 내역</a>
+        <a href="../approval/inbox.html" class="sidebar-item">문서함</a>
+      </div>
+    </div>
+
+    <!-- 성과 평가 -->
+    <div>
+      <a href="#" class="sidebar-item">
+        <span class="material-symbols-rounded">bar_chart</span>
+        <span class="sidebar-label">평가 관리</span>
+        <span class="material-symbols-rounded sidebar-sub-toggle">chevron_right</span>
+      </a>
+      <div class="sidebar-indent">
+        <a href="../performance/kpi-overview.html" class="sidebar-item">전체 KPI 분석</a>
+        <a href="../performance/kpi-list.html" class="sidebar-item">KPI 조회</a>
+        <a href="../performance/kpi-requests.html" class="sidebar-item">KPI 요청 관리</a>
+        <a href="../performance/evaluation-manage.html" class="sidebar-item">평가 관리</a>
+        <a href="../performance/evaluation-submit.html" class="sidebar-item">다면 평가 제출</a>
+        <a href="../performance/eval-all.html" class="sidebar-item">전체 인사 평가</a>
+        <a href="../performance/eval-me.html" class="sidebar-item">인사 평가 조회</a>
+        <a href="../performance/eval-objection.html" class="sidebar-item">이의 제기 조회</a>
+      </div>
+    </div>
+
+    <!-- 근속 지원 -->
+    <div>
+      <a href="#" class="sidebar-item">
+        <span class="material-symbols-rounded">support_agent</span>
+        <span class="sidebar-label">근속 지원</span>
+        <span class="material-symbols-rounded sidebar-sub-toggle">chevron_right</span>
+      </a>
+      <div class="sidebar-indent">
+        <a href="../retention/risk-stats.html" class="sidebar-item">근속 전망</a>
+        <a href="../retention/risk-contact.html" class="sidebar-item">면담 기록</a>
+      </div>
+    </div>
+
+    <!-- 공지 관리 -->
+    <div>
+      <a href="../announcement/announcements.html" class="sidebar-item">
+        <span class="material-symbols-rounded">campaign</span>
+        <span class="sidebar-label">공지 관리</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="../common/setting.html" class="sidebar-item">
+      <span class="material-symbols-rounded">settings</span>
+      <span class="sidebar-label">설정</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="material-symbols-rounded">logout</span>
+      <span class="sidebar-label">로그아웃</span>
+    </a>
+  </div>
+</aside>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회사 정보 관리 시스템</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(4px);
+        }
+        .form-input {
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        .floating-label {
+            transform: translateY(-1.5rem) scale(0.85);
+            color: #667eea;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-shadow {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+<div class="flex h-screen">
+    <!-- 사이드바 -->
+    <div class="w-64 glass-effect shadow-2xl">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-building text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">회사관리</h1>
+                    <p class="text-sm text-gray-500">Admin Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2">
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-tachometer-alt w-5"></i>
+                <span>대시보드</span>
+            </a>
+
+            <div class="space-y-1">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                    <i class="fas fa-building w-5"></i>
+                    <span>회사 정보</span>
+                </a>
+                <div class="ml-8 space-y-1">
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg text-sm text-blue-600 bg-blue-50">
+                        <i class="fas fa-circle text-xs"></i>
+                        <span>회사 기본 정보</span>
+                    </a>
+                </div>
+            </div>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-sitemap w-5"></i>
+                <span>조직도</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-users w-5"></i>
+                <span>사원 관리</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-user w-5"></i>
+                <span>내 정보</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-cog w-5"></i>
+                <span>관리</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-credit-card w-5"></i>
+                <span>결제 관리</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-chart-line w-5"></i>
+                <span>성과 평가</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-analytics w-5"></i>
+                <span>인사 분석</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-hand-holding-heart w-5"></i>
+                <span>근속 지원</span>
+            </a>
+
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-bullhorn w-5"></i>
+                <span>공지 사항</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-4 left-4 right-4 space-y-2">
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-cogs w-5"></i>
+                <span>설정</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:text-white">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>로그아웃</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="flex-1 p-8 overflow-auto">
+        <div class="max-w-4xl mx-auto">
+            <!-- 헤더 -->
+            <div class="animate-fade-in mb-8">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-building text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-white">회사 기본 정보</h1>
+                        <p class="text-blue-100">회사의 기본 정보를 관리합니다</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 폼 카드 -->
+            <div class="glass-effect rounded-2xl p-8 card-shadow animate-fade-in">
+                <form class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- 회사명 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-building text-blue-500 mr-2"></i>회사명
+                            </label>
+                            <input type="text" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder="회사명을 입력하세요">
+                        </div>
+
+                        <!-- 회사 대표 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-user-tie text-purple-500 mr-2"></i>회사 대표
+                            </label>
+                            <input type="text" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder="대표자명을 입력하세요">
+                        </div>
+                    </div>
+
+                    <!-- 회사 주소 -->
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>회사 주소
+                        </label>
+                        <input type="text" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder="주소를 입력하세요">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- 설립일 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-calendar-alt text-green-500 mr-2"></i>설립일
+                            </label>
+                            <div class="relative">
+                                <input type="date" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
+                            </div>
+                        </div>
+
+                        <!-- 회사 연락처 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-phone text-blue-500 mr-2"></i>회사 연락처
+                            </label>
+                            <input type="tel" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder="전화번호를 입력하세요">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- 사업자등록번호 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-id-card text-yellow-500 mr-2"></i>사업자등록번호
+                            </label>
+                            <input type="text" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder="000-00-00000">
+                        </div>
+
+                        <!-- 회사 이메일 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-envelope text-indigo-500 mr-2"></i>회사 이메일
+                            </label>
+                            <input type="email" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" placeholder="company@example.com">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- 출근 시간 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-clock text-green-500 mr-2"></i>출근 시간
+                            </label>
+                            <input type="time" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" value="09:00">
+                        </div>
+
+                        <!-- 퇴근 시간 -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-clock text-red-500 mr-2"></i>퇴근 시간
+                            </label>
+                            <input type="time" class="form-input w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" value="18:00">
+                        </div>
+                    </div>
+
+                    <!-- 저장 버튼 -->
+                    <div class="flex justify-end pt-6">
+                        <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-save mr-2"></i>저장하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 추가 정보 카드들 -->
+            <div class="grid md:grid-cols-3 gap-6 mt-8">
+                <div class="glass-effect rounded-xl p-6 text-center animate-fade-in">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-blue-500 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">직원 수</h3>
+                    <p class="text-2xl font-bold text-blue-600">124명</p>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 text-center animate-fade-in">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar text-purple-500 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">설립 연수</h3>
+                    <p class="text-2xl font-bold text-purple-600">15년</p>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 text-center animate-fade-in">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-green-500 text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">부서 수</h3>
+                    <p class="text-2xl font-bold text-green-600">12개</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 부드러운 애니메이션 효과
+    document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('.animate-fade-in');
+        elements.forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // 폼 입력 시 라벨 애니메이션
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').classList.add('floating-label');
+            });
+
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.querySelector('label').classList.remove('floating-label');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
