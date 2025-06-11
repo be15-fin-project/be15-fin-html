@@ -26,10 +26,52 @@
 
 ## 1. 🏆 팀 소개
 
-|                              곽진웅                              |                              김여진                              |                              김태인                              |                              김운경                               |                              정유진                              |
-|:-------------------------------------------------------------:|:-------------------------------------------------------------:|:-------------------------------------------------------------:|:--------------------------------------------------------------:|:-------------------------------------------------------------:|
-| <img src="./assets/images/다오.png" width="100" height="100"> | <img src="./assets/images/후우.png" width="100" height="100"> | <img src="./assets/images/케피.png" width="100" height="100"> | <img src="./assets/images/우니.png" width="100" height="100"> | <img src="./assets/images/마리드.png" width="100" height="100"> |
-|          [mijuckboon](https://github.com/mijuckboon)          |            [meowdule](https://github.com/meowdule)            |           [Taein5415](https://github.com/Taein5415)           |            [splguyjr](https://github.com/splguyjr)             |       [devyujinjeong](https://github.com/devyujinjeong)       |
+<div align="center">
+
+<br>
+
+<table>
+  <tr>
+    <td align="center"><b>곽진웅</b></td>
+    <td align="center"><b>김여진</b></td>
+    <td align="center"><b>김태인</b></td>
+    <td align="center"><b>김운경</b></td>
+    <td align="center"><b>정유진</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./assets/images/다오.png" height="100" /></td>
+    <td align="center"><img src="./assets/images/후우.png" height="100" /></td>
+    <td align="center"><img src="./assets/images/케피.png" height="100" /></td>
+    <td align="center"><img src="./assets/images/우니.png" height="100" /></td>
+    <td align="center"><img src="./assets/images/마리드.png" height="100" /></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/mijuckboon">mijuckboon</a></td>
+    <td align="center"><a href="https://github.com/meowdule">meowdule</a></td>
+    <td align="center"><a href="https://github.com/Taein5415">Taein5415</a></td>
+    <td align="center"><a href="https://github.com/splguyjr">splguyjr</a></td>
+    <td align="center"><a href="https://github.com/devyujinjeong">devyujinjeong</a></td>
+  </tr>
+</table>
+
+<br>
+
+<table>
+  <tr>
+    <td align="center"><b>안성민</b></td>
+    <td align="center"><b>소용준</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./assets/images/배찌.png" height="100" /></td>
+    <td align="center"><img src="./assets/images/후우.png" height="100" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>멘토님</b></td>
+    <td align="center"><b>자문 교수님</b></td>
+  </tr>
+</table>
+
+</div>
 
 
 <br>
