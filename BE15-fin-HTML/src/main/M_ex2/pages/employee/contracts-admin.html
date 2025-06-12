@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>계약서 내역 조회</title>
+    <link rel="stylesheet" href="../../assets/style.css"/>
+    <link rel="stylesheet" href="../../assets/list.css"/>
+    <link rel="stylesheet" href="../../assets/sidemodal.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script type="module" src="../../assets/common.js"></script>
+    <style>
+
+        /* Table Section */
+        .table-section {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .table-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--font-main);
+            margin-bottom: 8px;
+        }
+
+        .table-subtitle {
+            color: var(--font-sub);
+            font-size: 0.95rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .data-table th {
+            background: var(--gray-50);
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--font-main);
+            border-bottom: 2px solid var(--border-subtle);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--font-color);
+        }
+
+    </style>
+</head>
+<body>
+<main class="main">
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        <main class="container">
+            <div class="header-area">
+                <div class="page-header">
+                    <h1 class="page-title">계약서 내역 조회</h1>
+                    <p class="page-subtitle">사원의 계약서 정보를 조회하고 관리할 수 있습니다.</p>
+                </div>
+                <div class="header-buttons">
+                    <button class="bg-blue-600" onclick="openModal()">
+                        <i class="fas fa-file-signature"></i>
+                        계약서 등록
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="search-btn-area">
+                    <h3>검색 조건</h3>
+                    <button class="search-btn" onclick="searchData()">
+                        <i class="fas fa-search"></i> 검색
+                    </button>
+                </div>
+                <div class="filter-grid">
+                    <div>
+                        <label for="emp-id">사번</label>
+                        <input type="text" id="emp-id" placeholder="사번 입력">
+                    </div>
+                    <div>
+                        <label for="emp-name">사원명</label>
+                        <input type="text" id="emp-name" placeholder="사원명 입력">
+                    </div>
+                    <div>
+                        <label for="contract-name">계약서명</label>
+                        <input type="text" id="contract-name" placeholder="계약서명 입력">
+                    </div>
+                    <div>
+                        <label for="start-date">등록일 (시작)</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div>
+                        <label for="end-date">등록일 (종료)</label>
+                        <input type="date" id="end-date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <div class="table-header">
+                    <h2 class="table-title">계약서 목록</h2>
+                    <p class="table-subtitle">총 10건의 계약서가 등록되어 있습니다.</p>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>사번</th>
+                            <th>사원명</th>
+                            <th>계약서명</th>
+                            <th>등록일</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1024001</td><td>김유진</td><td>근로계약서</td><td>2024-06-03</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024002</td><td>이서준</td><td>비밀유지계약서</td><td>2024-05-28</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024003</td><td>박지후</td><td>프리랜서계약서</td><td>2024-05-20</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024004</td><td>최윤아</td><td>인턴계약서</td><td>2024-05-15</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024005</td><td>장도윤</td><td>정규직전환계약서</td><td>2024-05-01</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024006</td><td>윤하진</td><td>업무협약서</td><td>2024-04-25</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024007</td><td>정서현</td><td>용역계약서</td><td>2024-04-10</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024008</td><td>한승우</td><td>근로계약서</td><td>2024-03-31</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024009</td><td>임다은</td><td>파트타임계약서</td><td>2024-03-15</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        <tr>
+                            <td>1024010</td><td>배지훈</td><td>근속연장계약서</td><td>2024-03-01</td>
+                            <td><button class="btn btn-download">다운로드</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">...</button>
+                <button class="pagination-btn">10</button>
+                <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </main>
+    </div>
+</main>
+<div id="chatbot-container"></div>
+</body>
+</html>

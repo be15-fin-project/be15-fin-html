@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pretendard:400,500,600,700&display=swap"/>
   <style>
     :root {
-      --blue-main: #3b5bdb;
-      --blue-light: #e9f1fe;
-      --blue-dark: #244a87;
+      --blue-400: #3b5bdb;
+      --blue-100: #e9f1fe;
+      --blue-400: #244a87;
       --gray-50: #f8fafc;
       --gray-100: #f1f3f6;
       --gray-200: #e1e4ea;
@@ -22,8 +22,8 @@
       --card-radius: 18px;
       --shadow: 0 7px 24px 0 rgba(50, 60, 90, 0.10);
       --shadow-soft: 0 2px 12px 0 rgba(69,111,230,0.07);
-      --accent: #ffb43a;
-      --danger: #e8594a;
+      --warning: #ffb43a;
+      --error: #e8594a;
       --success: #4ea685;
     }
 
@@ -47,7 +47,7 @@
     }
 
     .profile-summary {
-      background: linear-gradient(90deg, var(--blue-light) 0%, #fff 90%);
+      background: linear-gradient(90deg, var(--blue-100) 0%, #fff 90%);
       box-shadow: var(--shadow-soft);
       border-radius: var(--card-radius);
       display: flex;
@@ -62,7 +62,7 @@
     }
     .profile-summary h2 {
       margin: 0 0 8px 0; font-size: 21.5px; font-weight: 700;
-      color: var(--blue-main);
+      color: var(--blue-400);
       letter-spacing: -0.7px;
     }
     .profile-summary p {
@@ -107,7 +107,7 @@
     .card h3, .card h4 {
       margin: 0 0 14px 0;
       font-size: 1.09rem;
-      color: var(--blue-main);
+      color: var(--blue-400);
       font-weight: 600;
     }
     .card h4 { font-size: 1.05rem; }
@@ -120,7 +120,7 @@
 
     /* 출퇴근/연차 카드 */
     .attendance-info strong {
-      color: var(--blue-dark);
+      color: var(--blue-400);
       font-weight: 600;
     }
     .leave-list {
@@ -155,7 +155,7 @@
       gap: 14px;
     }
     .notice-list strong {
-      color: var(--blue-dark);
+      color: var(--blue-400);
       font-size: 15px;
     }
     .notice-list small {
@@ -173,8 +173,8 @@
       flex: 1;
       padding: 12px 0;
       border: none;
-      background: var(--blue-light);
-      color: var(--blue-main);
+      background: var(--blue-100);
+      color: var(--blue-400);
       font-weight: 600;
       border-radius: 8px;
       font-size: 14.5px;
@@ -182,7 +182,7 @@
       transition: background 0.17s, color 0.18s;
     }
     .doc-buttons button:hover {
-      background: var(--blue-main);
+      background: var(--blue-400);
       color: #fff;
     }
 
@@ -203,8 +203,8 @@
       text-align: center;
     }
     .kpi-table th {
-      background: var(--blue-light);
-      color: var(--blue-dark);
+      background: var(--blue-100);
+      color: var(--blue-400);
       font-weight: 700;
       font-size: 14px;
     }
@@ -276,19 +276,19 @@
         </div>
         <div class="card">
           <h3>잔여 연차</h3>
-          <p><strong>남은 일수:</strong> <span style="color:var(--accent);font-weight:600;">15일</span></p>
-          <h4 style="font-size: 14.6px; margin-bottom: 8px; color: var(--blue-dark); margin-top: 16px;">이번달 연차/외근 일정</h4>
+          <p><strong>남은 일수:</strong> <span style="color:var(--warning);font-weight:600;">15일</span></p>
+          <h4 style="font-size: 14.6px; margin-bottom: 8px; color: var(--blue-400); margin-top: 16px;">이번달 연차/외근 일정</h4>
           <ul class="leave-list">
-            <li>6월 12일 (수) - <span style="color:var(--accent);font-weight:500;">연차</span></li>
-            <li>6월 19일 (수) - <span style="color:var(--blue-main);font-weight:500;">외근 (고객사 방문)</span></li>
-            <li>6월 28일 (금) - <span style="color:var(--accent);font-weight:500;">반차</span></li>
+            <li>6월 12일 (수) - <span style="color:var(--warning);font-weight:500;">연차</span></li>
+            <li>6월 19일 (수) - <span style="color:var(--blue-400);font-weight:500;">외근 (고객사 방문)</span></li>
+            <li>6월 28일 (금) - <span style="color:var(--warning);font-weight:500;">반차</span></li>
           </ul>
         </div>
       </div>
       <!-- 우측 캘린더 -->
       <div class="dashboard-calendar">
         <div class="card">
-          <h3 style="font-size: 18px; margin-bottom: 18px; color: var(--blue-main);">월간 일정</h3>
+          <h3 style="font-size: 18px; margin-bottom: 18px; color: var(--blue-400);">월간 일정</h3>
           <iframe
                   src="https://calendar.google.com/calendar/embed?src=ko.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul"
                   class="calendar-iframe"
@@ -337,7 +337,7 @@
             <td>업무</td>
             <td>매출 향상</td>
             <td>30%</td>
-            <td style="color: var(--blue-main); font-weight:600;">15%</td>
+            <td style="color: var(--blue-400); font-weight:600;">15%</td>
           </tr>
           <tr>
             <td>개인</td>

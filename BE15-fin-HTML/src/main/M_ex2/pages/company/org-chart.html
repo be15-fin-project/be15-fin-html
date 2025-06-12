@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>조직도</title>
+    <link rel="stylesheet" href="../../assets/style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script type="module" src="../../assets/common.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+
+        /* 헤더 영역 */
+        .header-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-logo {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: var(--icon-gradient);
+            border-radius: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 18px rgba(120, 127, 245, 0.08);
+        }
+
+        .header-logo i {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        .header-title {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: var(--font-main);
+            margin: 0 0 0.2rem 0;
+        }
+
+        .header-description {
+            color: var(--font-sub);
+            font-size: 1.1rem;
+            margin: 0;
+            letter-spacing: 0.01em;
+            font-weight: 500;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            height: calc(100vh - 200px);
+        }
+
+        @media (min-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 350px 1fr 350px;
+            }
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--card-radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-subtle);
+            height: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--font-main);
+        }
+
+        .card-icon {
+            color: var(--blue-400);
+            font-size: 1.125rem;
+        }
+
+        /* Organization Tree Styles */
+        .org-tree-content {
+            overflow-y: auto;
+            height: calc(100% - 80px);
+            padding-right: 8px;
+        }
+
+        .org-item {
+            position: relative;
+            margin-bottom: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            user-select: none;
+        }
+
+        .org-item:hover {
+            background: var(--blue-50);
+            transform: translateX(4px);
+        }
+
+        .org-item.active {
+            background: var(--blue-100);
+            border: 1px solid var(--blue-200);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .org-item.active .org-item-name {
+            color: var(--blue-400);
+            font-weight: 600;
+        }
+
+        .org-item-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .org-item-icon {
+            color: var(--main-color);
+            font-size: 14px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .org-item-name {
+            color: var(--font-main);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Tree connecting lines */
+        .org-item[data-level="1"] {
+            margin-left: 0;
+        }
+
+        .org-item[data-level="2"] {
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .org-item[data-level="3"] {
+            margin-left: 40px;
+            position: relative;
+        }
+
+        .org-item[data-level="2"]:before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            width: 8px;
+            height: 1px;
+            background: var(--gray-300);
+        }
+
+        .org-item[data-level="3"]:before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            width: 8px;
+            height: 1px;
+            background: var(--gray-300);
+        }
+
+        .org-item[data-level="2"]:after {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: -8px;
+            width: 1px;
+            height: calc(100% + 16px);
+            background: var(--gray-300);
+        }
+
+        .org-item[data-level="3"]:after {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: -8px;
+            width: 1px;
+            height: calc(100% + 16px);
+            background: var(--gray-300);
+        }
+
+        .org-item:last-child[data-level="2"]:after,
+        .org-item:last-child[data-level="3"]:after {
+            height: 50%;
+        }
+
+        /* Department Info Styles */
+        .dept-info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            height: 100%;
+        }
+
+        .dept-stats-section {
+            flex: 0 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .icon-bg-blue {
+            background: #e9f2fe;
+            color: #3868b9;
+        }
+
+        .stat-card-icon {
+            width: 3.1rem;
+            height: 3.1rem;
+            border-radius: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            box-shadow: 0 2px 8px 0 rgba(56, 104, 185, 0.08);
+        }
+        .stat_num {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--main-color);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--font-sub);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .dept-details {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dept-detail-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .dept-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .dept-detail-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dept-detail-label span {
+            color: var(--font-main);
+            font-weight: 500;
+        }
+
+        .dept-detail-value {
+            color: var(--font-sub);
+            font-weight: 600;
+        }
+
+        /* Members List Styles */
+        .members-content {
+            overflow-y: auto;
+            height: calc(100% - 80px);
+            padding-right: 8px;
+        }
+
+        .member-item {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            background: #fff;
+            border: 1px solid var(--blue-100);
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 8px 12px rgba(56, 104, 185, 0.10);
+        }
+
+        .member-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .member-item.manager {
+            /*background: var(--blue-200);*/
+            border-color: var(--blue-400);
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.875rem;
+            background: var(--blue-200);
+        }
+
+        .member-avatar.manager {
+            background: var(--blue-400);
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-weight: 700;
+            color: var(--font-main);
+            margin-bottom: 2px;
+        }
+
+        .member-position {
+            color: var(--blue-400);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .member-contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .member-contact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--font-sub);
+        }
+
+        .member-contact i {
+            width: 12px;
+            text-align: center;
+        }
+
+        .member-contact span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .manager-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--blue-400);
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 0;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            color: var(--font-sub);
+            font-size: 1rem;
+        }
+
+        /* Icon Colors */
+        .icon-purple {
+            color: var(--blue-400);
+        }
+
+        .icon-blue {
+            color: var(--blue-400);
+        }
+
+        .icon-green {
+            color: var(--success);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 8px 12px;
+            background: var(--blue-50);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb-item {
+            color: var(--font-sub);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--blue-400);
+            font-weight: 600;
+        }
+
+        .breadcrumb-separator {
+            color: var(--gray-500);
+        }
+
+        /* Custom scrollbar */
+        .org-tree-content::-webkit-scrollbar,
+        .members-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .org-tree-content::-webkit-scrollbar-track,
+        .members-content::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 3px;
+        }
+
+        .org-tree-content::-webkit-scrollbar-thumb,
+        .members-content::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 3px;
+        }
+
+        .org-tree-content::-webkit-scrollbar-thumb:hover,
+        .members-content::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+
+        /* Animation */
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<main class="main">
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 헤더 -->
+            <div class="header-section">
+                <div class="header-content">
+                    <div class="header-logo">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">조직도</h1>
+                        <p class="header-description">회사의 조직 구조와 구성원 정보를 관리합니다</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-grid">
+                <!-- Organization Tree -->
+                <div class="org-tree-section">
+                    <div class="card slide-in">
+                        <div class="card-header">
+                            <i class="fas fa-folder-tree card-icon"></i>
+                            <h2 class="card-title">조직 구조</h2>
+                        </div>
+                        <div class="breadcrumb" id="breadcrumb">
+                            <span class="breadcrumb-item active">테크놀로지㈜</span>
+                        </div>
+                        <div class="org-tree-content" id="org-tree">
+                            <!-- Organization tree will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Department Info -->
+                <div class="dept-info-section">
+                    <div class="card fade-in">
+                        <div class="card-header">
+                            <i class="fas fa-info-circle card-icon"></i>
+                            <h2 class="card-title">부서 정보</h2>
+                        </div>
+                        <div class="dept-info-grid">
+                            <div class="dept-stats-section">
+                                <div id="dept-stats" class="stats-grid">
+                                    <!-- Stats will be populated here -->
+                                </div>
+                                <div id="dept-info" class="dept-details">
+                                    <!-- Department info will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Members List -->
+                <div class="members-section">
+                    <div class="card fade-in">
+                        <div class="card-header">
+                            <i class="fas fa-users card-icon"></i>
+                            <h2 class="card-title">구성원</h2>
+                        </div>
+                        <div class="members-content" id="members-list">
+                            <!-- Members will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+<script>
+    // Department data
+    const departments = {
+        1: {
+            dept_id: 1,
+            name: "테크놀로지㈜",
+            contact: "02-1234-5678",
+            dept_head_id: 1,
+            parent_dept_id: null,
+            created_at: "2020-01-01"
+        },
+        2: {
+            dept_id: 2,
+            name: "경영지원본부",
+            contact: "02-1234-5680",
+            dept_head_id: 2,
+            parent_dept_id: 1,
+            created_at: "2020-01-01"
+        },
+        3: {
+            dept_id: 3,
+            name: "인사팀",
+            contact: "02-1234-5681",
+            dept_head_id: 3,
+            parent_dept_id: 2,
+            created_at: "2020-01-01"
+        },
+        4: {
+            dept_id: 4,
+            name: "재무팀",
+            contact: "02-1234-5682",
+            dept_head_id: 4,
+            parent_dept_id: 2,
+            created_at: "2020-01-01"
+        },
+        5: {
+            dept_id: 5,
+            name: "개발본부",
+            contact: "02-1234-5690",
+            dept_head_id: 5,
+            parent_dept_id: 1,
+            created_at: "2020-01-01"
+        },
+        6: {
+            dept_id: 6,
+            name: "프론트엔드팀",
+            contact: "02-1234-5691",
+            dept_head_id: 6,
+            parent_dept_id: 5,
+            created_at: "2020-01-01"
+        },
+        7: {
+            dept_id: 7,
+            name: "백엔드팀",
+            contact: "02-1234-5692",
+            dept_head_id: 7,
+            parent_dept_id: 5,
+            created_at: "2020-01-01"
+        },
+        8: {
+            dept_id: 8,
+            name: "데이터팀",
+            contact: "02-1234-5693",
+            dept_head_id: 8,
+            parent_dept_id: 5,
+            created_at: "2020-01-01"
+        },
+        9: {
+            dept_id: 9,
+            name: "마케팅본부",
+            contact: "02-1234-5700",
+            dept_head_id: 9,
+            parent_dept_id: 1,
+            created_at: "2020-01-01"
+        },
+        10: {
+            dept_id: 10,
+            name: "디지털마케팅팀",
+            contact: "02-1234-5701",
+            dept_head_id: 10,
+            parent_dept_id: 9,
+            created_at: "2020-01-01"
+        },
+        11: {
+            dept_id: 11,
+            name: "영업팀",
+            contact: "02-1234-5702",
+            dept_head_id: 11,
+            parent_dept_id: 9,
+            created_at: "2020-01-01"
+        }
+    };
+
+    // Members data
+    const members = {
+        1: [
+            {id: 1, name: "김대표", position: "대표이사", phone: "010-1234-5678", email: "ceo@company.com", isManager: true},
+            {
+                id: 2,
+                name: "박이사",
+                position: "경영지원이사",
+                phone: "010-1234-5679",
+                email: "support@company.com",
+                isManager: false
+            },
+            {id: 5, name: "최이사", position: "개발이사", phone: "010-1234-5689", email: "dev@company.com", isManager: false},
+            {
+                id: 9,
+                name: "정이사",
+                position: "마케팅이사",
+                phone: "010-1234-5699",
+                email: "marketing@company.com",
+                isManager: false
+            }
+        ],
+        2: [
+            {
+                id: 2,
+                name: "박이사",
+                position: "본부장",
+                phone: "010-1234-5679",
+                email: "support@company.com",
+                isManager: true
+            },
+            {id: 3, name: "이팀장", position: "인사팀장", phone: "010-1234-5680", email: "hr@company.com", isManager: false},
+            {
+                id: 4,
+                name: "김팀장",
+                position: "재무팀장",
+                phone: "010-1234-5681",
+                email: "finance@company.com",
+                isManager: false
+            }
+        ],
+        3: [
+            {id: 3, name: "이팀장", position: "팀장", phone: "010-1234-5680", email: "hr@company.com", isManager: true},
+            {id: 31, name: "손대리", position: "인사대리", phone: "010-1234-5682", email: "hr1@company.com", isManager: false},
+            {id: 32, name: "윤사원", position: "인사사원", phone: "010-1234-5683", email: "hr2@company.com", isManager: false}
+        ],
+        4: [
+            {id: 4, name: "김팀장", position: "팀장", phone: "010-1234-5681", email: "finance@company.com", isManager: true},
+            {
+                id: 41,
+                name: "조대리",
+                position: "재무대리",
+                phone: "010-1234-5684",
+                email: "finance1@company.com",
+                isManager: false
+            },
+            {
+                id: 42,
+                name: "한사원",
+                position: "재무사원",
+                phone: "010-1234-5685",
+                email: "finance2@company.com",
+                isManager: false
+            }
+        ],
+        5: [
+            {id: 5, name: "최이사", position: "본부장", phone: "010-1234-5689", email: "dev@company.com", isManager: true},
+            {
+                id: 6,
+                name: "송팀장",
+                position: "프론트엔드팀장",
+                phone: "010-1234-5690",
+                email: "frontend@company.com",
+                isManager: false
+            },
+            {
+                id: 7,
+                name: "강팀장",
+                position: "백엔드팀장",
+                phone: "010-1234-5691",
+                email: "backend@company.com",
+                isManager: false
+            },
+            {id: 8, name: "유팀장", position: "데이터팀장", phone: "010-1234-5692", email: "data@company.com", isManager: false}
+        ],
+        6: [
+            {
+                id: 6,
+                name: "송팀장",
+                position: "팀장",
+                phone: "010-1234-5690",
+                email: "frontend@company.com",
+                isManager: true
+            },
+            {
+                id: 61,
+                name: "백시니어",
+                position: "시니어개발자",
+                phone: "010-1234-5693",
+                email: "frontend1@company.com",
+                isManager: false
+            },
+            {
+                id: 62,
+                name: "문주니어",
+                position: "주니어개발자",
+                phone: "010-1234-5694",
+                email: "frontend2@company.com",
+                isManager: false
+            },
+            {
+                id: 63,
+                name: "서인턴",
+                position: "인턴개발자",
+                phone: "010-1234-5695",
+                email: "frontend3@company.com",
+                isManager: false
+            }
+        ],
+        7: [
+            {id: 7, name: "강팀장", position: "팀장", phone: "010-1234-5691", email: "backend@company.com", isManager: true},
+            {
+                id: 71,
+                name: "홍시니어",
+                position: "시니어개발자",
+                phone: "010-1234-5696",
+                email: "backend1@company.com",
+                isManager: false
+            },
+            {
+                id: 72,
+                name: "노주니어",
+                position: "주니어개발자",
+                phone: "010-1234-5697",
+                email: "backend2@company.com",
+                isManager: false
+            }
+        ],
+        8: [
+            {id: 8, name: "유팀장", position: "팀장", phone: "010-1234-5692", email: "data@company.com", isManager: true},
+            {
+                id: 81,
+                name: "임애널리스트",
+                position: "데이터애널리스트",
+                phone: "010-1234-5698",
+                email: "data1@company.com",
+                isManager: false
+            }
+        ],
+        9: [
+            {
+                id: 9,
+                name: "정이사",
+                position: "본부장",
+                phone: "010-1234-5699",
+                email: "marketing@company.com",
+                isManager: true
+            },
+            {
+                id: 10,
+                name: "구팀장",
+                position: "디지털마케팅팀장",
+                phone: "010-1234-5700",
+                email: "digital@company.com",
+                isManager: false
+            },
+            {
+                id: 11,
+                name: "신팀장",
+                position: "영업팀장",
+                phone: "010-1234-5701",
+                email: "sales@company.com",
+                isManager: false
+            }
+        ],
+        10: [
+            {
+                id: 10,
+                name: "구팀장",
+                position: "팀장",
+                phone: "010-1234-5700",
+                email: "digital@company.com",
+                isManager: true
+            },
+            {
+                id: 101,
+                name: "오대리",
+                position: "마케팅대리",
+                phone: "010-1234-5702",
+                email: "digital1@company.com",
+                isManager: false
+            }
+        ],
+        11: [
+            {id: 11, name: "신팀장", position: "팀장", phone: "010-1234-5701", email: "sales@company.com", isManager: true},
+            {
+                id: 111,
+                name: "양대리",
+                position: "영업대리",
+                phone: "010-1234-5703",
+                email: "sales1@company.com",
+                isManager: false
+            },
+            {
+                id: 112,
+                name: "하사원",
+                position: "영업사원",
+                phone: "010-1234-5704",
+                email: "sales2@company.com",
+                isManager: false
+            }
+        ]
+    };
+
+    // Organization tree structure with hierarchy levels
+    const orgStructure = [
+        {
+            id: 1,
+            name: "테크놀로지㈜",
+            icon: "fas fa-building",
+            level: 1,
+            children: [
+                {
+                    id: 2,
+                    name: "경영지원본부",
+                    icon: "fas fa-users-cog",
+                    level: 2,
+                    children: [
+                        {id: 3, name: "인사팀", icon: "fas fa-user-tie", level: 3},
+                        {id: 4, name: "재무팀", icon: "fas fa-calculator", level: 3}
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "개발본부",
+                    icon: "fas fa-code",
+                    level: 2,
+                    children: [
+                        {id: 6, name: "프론트엔드팀", icon: "fas fa-mobile-alt", level: 3},
+                        {id: 7, name: "백엔드팀", icon: "fas fa-server", level: 3},
+                        {id: 8, name: "데이터팀", icon: "fas fa-database", level: 3}
+                    ]
+                },
+                {
+                    id: 9,
+                    name: "마케팅본부",
+                    icon: "fas fa-chart-line",
+                    level: 2,
+                    children: [
+                        {id: 10, name: "디지털마케팅팀", icon: "fas fa-bullhorn", level: 3},
+                        {id: 11, name: "영업팀", icon: "fas fa-handshake", level: 3}
+                    ]
+                }
+            ]
+        }
+    ];
+
+    // Current navigation state
+    let breadcrumb = ["테크놀로지㈜"];
+
+    // Render organization tree
+    function renderOrgTree() {
+        const orgTreeElement = document.getElementById('org-tree');
+
+        function createTreeItem(item) {
+            const isActive = item.id === 1 ? 'active' : '';
+
+            return `
+                    <div class="org-item ${isActive}"
+                         data-dept-id="${item.id}"
+                         data-level="${item.level}">
+                        <div class="org-item-content">
+                            <i class="${item.icon} org-item-icon"></i>
+                            <span class="org-item-name">${item.name}</span>
+                        </div>
+                    </div>
+                    ${item.children ? item.children.map(child => createTreeItem(child)).join('') : ''}
+                `;
+        }
+
+        orgTreeElement.innerHTML = orgStructure.map(item => createTreeItem(item)).join('');
+    }
+
+    // Update breadcrumb
+    function updateBreadcrumb(deptId) {
+        const dept = departments[deptId];
+        const breadcrumbElement = document.getElementById('breadcrumb');
+
+        // Build breadcrumb path
+        let path = [];
+        let currentDept = dept;
+
+        while (currentDept) {
+            path.unshift(currentDept.name);
+            if (currentDept.parent_dept_id) {
+                currentDept = departments[currentDept.parent_dept_id];
+            } else {
+                break;
+            }
+        }
+
+        breadcrumbElement.innerHTML = path.map((name, index) => {
+            const isActive = index === path.length - 1 ? 'active' : '';
+            const separator = index < path.length - 1 ? '<i class="fas fa-chevron-right breadcrumb-separator"></i>' : '';
+            return `<span class="breadcrumb-item ${isActive}">${name}</span>${separator}`;
+        }).join('');
+    }
+
+    // Show department info
+    function showDepartmentInfo(deptId) {
+        const dept = departments[deptId];
+        const deptMembers = members[deptId] || [];
+
+        // Update stats (removed manager count)
+        document.getElementById('dept-stats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-card-icon icon-bg-blue"><i class="fas fa-users"></i></div>
+                    <div class="stat_num">
+                        <div class="stat-label">총 구성원</div>
+                        <div class="stat-number">${deptMembers.length}</div>
+                    </div>
+                </div>
+            `;
+
+        // Update department info
+        document.getElementById('dept-info').innerHTML = `
+                <div class="dept-detail-item">
+                    <div class="dept-detail-label">
+                        <i class="fas fa-building icon-purple"></i>
+                        <span>부서명</span>
+                    </div>
+                    <span class="dept-detail-value">${dept.name}</span>
+                </div>
+                <div class="dept-detail-item">
+                    <div class="dept-detail-label">
+                        <i class="fas fa-phone icon-blue"></i>
+                        <span>연락처</span>
+                    </div>
+                    <span class="dept-detail-value">${dept.contact}</span>
+                </div>
+                <div class="dept-detail-item">
+                    <div class="dept-detail-label">
+                        <i class="fas fa-calendar-plus icon-green"></i>
+                        <span>생성일</span>
+                    </div>
+                    <span class="dept-detail-value">${dept.created_at}</span>
+                </div>
+            `;
+
+        updateBreadcrumb(deptId);
+    }
+
+    // Show members
+    function showMembers(deptId) {
+        const deptMembers = members[deptId] || [];
+        const membersElement = document.getElementById('members-list');
+
+        if (deptMembers.length === 0) {
+            membersElement.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-friends"></i>
+                        <p>구성원이 없습니다</p>
+                    </div>
+                `;
+            return;
+        }
+
+        membersElement.innerHTML = deptMembers.map(member => `
+                <div class="member-item ${member.isManager ? 'manager' : ''}">
+                    ${member.isManager ? '<div class="manager-badge">팀장</div>' : ''}
+                    <div class="member-header">
+                        <div class="member-avatar ${member.isManager ? 'manager' : ''}">
+                        </div>
+                        <div class="member-info">
+                            <h4 class="member-name">${member.name}</h4>
+                            <p class="member-position">${member.position}</p>
+                        </div>
+                    </div>
+                    <div class="member-contacts">
+                        <div class="member-contact">
+                            <i class="fas fa-envelope"></i>
+                            <span>${member.email}</span>
+                        </div>
+                        <div class="member-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>${member.phone}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function () {
+        renderOrgTree();
+
+        // Organization tree click events
+        document.getElementById('org-tree').addEventListener('click', function (e) {
+            const orgItem = e.target.closest('.org-item');
+            if (orgItem) {
+                // Remove active class from all items
+                document.querySelectorAll('.org-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Add active class to clicked item
+                orgItem.classList.add('active');
+
+                const deptId = parseInt(orgItem.getAttribute('data-dept-id'));
+                showDepartmentInfo(deptId);
+                showMembers(deptId);
+            }
+        });
+
+        // Initialize with root department
+        showDepartmentInfo(1);
+        showMembers(1);
+    });
+</script>
+</body>
+</html>

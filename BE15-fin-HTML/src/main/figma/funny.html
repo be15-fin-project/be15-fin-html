@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로필 조회</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .sidebar-gradient {
+      background: var(--icon-gradient);
+    }
+
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .info-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .info-card:hover::before {
+      left: 100%;
+    }
+
+    .info-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.1);
+    }
+
+    .tab-active {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+    }
+
+    .profile-shadow {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .icon-gradient {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .contact-button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-badge {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+      animation: pulse 2s infinite;
+    }
+
+    .department-badge {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+    }
+
+    .sidebar-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+    }
+
+    .gradient-card-1 {
+      background: var(--icon-gradient);
+    }
+
+    .gradient-card-2 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .gradient-card-3 {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .gradient-card-4 {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .gradient-card-5 {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .gradient-card-6 {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .floating-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .scroll-smooth {
+      scroll-behavior: smooth;
+    }
+
+    .content-area {
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
+    }
+
+    .content-area::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .content-area::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .content-area::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 10px;
+    }
+
+    .tooltip {
+      position: relative;
+    }
+
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      margin-bottom: 8px;
+    }
+
+    .tooltip:hover::after {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex">
+<!-- Left Sidebar -->
+<div class="w-80 sidebar-gradient flex flex-col min-h-screen shadow-2xl">
+  <!-- Header -->
+  <div class="p-6 border-b border-white border-opacity-20">
+    <div class="flex items-center space-x-4 mb-6">
+      <button class="glass-effect p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300 tooltip" data-tooltip="뒤로가기">
+        <i class="fas fa-arrow-left text-white text-lg"></i>
+      </button>
+      <h1 class="text-xl font-bold text-white">직원 프로필</h1>
+    </div>
+  </div>
+
+  <!-- Profile Section -->
+  <div class="flex-1 p-6">
+    <!-- Profile Avatar -->
+    <div class="text-center mb-8">
+      <div class="relative inline-block floating-animation">
+        <div class="w-24 h-24 rounded-full glass-effect flex items-center justify-center mx-auto mb-4 shadow-2xl">
+          <i class="fas fa-user text-3xl text-white"></i>
+        </div>
+        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-3 border-white shadow-lg"></div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-white mb-2">이수진</h2>
+      <p class="text-lg text-gray-100 mb-4 opacity-90">UX/UI 디자이너</p>
+
+      <!-- Badges -->
+      <div class="flex justify-center space-x-2 mb-6">
+        <span class="status-badge px-3 py-1 rounded-full text-white text-xs font-medium">재직중</span>
+        <span class="department-badge px-3 py-1 rounded-full text-white text-xs font-medium">디자인팀</span>
+      </div>
+    </div>
+
+    <!-- Quick Contact -->
+    <div class="space-y-3 mb-8">
+      <div class="contact-button glass-effect p-4 rounded-2xl cursor-pointer tooltip" data-tooltip="이메일 보내기">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+            <i class="fas fa-envelope text-white"></i>
+          </div>
+          <div class="flex-1 text-left">
+            <p class="text-xs text-gray-200 opacity-80">이메일</p>
+            <p class="text-sm font-medium text-white">suj_lee@company.com</p>
+          </div>
+          <i class="fas fa-external-link-alt text-white opacity-60"></i>
+        </div>
+      </div>
+
+      <div class="contact-button glass-effect p-4 rounded-2xl cursor-pointer tooltip" data-tooltip="전화걸기">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+            <i class="fas fa-phone text-white"></i>
+          </div>
+          <div class="flex-1 text-left">
+            <p class="text-xs text-gray-200 opacity-80">전화번호</p>
+            <p class="text-sm font-medium text-white">010-5678-1234</p>
+          </div>
+          <i class="fas fa-external-link-alt text-white opacity-60"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Info Cards -->
+    <div class="space-y-3">
+      <div class="sidebar-card p-4 rounded-xl">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-fingerprint text-white opacity-80"></i>
+          <div>
+            <p class="text-xs text-gray-200 opacity-80">사번</p>
+            <p class="text-sm font-medium text-white">EMP20240502</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card p-4 rounded-xl">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-calendar-alt text-white opacity-80"></i>
+          <div>
+            <p class="text-xs text-gray-200 opacity-80">입사일</p>
+            <p class="text-sm font-medium text-white">2023.11.15</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card p-4 rounded-xl">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-briefcase text-white opacity-80"></i>
+          <div>
+            <p class="text-xs text-gray-200 opacity-80">직급</p>
+            <p class="text-sm font-medium text-white">사원</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Right Main Content -->
+<div class="flex-1 p-8 content-area">
+  <!-- Main Content Card -->
+  <div class="bg-white rounded-3xl profile-shadow overflow-hidden max-w-5xl">
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 bg-gray-50">
+      <nav class="flex">
+        <button class="tab-button flex-1 py-5 px-8 text-center font-semibold rounded-tl-3xl tab-active transition-all duration-300" data-tab="basic">
+          <i class="fas fa-user-circle mr-3"></i>기본정보
+        </button>
+        <button class="tab-button flex-1 py-5 px-8 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all duration-300" data-tab="history">
+          <i class="fas fa-history mr-3"></i>이력정보
+        </button>
+      </nav>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="p-8">
+      <!-- Basic Info Tab -->
+      <div id="basic-tab" class="tab-content">
+        <div class="space-y-10">
+          <!-- Personal Information Section -->
+          <div>
+            <div class="flex items-center mb-8">
+              <div class="w-12 h-12 icon-gradient rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                <i class="fas fa-id-card text-white text-lg"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gradient">개인정보</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="info-card gradient-card-1 p-6 rounded-2xl text-white shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-fingerprint text-white text-lg"></i>
+                  </div>
+                  <i class="fas fa-copy text-white opacity-60 cursor-pointer hover:opacity-100 transition-opacity"></i>
+                </div>
+                <p class="text-sm opacity-80 mb-1">사번</p>
+                <p class="text-xl font-bold">EMP20240502</p>
+              </div>
+
+              <div class="info-card gradient-card-2 p-6 rounded-2xl text-white shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-user-tag text-white text-lg"></i>
+                  </div>
+                </div>
+                <p class="text-sm opacity-80 mb-1">성명</p>
+                <p class="text-xl font-bold">이수진</p>
+              </div>
+
+              <div class="info-card gradient-card-3 p-6 rounded-2xl text-white shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-briefcase text-white text-lg"></i>
+                  </div>
+                </div>
+                <p class="text-sm opacity-80 mb-1">직급</p>
+                <p class="text-xl font-bold">사원</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Information Section -->
+          <div>
+            <div class="flex items-center mb-8">
+              <div class="w-12 h-12 icon-gradient rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                <i class="fas fa-address-book text-white text-lg"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gradient">연락정보</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="info-card gradient-card-4 p-6 rounded-2xl text-white shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-envelope text-white text-lg"></i>
+                  </div>
+                  <i class="fas fa-copy text-white opacity-60 cursor-pointer hover:opacity-100 transition-opacity copy-btn"></i>
+                </div>
+                <p class="text-sm opacity-80 mb-1">이메일</p>
+                <p class="text-lg font-bold break-all">suj_lee@company.com</p>
+              </div>
+
+              <div class="info-card gradient-card-5 p-6 rounded-2xl text-white shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-phone text-white text-lg"></i>
+                  </div>
+                  <i class="fas fa-phone text-white opacity-60 cursor-pointer hover:opacity-100 transition-opacity"></i>
+                </div>
+                <p class="text-sm opacity-80 mb-1">전화번호</p>
+                <p class="text-lg font-bold">010-5678-1234</p>
+              </div>
+
+              <div class="info-card gradient-card-6 p-6 rounded-2xl text-white shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-map-marker-alt text-white text-lg"></i>
+                  </div>
+                </div>
+                <p class="text-sm opacity-80 mb-1">주소</p>
+                <p class="text-lg font-bold">서울특별시 서초구</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Information Section -->
+          <div>
+            <div class="flex items-center mb-8">
+              <div class="w-12 h-12 icon-gradient rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                <i class="fas fa-building text-white text-lg"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-gradient">회사정보</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="info-card bg-white border-2 border-indigo-100 p-6 rounded-2xl shadow-lg hover:border-indigo-300">
+                <div class="text-center">
+                  <div class="w-14 h-14 icon-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <i class="fas fa-calendar-alt text-white text-xl"></i>
+                  </div>
+                  <p class="text-sm text-gray-600 font-medium mb-2">입사일</p>
+                  <p class="text-xl font-bold text-gray-800">2023.11.15</p>
+                  <div class="mt-3 px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium inline-block">
+                    재직 1년 1개월
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-card bg-white border-2 border-purple-100 p-6 rounded-2xl shadow-lg hover:border-purple-300">
+                <div class="text-center">
+                  <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <i class="fas fa-users text-white text-xl"></i>
+                  </div>
+                  <p class="text-sm text-gray-600 font-medium mb-2">소속 부서</p>
+                  <p class="text-xl font-bold text-gray-800">디자인팀</p>
+                  <div class="mt-3 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium inline-block">
+                    5명 부서
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-card bg-white border-2 border-green-100 p-6 rounded-2xl shadow-lg hover:border-green-300">
+                <div class="text-center">
+                  <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <i class="fas fa-palette text-white text-xl"></i>
+                  </div>
+                  <p class="text-sm text-gray-600 font-medium mb-2">업무</p>
+                  <p class="text-xl font-bold text-gray-800">UX/UI 디자인</p>
+                  <div class="mt-3 px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium inline-block">
+                    전문 분야
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Info Tab -->
+      <div id="history-tab" class="tab-content hidden">
+        <div class="text-center py-20">
+          <div class="w-32 h-32 icon-gradient rounded-full flex items-center justify-center mx-auto mb-8 floating-animation shadow-2xl">
+            <i class="fas fa-history text-4xl text-white"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-800 mb-6">이력 정보</h3>
+          <p class="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">직원의 경력, 교육, 프로젝트 이력 등 상세한 정보가 여기에 표시됩니다. 현재 정보를 준비 중입니다.</p>
+          <div class="space-y-4">
+            <button class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-10 py-4 rounded-2xl font-semibold hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+              <i class="fas fa-plus mr-2"></i>이력 정보 추가
+            </button>
+            <div class="text-sm text-gray-500 mt-4">
+              <p>• 경력 사항 • 교육 이력 • 프로젝트 참여 내역 • 수상 경력</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab functionality
+  document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const tabName = this.getAttribute('data-tab');
+
+      // Remove active class from all tabs and contents
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:bg-gray-100');
+      });
+
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+
+      // Add active class to clicked tab
+      this.classList.add('tab-active');
+      this.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:bg-gray-100');
+
+      // Show corresponding content
+      document.getElementById(tabName + '-tab').classList.remove('hidden');
+    });
+  });
+
+  // Back button functionality
+  document.querySelector('.fa-arrow-left').parentElement.addEventListener('click', function() {
+    window.history.back();
+  });
+
+  // Copy functionality for all copy buttons
+  document.querySelectorAll('.fa-copy').forEach(copyBtn => {
+    copyBtn.addEventListener('click', function() {
+      const card = this.closest('.info-card');
+      const textToCopy = card.querySelector('.text-xl, .text-lg').textContent;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        // Show success indication
+        const originalIcon = this.className;
+        this.className = 'fas fa-check text-white opacity-100';
+
+        // Create success message
+        const message = document.createElement('div');
+        message.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+        message.innerHTML = '<i class="fas fa-check mr-2"></i>복사되었습니다!';
+        document.body.appendChild(message);
+
+        // Animate in
+        setTimeout(() => message.classList.remove('translate-x-full'), 100);
+
+        // Reset icon and remove message
+        setTimeout(() => {
+          this.className = originalIcon;
+          message.classList.add('translate-x-full');
+          setTimeout(() => document.body.removeChild(message), 300);
+        }, 2000);
+      }).catch(() => {
+        // Error handling
+        const message = document.createElement('div');
+        message.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+        message.innerHTML = '<i class="fas fa-times mr-2"></i>복사에 실패했습니다.';
+        document.body.appendChild(message);
+        setTimeout(() => document.body.removeChild(message), 3000);
+      });
+    });
+  });
+
+  // Contact button functionality in sidebar
+  document.querySelectorAll('.contact-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const isEmail = this.querySelector('.fa-envelope');
+      if (isEmail) {
+        window.location.href = 'mailto:suj_lee@company.com';
+      } else {
+        window.location.href = 'tel:010-5678-1234';
+      }
+    });
+  });
+
+  // Phone button functionality in main content
+  document.querySelectorAll('.fa-phone').forEach(phoneBtn => {
+    if (phoneBtn.parentElement.classList.contains('cursor-pointer')) {
+      phoneBtn.parentElement.addEventListener('click', function() {
+        window.location.href = 'tel:010-5678-1234';
+      });
+    }
+  });
+
+      // Add subtle parallax effect to cards
+      document.addEventListener('mousemove', function(e) {
+          const cards = document.querySelectorAll('.info-card');
+          const mouseX = e.clientX / window.innerWidth;
+          const mouseY = e.clientY / window.innerHeight;
+
+          cards.forEach(card => {
+              const rect = card.getBoundingClientRect();
+              const cardX = (rect.left + rect.width / 2) / window.innerWidth;
+              const cardY = (rect.top + rect.height / 2) / window.innerHeight;
+
+              const deltaX = (mouseX - cardX) * 10;
+              const deltaY = (mouseY - cardY) * 10;
+
+              card.style.transform += ` perspective(1000px) rotateY(${deltaX}deg) rotateX(${-deltaY}deg)`;
+          });
+      });
+
+  // Reset card transforms when mouse leaves
+  document.addEventListener('mouseleave', function() {
+    document.querySelectorAll('.info-card').forEach(card => {
+      card.style.transform = '';
+    });
+  });
+</script>
+</body>
+</html>
