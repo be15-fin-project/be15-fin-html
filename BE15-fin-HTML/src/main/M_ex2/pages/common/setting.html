@@ -1,13 +1,290 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>설정</title>
-    <link rel="stylesheet" href="../../assets/style.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/style.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script type="module" src="../../assets/common.js"></script>
     <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .checkbox-custom {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-custom:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .checkbox-custom:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: -2px;
+            left: 2px;
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .department-tree {
+            position: relative;
+        }
+
+        .department-tree::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 40px;
+            height: calc(100% - 40px);
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .tree-item {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .tree-item::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            width: 15px;
+            height: 2px;
+            background: #e5e7eb;
+        }
+        .genspark-badge-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .genspark-modal {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 10000;
+            justify-content: end;
+        }
+
+        .genspark-modal-content {
+            background-color: white;
+            border-radius: 8px;
+            max-width: 450px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .genspark-modal-content {
+                max-width: 90%;
+            }
+        }
+
+        .genspark-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .genspark-title {
+            margin-bottom: 8px;
+            font-weight: normal;
+            display: inline;
+            font-size: 14px;
+        }
+
+        .genspark-report {
+            color: #909499;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 14px;
+            display: inline;
+        }
+
+        .genspark-info {
+            margin: 25px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .genspark-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .genspark-remove-btn {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            color: #333;
+            padding: 4px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .genspark-go-btn {
+            background-color: #222;
+            border: none;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .genspark-notice-dialog {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .genspark-notice-content {
+            background-color: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            box-sizing: border-box;
+            padding: 10px 30px 30px 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+        }
+
+        .genspark-notice-title {
+            color: #000;
+            font-family: Arial;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 150%;
+        }
+
+        .genspark-notice-list {
+            margin: 24px 0;
+
+            color: #606366;
+            font-family: Arial;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+            padding-left: 12px;
+        }
+
+        .genspark-notice-list li {
+            margin-bottom: 12px;
+            list-style-type: disc;
+        }
+
+        .genspark-notice-list li a {
+            color: #606366;
+            text-decoration: underline;
+        }
+
+        .genspark-notice-checkbox {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+
+            color: #232425;
+
+            font-family: Arial;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        .genspark-notice-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .genspark-notice-ok {
+            color: #232425;
+
+            text-align: center;
+            font-family: Arial;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 150%;
+
+            cursor: pointer;
+            display: flex;
+            height: 40px;
+            padding: 6px 14px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            align-self: stretch;
+            border-radius: 8px;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -16,11 +293,306 @@
     <div id="sidebar-container"></div>
 
     <div class="main-content">
-        <h1>설정</h1>
+        <header class="gradient-bg text-white py-6 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-building text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold">권한 관리 시스템</h1>
+                            <p class="text-blue-100">회사 조직 및 권한 관리</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
+                            <i class="fas fa-user-circle mr-2"></i>
+                            관리자
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <!-- Company Info Card -->
+            <div class="bg-white rounded-xl card-shadow hover-lift p-6 mb-8" style="transform: translateY(0px);">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-building text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">회사명</h2>
+                        <p class="text-gray-600">회사 대표, 회사 구성인원</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">회사명</label>
+                        <input type="text"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                               placeholder="회사명을 입력하세요">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">사업자등록번호</label>
+                        <input type="text"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                               placeholder="000-00-00000">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="bg-white rounded-xl card-shadow mb-8 p-2">
+                <div class="flex space-x-2">
+                    <button class="flex-1 px-6 py-3 rounded-lg text-center font-medium transition-all hover:bg-gray-50">
+                        <i class="fas fa-building mr-2"></i>
+                        회사 관리
+                    </button>
+                    <button class="flex-1 px-6 py-3 rounded-lg text-center font-medium transition-all hover:bg-gray-50">
+                        <i class="fas fa-users mr-2"></i>
+                        부서 관리
+                    </button>
+                    <button class="flex-1 px-6 py-3 rounded-lg text-center font-medium transition-all hover:bg-gray-50">
+                        <i class="fas fa-user-tie mr-2"></i>
+                        직위 관리
+                    </button>
+                    <button class="flex-1 px-6 py-3 rounded-lg text-center font-medium tab-active">
+                        <i class="fas fa-key mr-2"></i>
+                        권한 관리
+                    </button>
+                </div>
+            </div>
+
+            <!-- Permission Management -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Department Tree -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl card-shadow hover-lift p-6" style="transform: translateY(0px);">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-sitemap mr-2 text-blue-500"></i>
+                                권한 관리
+                            </h3>
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">
+                                <i class="fas fa-plus mr-2"></i>
+                                부서 추가
+                            </button>
+                        </div>
+
+                        <!-- Marketing Department -->
+                        <div class="department-tree mb-6">
+                            <div class="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg mb-3">
+                                <button class="text-blue-500 hover:text-blue-700 transition-all">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-bullhorn text-white text-sm"></i>
+                                </div>
+                                <span class="font-medium text-gray-800">마케팅부</span>
+                                <button class="ml-auto text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+
+                            <div class="ml-6 space-y-2">
+                                <div class="tree-item flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg transition-all">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="text-gray-700">마케팅 1팀</span>
+                                    <button class="ml-auto text-blue-500 hover:text-blue-700 transition-all">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <div class="tree-item flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg transition-all">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="text-gray-700">마케팅 1팀 1팀</span>
+                                </div>
+                                <div class="tree-item flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg transition-all">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="text-gray-700">마케팅 1팀 2팀</span>
+                                </div>
+                                <div class="tree-item flex items-center justify-between p-2 bg-yellow-50 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-user text-yellow-500"></i>
+                                        <span class="text-gray-700">홍길동-사원</span>
+                                    </div>
+                                    <div class="text-sm text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
+                                        강감찬-팀장
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personnel Department -->
+                        <div class="department-tree">
+                            <div class="flex items-center space-x-3 p-3 bg-green-50 rounded-lg mb-3">
+                                <button class="text-green-500 hover:text-green-700 transition-all">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-users text-white text-sm"></i>
+                                </div>
+                                <span class="font-medium text-gray-800">인사부</span>
+                                <button class="ml-auto text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+
+                            <div class="ml-6 space-y-2">
+                                <div class="tree-item flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg transition-all">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="text-gray-700">인사팀 1팀</span>
+                                    <button class="ml-auto text-blue-500 hover:text-blue-700 transition-all">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                                <div class="tree-item flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg transition-all">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="text-gray-700">인사팀 1팀 1팀</span>
+                                    <span class="ml-auto text-sm text-gray-500">유민준</span>
+                                </div>
+                                <div class="tree-item flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg transition-all">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="text-gray-700">인사팀 1팀 2팀</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions Panel -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl card-shadow hover-lift p-6" style="transform: translateY(0px);">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-shield-alt mr-2 text-green-500"></i>
+                                권한설정
+                            </h3>
+                            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <input type="checkbox" class="checkbox-custom" checked="">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-user-shield text-blue-500"></i>
+                                        <span class="font-medium text-gray-800">관리자</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="flex items-center space-x-3">
+                                    <input type="checkbox" class="checkbox-custom">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-gavel text-purple-500"></i>
+                                        <span class="text-gray-700">입찰</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="flex items-center space-x-3">
+                                    <input type="checkbox" class="checkbox-custom">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-users text-green-500"></i>
+                                        <span class="text-gray-700">인사팀</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="flex items-center space-x-3">
+                                    <input type="checkbox" class="checkbox-custom">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-briefcase text-orange-500"></i>
+                                        <span class="text-gray-700">사업</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="flex items-center space-x-3">
+                                    <input type="checkbox" class="checkbox-custom">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-calculator text-red-500"></i>
+                                        <span class="text-gray-700">경리팀</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <button class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105">
+                                <i class="fas fa-save mr-2"></i>
+                                권한변경
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
 
 <div id="chatbot-container"></div>
+
+<script>
+    // Interactive functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        // Tab switching
+        const tabs = document.querySelectorAll('button[class*="flex-1"]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                tabs.forEach(t => t.classList.remove('tab-active'));
+                this.classList.add('tab-active');
+            });
+        });
+
+        // Department tree collapse/expand
+        const chevrons = document.querySelectorAll('.fas.fa-chevron-down');
+        chevrons.forEach(chevron => {
+            chevron.addEventListener('click', function () {
+                this.classList.toggle('fa-chevron-down');
+                this.classList.toggle('fa-chevron-right');
+
+                const departmentTree = this.closest('.department-tree');
+                const subItems = departmentTree.querySelector('.ml-6');
+                if (subItems) {
+                    subItems.style.display = subItems.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Checkbox animations
+        const checkboxes = document.querySelectorAll('.checkbox-custom');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    this.parentElement.parentElement.classList.add('bg-blue-50');
+                } else {
+                    this.parentElement.parentElement.classList.remove('bg-blue-50');
+                }
+            });
+        });
+
+        // Hover effects for cards
+        const cards = document.querySelectorAll('.hover-lift');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-4px)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

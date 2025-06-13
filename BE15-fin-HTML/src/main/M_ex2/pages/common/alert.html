@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>알림</title>
+  <link rel="stylesheet" href="../../assets/style.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script type="module" src="../../assets/common.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .alert-modal {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 22rem;
+      height: 100%;
+      background-color: #ffffff;
+    }
+    .alert-footer {
+      position: fixed;
+      bottom: 0;
+      left: 22rem;
+      background-color: #cccccc;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .alert-item {
+      transition: all 0.2s ease;
+    }
+    .alert-item:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .tab-active {
+      color: #60a5fa;
+      border-bottom: 2px solid #60a5fa;
+    }
+    .notification-dot {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+
+<main class="main">
+  <div id="sidebar-container"></div>
+
+    <!-- 알림 패널 -->
+    <div class="alert-modal">
+      <!-- 알림 헤더 -->
+      <div class="bg-white border-b border-gray-200 p-4">
+        <h2 class="text-lg font-semibold text-gray-800">ALERTS</h2>
+
+        <!-- 탭 메뉴 -->
+        <div class="flex space-x-6 mt-4">
+          <button class="tab-active pb-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:text-blue-600 transition-colors">
+            읽지 않음
+          </button>
+          <button class="pb-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:text-blue-600 transition-colors">
+            읽음
+          </button>
+          <button class="pb-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:text-blue-600 transition-colors">
+            전체
+          </button>
+        </div>
+      </div>
+
+      <!-- 알림 목록 -->
+      <div class="flex-1 overflow-y-auto scrollbar-hide">
+        <!-- 알림 카테고리 -->
+        <div class="p-4 border-b border-gray-200">
+          <div class="flex items-center space-x-2 mb-3">
+            <div class="w-2 h-2 bg-red-500 rounded-full notification-dot"></div>
+            <span class="text-sm font-medium text-gray-800">알림</span>
+          </div>
+
+          <!-- 알림 항목 -->
+          <div class="alert-item p-3 rounded-lg border border-gray-200 bg-white">
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-bell text-blue-600 text-sm"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                  <h4 class="text-sm font-medium text-gray-800">결재 요청</h4>
+                  <span class="text-xs text-gray-500">3분 전</span>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  통컴쳄 날의 결재 승인 요청이 도착했습니다.
+                </p>
+                <div class="text-xs text-gray-500 mt-1">
+                  (문서 처리 기기)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 추가 알림 항목들 -->
+        <div class="p-4 border-b border-gray-200">
+          <div class="alert-item p-3 rounded-lg border border-gray-200 bg-white">
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-green-600 text-sm"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                  <h4 class="text-sm font-medium text-gray-800">근무 신청 승인</h4>
+                  <span class="text-xs text-gray-500">1시간 전</span>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  2024년 1월 15일 근무 신청이 승인되었습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-b border-gray-200">
+          <div class="alert-item p-3 rounded-lg border border-gray-200 bg-white">
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-exclamation-triangle text-yellow-600 text-sm"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                  <h4 class="text-sm font-medium text-gray-800">출근 시간 알림</h4>
+                  <span class="text-xs text-gray-500">2시간 전</span>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  내일 오전 9시 출근 예정입니다. 준비해주세요.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모두 읽음 처리 버튼 -->
+      <div class="alert-footer">
+        <button class="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
+          모두 읽음 처리
+        </button>
+      </div>
+    </div>
+  <div class="main-content">
+
+    <!-- 메인 콘텐츠 -->
+    <div class="flex-1 bg-gray-100 flex items-center justify-center">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-clipboard-list text-blue-600 text-xl"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">근무 신청 내역 조회 페이지</h1>
+        <p class="text-gray-600">알림을 선택하여 세부 내용을 확인하세요.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="chatbot-container"></div>
+
+<script>
+  // 탭 클릭 이벤트
+  document.querySelectorAll('button[class*="pb-2"]').forEach(tab => {
+    tab.addEventListener('click', function() {
+      // 모든 탭에서 active 클래스 제거
+      document.querySelectorAll('button[class*="pb-2"]').forEach(t => {
+        t.classList.remove('tab-active');
+        t.classList.add('text-gray-600');
+      });
+
+      // 클릭된 탭에 active 클래스 추가
+      this.classList.add('tab-active');
+      this.classList.remove('text-gray-600');
+    });
+  });
+
+  // 알림 항목 클릭 이벤트
+  document.querySelectorAll('.alert-item').forEach(item => {
+    item.addEventListener('click', function() {
+      // 모든 알림 항목에서 선택 표시 제거
+      document.querySelectorAll('.alert-item').forEach(i => {
+        i.classList.remove('bg-blue-50', 'border-blue-200');
+      });
+
+      // 클릭된 항목에 선택 표시 추가
+      this.classList.add('bg-blue-50', 'border-blue-200');
+    });
+  });
+
+  // 모두 읽음 처리 버튼
+  document.querySelector('button[class*="w-full"]').addEventListener('click', function() {
+    // 알림 개수 초기화
+    document.querySelectorAll('.notification-dot').forEach(dot => {
+      dot.style.display = 'none';
+    });
+
+    // 성공 메시지 표시
+    const button = this;
+    const originalText = button.textContent;
+    button.textContent = '처리 완료!';
+    button.classList.add('bg-green-100', 'text-green-700');
+
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.classList.remove('bg-green-100', 'text-green-700');
+    }, 2000);
+  });
+
+  // 사이드바 메뉴 클릭 이벤트
+  document.querySelectorAll('nav .flex.items-center').forEach(item => {
+    item.addEventListener('click', function() {
+      // 기존 선택된 메뉴에서 active 클래스 제거
+      document.querySelectorAll('nav .flex.items-center').forEach(i => {
+        i.classList.remove('bg-gray-700');
+      });
+
+      // 클릭된 메뉴에 active 클래스 추가
+      this.classList.add('bg-gray-700');
+    });
+  });
+</script>
+</body>
+</html>

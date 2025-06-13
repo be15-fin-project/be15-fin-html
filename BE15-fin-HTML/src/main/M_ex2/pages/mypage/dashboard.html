@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../assets/style.css"/>
     <script type="module" src="../../assets/common.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pretendard:400,500,600,700&display=swap"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
     <style>
@@ -150,62 +151,102 @@
 
         /* ===== 프로필 카드 ===== */
         .profile-card {
-            background: var(--bg-gradient);
-            box-shadow: var(--shadow-soft);
-            padding: 36px 32px 30px 32px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            position: relative;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            margin-top: 12px;
+            /*box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);*/
+            text-align: center;
+            /*position: relative;*/
             overflow: hidden;
         }
 
-        .profile-card:before {
-            content: "";
+        .profile-card::before {
+            content: '';
             position: absolute;
-            right: -30px;
-            top: -65px;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, var(--blue-50) 30%, transparent 100%);
-            z-index: 0;
-            opacity: .7;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            /*background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);*/
         }
 
         .profile-avatar {
-            width: 84px;
-            height: 84px;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .avatar-circle {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #fff;
-            box-shadow: 0 2px 10px 0 rgba(69, 111, 230, .13);
-            background: #fff;
-            z-index: 1;
+            background: var(--blue-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
-        .profile-info {
-            z-index: 1;
+        .avatar-circle i {
+            color: white;
+            font-size: 32px;
         }
 
-        .profile-info h2 {
-            margin: 0 0 7px 0;
-            font-size: 22px;
+        .status-indicator {
+            position: absolute;
+            bottom: 16px;
+            right: -4px;
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+        }
+
+        .profile-name {
+            font-size: 28px;
             font-weight: 700;
-            color: var(--blue-400);
-            letter-spacing: -0.9px;
+            color: #1f2937;
+            margin-bottom: 8px;
         }
 
-        .profile-info .role {
-            font-size: 14.1px;
-            color: var(--font-sub);
-            margin-bottom: 7px;
-            font-weight: 500;
+        .profile-position {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 24px;
         }
 
-        .profile-info .contact {
-            font-size: 13.8px;
-            color: var(--gray-500);
-            line-height: 1.8;
+        .profile-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .status-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+            animation: pulse 2s infinite;
+        }
+
+        .department-badge {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
         }
 
         /* ===== 공지/근태/연차 ===== */
@@ -449,12 +490,21 @@
             <!-- 사이드(좌측) -->
             <aside class="dashboard-side">
                 <div class="card profile-card">
-                    <img src="https://via.placeholder.com/90" alt="avatar" class="profile-avatar"/>
-                    <div class="profile-info">
-                        <h2>이수진</h2>
-                        <div class="role">디자인팀 · UX 디자이너</div>
-                        <div class="contact">suji_lee@company.com<br>010-5678-1234</div>
-                    </div>
+                        <div class="profile-avatar">
+                            <div class="avatar-circle">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="status-indicator"></div>
+                        </div>
+
+                        <h2 class="profile-name">이수진</h2>
+                        <p class="profile-position">UX/UI 디자이너</p>
+
+                        <!-- Badges -->
+                        <div class="profile-badges">
+                            <span class="status-badge">재직중</span>
+                            <span class="department-badge">디자인팀</span>
+                        </div>
                 </div>
                 <div class="card attendance-info">
                     <div class="side-section-title"><span class="material-icons">schedule</span>출퇴근 정보</div>

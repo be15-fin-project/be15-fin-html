@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>결재 사이드 모달</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .main-container {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .demo-content {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .demo-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .demo-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 16px;
+    }
+
+    .demo-subtitle {
+      font-size: 1.2rem;
+      color: #718096;
+      margin-bottom: 32px;
+    }
+
+    .open-modal-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .open-modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .side-modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 600px;
+      height: 100vh;
+      background: white;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 1001;
+      box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-modal.active {
+      transform: translateX(0);
+    }
+
+    .modal-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid #e2e8f0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    .approval-section {
+      padding: 32px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .approval-line {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .approver-card {
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      min-width: 120px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .approver-card.approved {
+      border-color: #48bb78;
+      background: #f0fff4;
+    }
+
+    .approver-card.pending {
+      border-color: #ed8936;
+      background: #fffaf0;
+    }
+
+    .approver-card.rejected {
+      border-color: #f56565;
+      background: #fff5f5;
+    }
+
+    .approver-name {
+      font-weight: 500;
+      color: #2d3748;
+      margin-bottom: 4px;
+    }
+
+    .approver-role {
+      font-size: 0.875rem;
+      color: #718096;
+      margin-bottom: 8px;
+    }
+
+    .approval-status {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .status-approved {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .status-pending {
+      background: #feebc8;
+      color: #9c4221;
+    }
+
+    .status-rejected {
+      background: #fed7d7;
+      color: #742a2a;
+    }
+
+    .arrow-icon {
+      color: #a0aec0;
+      font-size: 1.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+
+    .form-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .attachment-area {
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      background: #f7fafc;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .attachment-area:hover {
+      border-color: #667eea;
+      background: #edf2f7;
+    }
+
+    .attachment-icon {
+      font-size: 2rem;
+      color: #a0aec0;
+      margin-bottom: 16px;
+    }
+
+    .attachment-text {
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    .file-list {
+      margin-top: 16px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .file-icon {
+      color: #667eea;
+    }
+
+    .remove-file {
+      background: none;
+      border: none;
+      color: #e53e3e;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .remove-file:hover {
+      background: #fed7d7;
+    }
+
+    .modal-footer {
+      padding: 24px 32px;
+      border-top: 1px solid #e2e8f0;
+      background: #f7fafc;
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn-approve {
+      background: #48bb78;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #38a169;
+      transform: translateY(-1px);
+    }
+
+    .btn-reject {
+      background: #f56565;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #e53e3e;
+      transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-cancel:hover {
+      background: #cbd5e0;
+    }
+
+    .history-section {
+      padding: 32px;
+    }
+
+    .history-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .history-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .history-icon.approved {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .history-icon.submitted {
+      background: #bee3f8;
+      color: #2a69ac;
+    }
+
+    .history-content {
+      flex: 1;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .history-action {
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .history-time {
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    .history-user {
+      font-size: 0.875rem;
+      color: #4a5568;
+      margin-bottom: 4px;
+    }
+
+    .history-comment {
+      color: #718096;
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      .side-modal {
+        width: 100%;
+      }
+
+      .approval-line {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .arrow-icon {
+        transform: rotate(90deg);
+      }
+    }
+
+    .document-info {
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .doc-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+
+    .doc-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    .priority-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-left: 12px;
+    }
+
+    .priority-high {
+      background: #fed7d7;
+      color: #742a2a;
+    }
+
+    .priority-normal {
+      background: #e6fffa;
+      color: #234e52;
+    }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <div class="content-area">
+    <div class="demo-content">
+      <div class="demo-header">
+        <h1 class="demo-title">결재 시스템</h1>
+        <p class="demo-subtitle">사이드 모달을 통한 결재 승인 시스템</p>
+        <button class="open-modal-btn" onclick="openModal()">
+          <i class="fas fa-clipboard-check"></i> 결재 모달 열기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+  <div class="side-modal" id="sideModal">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <i class="fas fa-file-signature"></i>
+        결재 승인
+      </h2>
+      <button class="close-btn" onclick="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="approval-section">
+        <div class="document-info">
+          <div class="doc-title">
+            2024년 마케팅 예산 승인 요청
+            <span class="priority-badge priority-high">긴급</span>
+          </div>
+          <div class="doc-meta">
+            <span><i class="fas fa-user"></i> 작성자: 김마케팅</span>
+            <span><i class="fas fa-calendar"></i> 작성일: 2024.01.15</span>
+            <span><i class="fas fa-clock"></i> 기한: 2024.01.20</span>
+          </div>
+        </div>
+
+        <h3 class="section-title">
+          <i class="fas fa-route"></i>
+          결재선
+        </h3>
+        <div class="approval-line">
+          <div class="approver-card approved">
+            <div class="approver-name">김팀장</div>
+            <div class="approver-role">팀장</div>
+            <div class="approval-status status-approved">승인완료</div>
+          </div>
+          <i class="fas fa-arrow-right arrow-icon"></i>
+          <div class="approver-card pending">
+            <div class="approver-name">박부장</div>
+            <div class="approver-role">부장</div>
+            <div class="approval-status status-pending">승인대기</div>
+          </div>
+          <i class="fas fa-arrow-right arrow-icon"></i>
+          <div class="approver-card">
+            <div class="approver-name">최이사</div>
+            <div class="approver-role">이사</div>
+            <div class="approval-status">대기</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-comment-dots"></i>
+            승인 의견
+          </label>
+          <textarea class="form-textarea" placeholder="승인 또는 반려 사유를 입력해주세요..."></textarea>
+        </div>
+      </div>
+
+      <div class="approval-section">
+        <h3 class="section-title">
+          <i class="fas fa-paperclip"></i>
+          첨부파일
+        </h3>
+        <div class="attachment-area" onclick="document.getElementById('fileInput').click()">
+          <i class="fas fa-cloud-upload-alt attachment-icon"></i>
+          <div class="attachment-text">클릭하거나 파일을 드래그하여 업로드</div>
+          <input type="file" id="fileInput" style="display: none;" multiple onchange="handleFileSelect(event)">
+        </div>
+        <div class="file-list" id="fileList">
+          <div class="file-item">
+            <div class="file-info">
+              <i class="fas fa-file-pdf file-icon"></i>
+              <span>마케팅_예산계획서.pdf</span>
+            </div>
+            <button class="remove-file">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="file-item">
+            <div class="file-info">
+              <i class="fas fa-file-excel file-icon"></i>
+              <span>예산_상세내역.xlsx</span>
+            </div>
+            <button class="remove-file">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="approval-section history-section">
+        <h3 class="section-title">
+          <i class="fas fa-history"></i>
+          결재 히스토리
+        </h3>
+        <div class="history-item">
+          <div class="history-icon approved">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="history-content">
+            <div class="history-header">
+              <span class="history-action">승인</span>
+              <span class="history-time">2024.01.16 14:30</span>
+            </div>
+            <div class="history-user">김팀장 (마케팅팀)</div>
+            <div class="history-comment">예산 계획이 합리적이고 목표가 명확합니다. 승인합니다.</div>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-icon submitted">
+            <i class="fas fa-paper-plane"></i>
+          </div>
+          <div class="history-content">
+            <div class="history-header">
+              <span class="history-action">결재 요청</span>
+              <span class="history-time">2024.01.15 09:15</span>
+            </div>
+            <div class="history-user">김마케팅 (마케팅팀)</div>
+            <div class="history-comment">2024년 1분기 마케팅 예산 승인을 요청드립니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-approve" onclick="handleApproval('approve')">
+        <i class="fas fa-check"></i> 승인
+      </button>
+      <button class="btn btn-reject" onclick="handleApproval('reject')">
+        <i class="fas fa-times"></i> 반려
+      </button>
+      <button class="btn btn-cancel" onclick="closeModal()">
+        취소
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    const overlay = document.getElementById('modalOverlay');
+    const modal = document.getElementById('sideModal');
+
+    overlay.classList.add('active');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    const overlay = document.getElementById('modalOverlay');
+    const modal = document.getElementById('sideModal');
+
+    overlay.classList.remove('active');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  function handleApproval(action) {
+    const actionText = action === 'approve' ? '승인' : '반려';
+    if (confirm(`정말로 ${actionText}하시겠습니까?`)) {
+      alert(`${actionText}이 완료되었습니다.`);
+      closeModal();
+    }
+  }
+
+  function handleFileSelect(event) {
+    const files = event.target.files;
+    const fileList = document.getElementById('fileList');
+
+    for (let file of files) {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+
+      const fileIcon = getFileIcon(file.name);
+
+      fileItem.innerHTML = `
+                    <div class="file-info">
+                        <i class="${fileIcon} file-icon"></i>
+                        <span>${file.name}</span>
+                    </div>
+                    <button class="remove-file" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+
+      fileList.appendChild(fileItem);
+    }
+  }
+
+  function getFileIcon(filename) {
+    const extension = filename.split('.').pop().toLowerCase();
+
+    switch (extension) {
+      case 'pdf':
+        return 'fas fa-file-pdf';
+      case 'doc':
+      case 'docx':
+        return 'fas fa-file-word';
+      case 'xls':
+      case 'xlsx':
+        return 'fas fa-file-excel';
+      case 'ppt':
+      case 'pptx':
+        return 'fas fa-file-powerpoint';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return 'fas fa-file-image';
+      default:
+        return 'fas fa-file';
+    }
+  }
+
+  // 드래그 앤 드롭 기능
+  const attachmentArea = document.querySelector('.attachment-area');
+
+  attachmentArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    attachmentArea.style.borderColor = '#667eea';
+    attachmentArea.style.backgroundColor = '#edf2f7';
+  });
+
+  attachmentArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    attachmentArea.style.borderColor = '#cbd5e0';
+    attachmentArea.style.backgroundColor = '#f7fafc';
+  });
+
+  attachmentArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    attachmentArea.style.borderColor = '#cbd5e0';
+    attachmentArea.style.backgroundColor = '#f7fafc';
+
+    const files = e.dataTransfer.files;
+    const fileList = document.getElementById('fileList');
+
+    for (let file of files) {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+
+      const fileIcon = getFileIcon(file.name);
+
+      fileItem.innerHTML = `
+                    <div class="file-info">
+                        <i class="${fileIcon} file-icon"></i>
+                        <span>${file.name}</span>
+                    </div>
+                    <button class="remove-file" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+
+      fileList.appendChild(fileItem);
+    }
+  });
+
+  // ESC 키로 모달 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+</script>
+</body>
+</html>
