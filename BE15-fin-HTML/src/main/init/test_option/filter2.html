@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사원 목록 조회 - 모던 버전</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      z-index: 1000;
+      border: 1px solid #e5e7eb;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .dropdown-content.show {
+      display: block;
+    }
+    .dropdown-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .dropdown-item:hover {
+      background-color: #f3f4f6;
+    }
+    .view-toggle-active {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .employee-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .employee-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .status-active { color: #10b981; }
+    .status-inactive { color: #f59e0b; }
+    .status-resigned { color: #ef4444; }
+  </style>
+</head>
+<body class="bg-gray-50">
+<div class="container mx-auto px-6 py-8 max-w-7xl">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">사원 목록 조회</h1>
+    <p class="text-gray-600">전체 사원의 정보를 조회하고 관리하세요</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div class="flex flex-wrap items-center gap-4 mb-4">
+      <!-- View Toggle -->
+      <div class="flex bg-gray-100 rounded-lg p-1">
+        <button id="dashboardView" class="view-toggle px-4 py-2 rounded-md text-sm font-medium transition-colors view-toggle-active">
+          <i class="fas fa-th-large mr-2"></i>대시보드형
+        </button>
+        <button id="listView" class="view-toggle px-4 py-2 rounded-md text-sm font-medium transition-colors text-gray-600">
+          <i class="fas fa-list mr-2"></i>리스트형
+        </button>
+      </div>
+
+      <!-- Filter Button -->
+      <div class="relative">
+        <button id="filterBtn" class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          <i class="fas fa-filter mr-2"></i>필터 <i class="fas fa-chevron-down ml-2"></i>
+        </button>
+        <div id="filterDropdown" class="dropdown-content left-0 top-full mt-2">
+          <div class="p-4 border-b border-gray-200">
+            <h4 class="font-medium text-gray-900 mb-3">부서</h4>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="전체" checked> 전체
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="디자인"> 디자인
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="경영"> 경영
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="개발"> 개발
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="마케팅"> 마케팅
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="영업"> 영업
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="department-filter mr-2" value="CS"> CS
+              </label>
+            </div>
+          </div>
+          <div class="p-4">
+            <h4 class="font-medium text-gray-900 mb-3">상태</h4>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" class="status-filter mr-2" value="전체" checked> 전체
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="status-filter mr-2" value="재직"> 재직
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="status-filter mr-2" value="휴직"> 휴직
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="status-filter mr-2" value="퇴사"> 퇴사
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sort Button -->
+      <div class="relative">
+        <button id="sortBtn" class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          <i class="fas fa-sort mr-2"></i>정렬 <i class="fas fa-chevron-down ml-2"></i>
+        </button>
+        <div id="sortDropdown" class="dropdown-content left-0 top-full mt-2">
+          <div class="dropdown-item" onclick="sortEmployees('name')">이름순</div>
+          <div class="dropdown-item" onclick="sortEmployees('empId')">사번순</div>
+          <div class="dropdown-item" onclick="sortEmployees('department')">부서순</div>
+          <div class="dropdown-item" onclick="sortEmployees('joinDate')">입사일순</div>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="flex-1 max-w-md">
+        <div class="relative">
+          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <input type="text" id="searchInput" placeholder="면접자 이름을 검색해보세요"
+                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+      </div>
+    </div>
+
+    <!-- Year Filter -->
+    <div class="flex items-center gap-4">
+      <div class="relative">
+        <button id="yearBtn" class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          2023년 <i class="fas fa-chevron-down ml-2"></i>
+        </button>
+        <div id="yearDropdown" class="dropdown-content left-0 top-full mt-2">
+          <div class="dropdown-item" onclick="filterByYear('2023')">2023년</div>
+          <div class="dropdown-item" onclick="filterByYear('2022')">2022년</div>
+          <div class="dropdown-item" onclick="filterByYear('2021')">2021년</div>
+          <div class="dropdown-item" onclick="filterByYear('2020')">2020년</div>
+          <div class="dropdown-item" onclick="filterByYear('전체')">전체</div>
+        </div>
+      </div>
+
+      <div class="text-sm text-gray-500">
+        필터&정렬 초기화 <button onclick="resetFilters()" class="text-blue-600 hover:text-blue-800"><i class="fas fa-redo ml-1"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Counter -->
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center text-sm text-gray-600">
+      <span class="font-medium">서류 전형</span>
+      <span class="mx-2"><i class="fas fa-users"></i></span>
+      <span id="resultCount">0</span>
+    </div>
+  </div>
+
+  <!-- Employee List -->
+  <div id="employeeContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- Employee cards will be inserted here -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="emptyState" class="text-center py-12" style="display: none;">
+    <i class="fas fa-users text-gray-300 text-6xl mb-4"></i>
+    <p class="text-gray-500 text-lg">아직 등록된 면접자가 없어요.</p>
+  </div>
+</div>
+
+<script>
+  // Sample employee data
+  const employees = [
+    { id: 1, name: '김대훈', empId: '2024002', department: '개발', position: '시원', level: '입단', joinDate: '2023-02-01', status: '재직' },
+    { id: 2, name: '이하나', empId: '2024003', department: '디자인', position: '대리', level: '입단', joinDate: '2022-11-10', status: '휴직' },
+    { id: 3, name: '박지민', empId: '2024004', department: '영업', position: '과장', level: '관리자', joinDate: '2020-07-25', status: '재직' },
+    { id: 4, name: '최윤서', empId: '2024005', department: '인사팀', position: '시원', level: '입단', joinDate: '2024-01-10', status: '재직' },
+    { id: 5, name: '정우진', empId: '2024006', department: '기획팀', position: '차장', level: '관리자', joinDate: '2019-03-03', status: '퇴사' },
+    { id: 6, name: '한소희', empId: '2024007', department: '마케팅', position: '대리', level: '입단', joinDate: '2023-08-15', status: '재직' },
+    { id: 7, name: '송민호', empId: '2024008', department: 'CS', position: '시원', level: '입단', joinDate: '2023-12-01', status: '재직' },
+    { id: 8, name: '강예린', empId: '2024009', department: '경영', position: '부장', level: '관리자', joinDate: '2018-05-20', status: '재직' }
+  ];
+
+  let filteredEmployees = [...employees];
+  let currentView = 'dashboard';
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    renderEmployees();
+    setupEventListeners();
+  });
+
+  function setupEventListeners() {
+    // View toggle
+    document.getElementById('dashboardView').addEventListener('click', () => switchView('dashboard'));
+    document.getElementById('listView').addEventListener('click', () => switchView('list'));
+
+    // Dropdown toggles
+    document.getElementById('filterBtn').addEventListener('click', () => toggleDropdown('filterDropdown'));
+    document.getElementById('sortBtn').addEventListener('click', () => toggleDropdown('sortDropdown'));
+    document.getElementById('yearBtn').addEventListener('click', () => toggleDropdown('yearDropdown'));
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+    // Filter checkboxes
+    document.querySelectorAll('.department-filter, .status-filter').forEach(checkbox => {
+      checkbox.addEventListener('change', applyFilters);
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.relative')) {
+        closeAllDropdowns();
+      }
+    });
+  }
+
+  function switchView(view) {
+    currentView = view;
+    document.querySelectorAll('.view-toggle').forEach(btn => {
+      btn.classList.remove('view-toggle-active');
+      btn.classList.add('text-gray-600');
+    });
+
+    if (view === 'dashboard') {
+      document.getElementById('dashboardView').classList.add('view-toggle-active');
+      document.getElementById('dashboardView').classList.remove('text-gray-600');
+    } else {
+      document.getElementById('listView').classList.add('view-toggle-active');
+      document.getElementById('listView').classList.remove('text-gray-600');
+    }
+
+    renderEmployees();
+  }
+
+  function toggleDropdown(dropdownId) {
+    closeAllDropdowns();
+    document.getElementById(dropdownId).classList.toggle('show');
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+      dropdown.classList.remove('show');
+    });
+  }
+
+  function handleSearch(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    filteredEmployees = employees.filter(emp =>
+            emp.name.toLowerCase().includes(searchTerm) ||
+            emp.empId.toLowerCase().includes(searchTerm) ||
+            emp.department.toLowerCase().includes(searchTerm)
+    );
+    renderEmployees();
+  }
+
+  function applyFilters() {
+    const selectedDepartments = Array.from(document.querySelectorAll('.department-filter:checked')).map(cb => cb.value);
+    const selectedStatuses = Array.from(document.querySelectorAll('.status-filter:checked')).map(cb => cb.value);
+
+    filteredEmployees = employees.filter(emp => {
+      const deptMatch = selectedDepartments.includes('전체') || selectedDepartments.includes(emp.department);
+      const statusMatch = selectedStatuses.includes('전체') || selectedStatuses.includes(emp.status);
+      return deptMatch && statusMatch;
+    });
+
+    renderEmployees();
+  }
+
+  function sortEmployees(criteria) {
+    filteredEmployees.sort((a, b) => {
+      switch(criteria) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'empId':
+          return a.empId.localeCompare(b.empId);
+        case 'department':
+          return a.department.localeCompare(b.department);
+        case 'joinDate':
+          return new Date(a.joinDate) - new Date(b.joinDate);
+        default:
+          return 0;
+      }
+    });
+    renderEmployees();
+    closeAllDropdowns();
+  }
+
+  function filterByYear(year) {
+    if (year === '전체') {
+      filteredEmployees = [...employees];
+    } else {
+      filteredEmployees = employees.filter(emp => emp.joinDate.startsWith(year));
+    }
+    document.getElementById('yearBtn').innerHTML = `${year}년 <i class="fas fa-chevron-down ml-2"></i>`;
+    renderEmployees();
+    closeAllDropdowns();
+  }
+
+  function resetFilters() {
+    // Reset checkboxes
+    document.querySelectorAll('.department-filter, .status-filter').forEach(cb => {
+      cb.checked = cb.value === '전체';
+    });
+
+    // Reset search
+    document.getElementById('searchInput').value = '';
+
+    // Reset year
+    document.getElementById('yearBtn').innerHTML = '2023년 <i class="fas fa-chevron-down ml-2"></i>';
+
+    // Reset data
+    filteredEmployees = [...employees];
+    renderEmployees();
+  }
+
+  function getStatusClass(status) {
+    switch(status) {
+      case '재직': return 'status-active';
+      case '휴직': return 'status-inactive';
+      case '퇴사': return 'status-resigned';
+      default: return '';
+    }
+  }
+
+  function getStatusIcon(status) {
+    switch(status) {
+      case '재직': return 'fa-circle';
+      case '휴직': return 'fa-pause-circle';
+      case '퇴사': return 'fa-times-circle';
+      default: return 'fa-circle';
+    }
+  }
+
+  function renderEmployees() {
+    const container = document.getElementById('employeeContainer');
+    const emptyState = document.getElementById('emptyState');
+    const resultCount = document.getElementById('resultCount');
+
+    // Update result count
+    resultCount.textContent = filteredEmployees.length;
+
+    if (filteredEmployees.length === 0) {
+      container.style.display = 'none';
+      emptyState.style.display = 'block';
+      return;
+    }
+
+    container.style.display = 'grid';
+    emptyState.style.display = 'none';
+
+    if (currentView === 'dashboard') {
+      container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+      container.innerHTML = filteredEmployees.map(emp => `
+                    <div class="employee-card bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-user text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">${emp.name}</h3>
+                                <p class="text-sm text-gray-500">${emp.empId}</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">부서</span>
+                                <span class="text-sm font-medium">${emp.department}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">직위</span>
+                                <span class="text-sm font-medium">${emp.position}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">권한</span>
+                                <span class="text-sm font-medium">${emp.level}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">입사일</span>
+                                <span class="text-sm font-medium">${emp.joinDate}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas ${getStatusIcon(emp.status)} ${getStatusClass(emp.status)} mr-2"></i>
+                                <span class="text-sm font-medium ${getStatusClass(emp.status)}">${emp.status}</span>
+                            </div>
+                            <button class="px-3 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors">
+                                상세보기
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+    } else {
+      container.className = 'space-y-4';
+      container.innerHTML = filteredEmployees.map(emp => `
+                    <div class="employee-card bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-all">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">${emp.name}</h3>
+                                    <p class="text-sm text-gray-500">${emp.empId}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-8">
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-500">부서</p>
+                                    <p class="text-sm font-medium">${emp.department}</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-500">직위</p>
+                                    <p class="text-sm font-medium">${emp.position}</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-500">권한</p>
+                                    <p class="text-sm font-medium">${emp.level}</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs text-gray-500">입사일</p>
+                                    <p class="text-sm font-medium">${emp.joinDate}</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas ${getStatusIcon(emp.status)} ${getStatusClass(emp.status)} mr-2"></i>
+                                    <span class="text-sm font-medium ${getStatusClass(emp.status)}">${emp.status}</span>
+                                </div>
+                                <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
+                                    상세보기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+    }
+  }
+</script>
+</body>
+</html>

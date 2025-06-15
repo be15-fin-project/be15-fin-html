@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>권한 관리 시스템</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .tree-item {
+      transition: all 0.2s ease;
+    }
+    .tree-item:hover {
+      background-color: #f3f4f6;
+    }
+    .permission-card {
+      transition: all 0.2s ease;
+    }
+    .permission-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .tab-active {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+    }
+    .tab-inactive {
+      background: #e5e7eb;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div class="container mx-auto p-6">
+  <!-- 회사 프로필 배너 -->
+  <div class="bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg p-6 mb-6 shadow-lg">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
+          <i class="fas fa-building text-gray-600 text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">회사명</h1>
+          <p class="text-gray-600">회사 대표, 회사 구성인원</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-full p-3 shadow-md">
+        <i class="fas fa-arrow-right text-gray-600"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭 메뉴 -->
+  <div class="flex space-x-2 mb-6">
+    <button class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all" onclick="showTab('company')">
+      <i class="fas fa-building mr-2"></i>회사 관리
+    </button>
+    <button class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all" onclick="showTab('department')">
+      <i class="fas fa-sitemap mr-2"></i>부서 관리
+    </button>
+    <button class="tab-inactive px-6 py-3 rounded-lg font-medium transition-all" onclick="showTab('position')">
+      <i class="fas fa-user-tie mr-2"></i>직위 관리
+    </button>
+    <button class="tab-active px-6 py-3 rounded-lg font-medium transition-all" onclick="showTab('permission')">
+      <i class="fas fa-key mr-2"></i>권한 관리
+    </button>
+  </div>
+
+  <!-- 권한 관리 섹션 -->
+  <div id="permission-tab" class="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-gray-50 px-6 py-4 border-b">
+      <h2 class="text-xl font-bold text-gray-800">
+        <i class="fas fa-key mr-2 text-blue-500"></i>권한 관리
+      </h2>
+    </div>
+
+    <div class="flex h-96">
+      <!-- 좌측: 조직도 트리 -->
+      <div class="w-1/2 border-r bg-gray-50 p-4 overflow-y-auto">
+        <h3 class="font-semibold text-gray-700 mb-4">조직도</h3>
+
+        <!-- 마케팅부 -->
+        <div class="mb-4">
+          <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="toggleDepartment('marketing')">
+            <i id="marketing-icon" class="fas fa-chevron-right mr-2 text-gray-500 transition-transform"></i>
+            <i class="fas fa-building mr-2 text-blue-500"></i>
+            <span class="font-medium">마케팅부</span>
+          </div>
+          <div id="marketing-dept" class="ml-6 hidden">
+            <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="toggleTeam('marketing-team1')">
+              <i id="marketing-team1-icon" class="fas fa-chevron-right mr-2 text-gray-400 transition-transform"></i>
+              <i class="fas fa-users mr-2 text-green-500"></i>
+              <span>마케팅 1과</span>
+            </div>
+            <div id="marketing-team1" class="ml-6 hidden">
+              <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="selectEmployee('홍길동', 'marketing')">
+                <i class="fas fa-user mr-2 text-orange-500"></i>
+                <span>홍길동 - 사원</span>
+              </div>
+              <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="selectEmployee('김철수', 'marketing')">
+                <i class="fas fa-user mr-2 text-orange-500"></i>
+                <span>김철수 - 대리</span>
+              </div>
+            </div>
+            <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="toggleTeam('marketing-team2')">
+              <i id="marketing-team2-icon" class="fas fa-chevron-right mr-2 text-gray-400 transition-transform"></i>
+              <i class="fas fa-users mr-2 text-green-500"></i>
+              <span>마케팅 2과</span>
+            </div>
+            <div id="marketing-team2" class="ml-6 hidden">
+              <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="selectEmployee('이영희', 'marketing')">
+                <i class="fas fa-user mr-2 text-orange-500"></i>
+                <span>이영희 - 과장</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 인사부 -->
+        <div class="mb-4">
+          <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="toggleDepartment('hr')">
+            <i id="hr-icon" class="fas fa-chevron-right mr-2 text-gray-500 transition-transform"></i>
+            <i class="fas fa-building mr-2 text-purple-500"></i>
+            <span class="font-medium">인사부</span>
+          </div>
+          <div id="hr-dept" class="ml-6 hidden">
+            <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="toggleTeam('hr-team1')">
+              <i id="hr-team1-icon" class="fas fa-chevron-right mr-2 text-gray-400 transition-transform"></i>
+              <i class="fas fa-users mr-2 text-green-500"></i>
+              <span>인사 1과</span>
+            </div>
+            <div id="hr-team1" class="ml-6 hidden">
+              <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="selectEmployee('유관순', 'hr')">
+                <i class="fas fa-user mr-2 text-orange-500"></i>
+                <span>유관순 - 부장</span>
+              </div>
+              <div class="tree-item flex items-center p-2 rounded cursor-pointer" onclick="selectEmployee('안중근', 'hr')">
+                <i class="fas fa-user mr-2 text-orange-500"></i>
+                <span>안중근 - 차장</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측: 권한 설정 -->
+      <div class="w-1/2 p-4">
+        <div id="permission-content">
+          <div class="text-center text-gray-500 py-8">
+            <i class="fas fa-user-shield text-4xl mb-4"></i>
+            <p>구성원을 선택하여 권한을 설정하세요</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 권한 변경 버튼 -->
+    <div class="bg-gray-50 px-6 py-4 border-t">
+      <button id="save-permissions" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+        <i class="fas fa-save mr-2"></i>권한변경
+      </button>
+    </div>
+  </div>
+
+  <!-- 다른 탭들 (비활성화 상태 표시) -->
+  <div id="other-tabs" class="hidden bg-white rounded-lg shadow-lg p-8 text-center">
+    <i class="fas fa-cog text-4xl text-gray-400 mb-4"></i>
+    <h3 class="text-xl font-semibold text-gray-600 mb-2">해당 기능은 개발 중입니다</h3>
+    <p class="text-gray-500">현재는 권한 관리 기능만 이용하실 수 있습니다.</p>
+  </div>
+</div>
+
+<script>
+  let selectedEmployee = null;
+  let employeePermissions = {};
+
+  // 탭 전환 함수
+  function showTab(tabName) {
+    const tabs = document.querySelectorAll('.tab-active, .tab-inactive');
+    tabs.forEach(tab => {
+      tab.className = 'tab-inactive px-6 py-3 rounded-lg font-medium transition-all';
+    });
+
+    if (tabName === 'permission') {
+      event.target.className = 'tab-active px-6 py-3 rounded-lg font-medium transition-all';
+      document.getElementById('permission-tab').classList.remove('hidden');
+      document.getElementById('other-tabs').classList.add('hidden');
+    } else {
+      event.target.className = 'tab-active px-6 py-3 rounded-lg font-medium transition-all';
+      document.getElementById('permission-tab').classList.add('hidden');
+      document.getElementById('other-tabs').classList.remove('hidden');
+    }
+  }
+
+  // 부서 토글
+  function toggleDepartment(deptName) {
+    const dept = document.getElementById(deptName + '-dept');
+    const icon = document.getElementById(deptName + '-icon');
+
+    if (dept.classList.contains('hidden')) {
+      dept.classList.remove('hidden');
+      icon.style.transform = 'rotate(90deg)';
+    } else {
+      dept.classList.add('hidden');
+      icon.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  // 팀 토글
+  function toggleTeam(teamName) {
+    const team = document.getElementById(teamName);
+    const icon = document.getElementById(teamName + '-icon');
+
+    if (team.classList.contains('hidden')) {
+      team.classList.remove('hidden');
+      icon.style.transform = 'rotate(90deg)';
+    } else {
+      team.classList.add('hidden');
+      icon.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  // 구성원 선택
+  function selectEmployee(name, dept) {
+    selectedEmployee = name;
+
+    // 기존 선택 제거
+    document.querySelectorAll('.tree-item').forEach(item => {
+      item.classList.remove('bg-blue-100', 'border-blue-300', 'border-l-4');
+    });
+
+    // 새 선택 표시
+    event.target.classList.add('bg-blue-100', 'border-blue-300', 'border-l-4');
+
+    // 권한 설정 패널 업데이트
+    updatePermissionPanel(name, dept);
+
+    // 저장 버튼 활성화
+    document.getElementById('save-permissions').disabled = false;
+  }
+
+  // 권한 설정 패널 업데이트
+  function updatePermissionPanel(name, dept) {
+    const content = document.getElementById('permission-content');
+    const currentPermissions = employeePermissions[name] || [];
+
+    content.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                        <i class="fas fa-user mr-2 text-blue-500"></i>${name}
+                    </h3>
+                    <p class="text-gray-600">${dept === 'marketing' ? '마케팅부' : '인사부'}</p>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="font-medium text-gray-700 mb-3">권한 설정</h4>
+
+                    <label class="flex items-center p-3 rounded-lg border hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" class="permission-check" value="관리자" ${currentPermissions.includes('관리자') ? 'checked' : ''}>
+                        <div class="ml-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-crown mr-2 text-yellow-500"></i>
+                                <span class="font-medium">관리자</span>
+                            </div>
+                            <p class="text-sm text-gray-500">시스템 전체 관리 권한</p>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center p-3 rounded-lg border hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" class="permission-check" value="팀장" ${currentPermissions.includes('팀장') ? 'checked' : ''}>
+                        <div class="ml-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-users-cog mr-2 text-blue-500"></i>
+                                <span class="font-medium">팀장</span>
+                            </div>
+                            <p class="text-sm text-gray-500">팀 관리 및 승인 권한</p>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center p-3 rounded-lg border hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" class="permission-check" value="인사팀" ${currentPermissions.includes('인사팀') ? 'checked' : ''}>
+                        <div class="ml-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-user-friends mr-2 text-green-500"></i>
+                                <span class="font-medium">인사팀</span>
+                            </div>
+                            <p class="text-sm text-gray-500">인사 관련 업무 권한</p>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center p-3 rounded-lg border hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" class="permission-check" value="사원" ${currentPermissions.includes('사원') ? 'checked' : ''}>
+                        <div class="ml-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-user mr-2 text-gray-500"></i>
+                                <span class="font-medium">사원</span>
+                            </div>
+                            <p class="text-sm text-gray-500">기본 사용자 권한</p>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center p-3 rounded-lg border hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" class="permission-check" value="정리팀" ${currentPermissions.includes('정리팀') ? 'checked' : ''}>
+                        <div class="ml-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-broom mr-2 text-purple-500"></i>
+                                <span class="font-medium">정리팀</span>
+                            </div>
+                            <p class="text-sm text-gray-500">데이터 정리 및 정비 권한</p>
+                        </div>
+                    </label>
+                </div>
+            `;
+
+    // 체크박스 이벤트 리스너 추가
+    content.querySelectorAll('.permission-check').forEach(checkbox => {
+      checkbox.addEventListener('change', updateEmployeePermissions);
+    });
+  }
+
+  // 구성원 권한 업데이트
+  function updateEmployeePermissions() {
+    if (!selectedEmployee) return;
+
+    const checkedPermissions = Array.from(document.querySelectorAll('.permission-check:checked'))
+            .map(checkbox => checkbox.value);
+
+    employeePermissions[selectedEmployee] = checkedPermissions;
+  }
+
+  // 권한 저장
+  document.getElementById('save-permissions').addEventListener('click', function() {
+    if (selectedEmployee) {
+      const permissions = employeePermissions[selectedEmployee] || [];
+      alert(`${selectedEmployee}님의 권한이 저장되었습니다.\n권한: ${permissions.join(', ') || '없음'}`);
+    }
+  });
+</script>
+</body>
+</html>

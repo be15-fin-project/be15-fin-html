@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사원 목록 조회</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .filter-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+      min-width: fit-content;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      ring: 2px;
+      ring-color: #3B82F6;
+    }
+
+    .table-row:hover {
+      background-color: #F9FAFB;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .status-active::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: #10B981;
+      border-radius: 50%;
+    }
+
+    .status-inactive::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: #EF4444;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- 헤더 -->
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">사원 목록 조회</h1>
+    <p class="text-gray-600">전체 사원의 정보를 조회하고 관리하세요</p>
+  </div>
+
+  <!-- 한 줄 필터 -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div class="flex flex-wrap items-center gap-4">
+      <select class="filter-select px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors" id="yearFilter">
+        <option value="">2023년</option>
+        <option value="2023">2023년</option>
+        <option value="2022">2022년</option>
+        <option value="2021">2021년</option>
+      </select>
+
+      <div class="h-6 w-px bg-gray-300"></div>
+
+      <select class="filter-select px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors" id="teamFilter">
+        <option value="">팀</option>
+        <option value="개발팀">개발팀</option>
+        <option value="마케팅팀">마케팅팀</option>
+        <option value="영업팀">영업팀</option>
+        <option value="인사팀">인사팀</option>
+      </select>
+
+      <select class="filter-select px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors" id="positionFilter">
+        <option value="">직무</option>
+        <option value="디자인">디자인</option>
+        <option value="경영">경영</option>
+        <option value="개발">개발</option>
+        <option value="마케팅">마케팅</option>
+        <option value="영업">영업</option>
+        <option value="CS">CS</option>
+      </select>
+
+      <select class="filter-select px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors" id="statusFilter">
+        <option value="">상태</option>
+        <option value="재직">재직</option>
+        <option value="휴직">휴직</option>
+        <option value="퇴사">퇴사</option>
+      </select>
+
+      <div class="h-6 w-px bg-gray-300"></div>
+
+      <select class="filter-select px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors" id="sortFilter">
+        <option value="">정렬</option>
+        <option value="name_asc">이름 오름차순</option>
+        <option value="name_desc">이름 내림차순</option>
+        <option value="date_asc">입사일 오름차순</option>
+        <option value="date_desc">입사일 내림차순</option>
+      </select>
+
+      <div class="ml-auto flex gap-2">
+        <button class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors" onclick="resetFilters()">
+          <i class="fas fa-redo mr-1"></i>초기화
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 통계 및 액션 버튼 -->
+  <div class="flex justify-between items-center mb-4">
+    <div class="text-sm text-gray-600">
+      <span class="font-medium text-gray-900" id="totalCount">0</span>명의 사원이 검색되었습니다
+    </div>
+    <div class="flex gap-2">
+      <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+        <i class="fas fa-download mr-2"></i>엑셀
+      </button>
+      <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+        <i class="fas fa-file-csv mr-2"></i>CSV
+      </button>
+      <button class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+        <i class="fas fa-share mr-2"></i>공유
+      </button>
+    </div>
+  </div>
+
+  <!-- 테이블 -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">사원명</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">사번</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">부서</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">직위</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">관한</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">입사일</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상태</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상세</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200" id="employeeTableBody">
+      <!-- 데이터가 여기에 동적으로 삽입됩니다 -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // 샘플 데이터
+  const employees = [
+    { id: 1, name: '김태호', empId: '2024002', dept: '개발팀', position: '시원', level: '일반', joinDate: '2023-02-01', status: '재직' },
+    { id: 2, name: '이민수', empId: '2024003', dept: '마케팅팀', position: '대리', level: '관리', joinDate: '2022-03-15', status: '재직' },
+    { id: 3, name: '박지영', empId: '2024004', dept: '디자인팀', position: '과장', level: '관리', joinDate: '2021-05-20', status: '휴직' },
+    { id: 4, name: '최수진', empId: '2024005', dept: '인사팀', position: '부장', level: '임원', joinDate: '2020-01-10', status: '재직' },
+    { id: 5, name: '정현우', empId: '2024006', dept: '영업팀', position: '사원', level: '일반', joinDate: '2023-07-01', status: '재직' },
+    { id: 6, name: '강미란', empId: '2024007', dept: 'CS팀', position: '대리', level: '관리', joinDate: '2022-09-12', status: '퇴사' },
+    { id: 7, name: '윤성호', empId: '2024008', dept: '개발팀', position: '시니어', level: '관리', joinDate: '2019-04-05', status: '재직' },
+    { id: 8, name: '임소영', empId: '2024009', dept: '마케팅팀', position: '사원', level: '일반', joinDate: '2023-11-20', status: '재직' }
+  ];
+
+  let filteredEmployees = [...employees];
+
+  function renderTable() {
+    const tbody = document.getElementById('employeeTableBody');
+    const totalCount = document.getElementById('totalCount');
+
+    totalCount.textContent = filteredEmployees.length;
+
+    if (filteredEmployees.length === 0) {
+      tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="px-6 py-12 text-center text-gray-500">
+                            <i class="fas fa-search text-2xl mb-2"></i>
+                            <div>검색 결과가 없습니다</div>
+                        </td>
+                    </tr>
+                `;
+      return;
+    }
+
+    tbody.innerHTML = filteredEmployees.map((emp, index) => `
+                <tr class="table-row transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span class="text-blue-600 font-medium text-sm">${emp.name.charAt(0)}</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${emp.name}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${emp.empId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${emp.dept}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${emp.position}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${emp.level}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${emp.joinDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="status-badge px-2 py-1 text-xs font-medium rounded-full ${
+            emp.status === '재직' ? 'bg-green-100 text-green-800 status-active' :
+                    emp.status === '휴직' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800 status-inactive'
+    }">
+                            ${emp.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 transition-colors">상세보기</button>
+                    </td>
+                </tr>
+            `).join('');
+  }
+
+  function applyFilters() {
+    const year = document.getElementById('yearFilter').value;
+    const team = document.getElementById('teamFilter').value;
+    const position = document.getElementById('positionFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+
+    filteredEmployees = employees.filter(emp => {
+      if (year && !emp.joinDate.startsWith(year)) return false;
+      if (team && emp.dept !== team) return false;
+      if (position && !emp.position.includes(position)) return false;
+      if (status && emp.status !== status) return false;
+      return true;
+    });
+
+    // 정렬 적용
+    if (sort) {
+      if (sort === 'name_asc') {
+        filteredEmployees.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sort === 'name_desc') {
+        filteredEmployees.sort((a, b) => b.name.localeCompare(a.name));
+      } else if (sort === 'date_asc') {
+        filteredEmployees.sort((a, b) => new Date(a.joinDate) - new Date(b.joinDate));
+      } else if (sort === 'date_desc') {
+        filteredEmployees.sort((a, b) => new Date(b.joinDate) - new Date(a.joinDate));
+      }
+    }
+
+    renderTable();
+  }
+
+  function resetFilters() {
+    document.getElementById('yearFilter').value = '';
+    document.getElementById('teamFilter').value = '';
+    document.getElementById('positionFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('sortFilter').value = '';
+    filteredEmployees = [...employees];
+    renderTable();
+  }
+
+  // 이벤트 리스너 등록
+  document.getElementById('yearFilter').addEventListener('change', applyFilters);
+  document.getElementById('teamFilter').addEventListener('change', applyFilters);
+  document.getElementById('positionFilter').addEventListener('change', applyFilters);
+  document.getElementById('statusFilter').addEventListener('change', applyFilters);
+  document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+  // 초기 렌더링
+  renderTable();
+</script>
+</body>
+</html>

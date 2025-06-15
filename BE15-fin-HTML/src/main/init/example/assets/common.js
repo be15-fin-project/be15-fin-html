@@ -1,4 +1,4 @@
-import { initChatbotEvents } from '../assets/chatbot.js';
+import { initChatbotEvents } from './chatbot.js';
 
 async function loadComponent(id, path, callback) {
     try {

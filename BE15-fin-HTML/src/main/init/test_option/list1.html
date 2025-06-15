@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사원 목록 조회 - 개선된 디자인</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .employee-card {
+      transition: all 0.3s ease;
+    }
+    .employee-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .status-badge {
+      animation: pulse 2s infinite;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    .dept-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .position-badge {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="container mx-auto px-4 py-8">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">사원 목록 조회</h1>
+        <p class="text-gray-600">직원 정보를 효율적으로 관리하세요</p>
+      </div>
+      <div class="flex space-x-3">
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center">
+          <i class="fas fa-plus mr-2"></i>
+          신규 등록
+        </button>
+        <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center">
+          <i class="fas fa-download mr-2"></i>
+          CSV 다운로드
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Filters -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">부서</label>
+        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option>전체</option>
+          <option>개발팀</option>
+          <option>디자인팀</option>
+          <option>기획팀</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">직위</label>
+        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option>전체</option>
+          <option>사원</option>
+          <option>대리</option>
+          <option>과장</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">검색</label>
+        <input type="text" placeholder="이름 또는 사번 검색" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+      <div class="flex items-end">
+        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+          <i class="fas fa-search mr-2"></i>
+          검색
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">전체 직원</p>
+          <p class="text-2xl font-bold text-gray-900">127</p>
+        </div>
+        <div class="bg-blue-100 p-3 rounded-full">
+          <i class="fas fa-users text-blue-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">재직중</p>
+          <p class="text-2xl font-bold text-gray-900">121</p>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+          <i class="fas fa-user-check text-green-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">휴직중</p>
+          <p class="text-2xl font-bold text-gray-900">3</p>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-full">
+          <i class="fas fa-user-clock text-yellow-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">퇴사</p>
+          <p class="text-2xl font-bold text-gray-900">3</p>
+        </div>
+        <div class="bg-red-100 p-3 rounded-full">
+          <i class="fas fa-user-times text-red-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee List -->
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+        <i class="fas fa-list-ul mr-2 text-blue-600"></i>
+        직원 목록
+      </h3>
+    </div>
+
+    <div class="divide-y divide-gray-200">
+      <!-- Employee Card 1 -->
+      <div class="employee-card p-6 animate-fadeInUp">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              김
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">김태훈</h4>
+              <p class="text-sm text-gray-500">ID: 2024002</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="dept-badge text-white px-3 py-1 rounded-full text-sm font-medium">개발팀</span>
+            <span class="position-badge text-white px-3 py-1 rounded-full text-sm font-medium">사원</span>
+            <div class="text-sm text-gray-600">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              2023-02-01
+            </div>
+            <span class="status-badge bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                재직
+                            </span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+              <i class="fas fa-eye mr-1"></i>
+              상세보기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Card 2 -->
+      <div class="employee-card p-6 animate-fadeInUp" style="animation-delay: 0.1s;">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              이
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">이하나</h4>
+              <p class="text-sm text-gray-500">ID: 2024003</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="dept-badge text-white px-3 py-1 rounded-full text-sm font-medium">디자인팀</span>
+            <span class="position-badge text-white px-3 py-1 rounded-full text-sm font-medium">대리</span>
+            <div class="text-sm text-gray-600">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              2022-11-10
+            </div>
+            <span class="status-badge bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                                휴직
+                            </span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+              <i class="fas fa-eye mr-1"></i>
+              상세보기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Card 3 -->
+      <div class="employee-card p-6 animate-fadeInUp" style="animation-delay: 0.2s;">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              박
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">박정민</h4>
+              <p class="text-sm text-gray-500">ID: 2024004</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="dept-badge text-white px-3 py-1 rounded-full text-sm font-medium">전략팀</span>
+            <span class="position-badge text-white px-3 py-1 rounded-full text-sm font-medium">과장</span>
+            <div class="text-sm text-gray-600">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              2020-07-25
+            </div>
+            <span class="status-badge bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                재직
+                            </span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+              <i class="fas fa-eye mr-1"></i>
+              상세보기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Card 4 -->
+      <div class="employee-card p-6 animate-fadeInUp" style="animation-delay: 0.3s;">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              최
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">최윤서</h4>
+              <p class="text-sm text-gray-500">ID: 2024005</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="dept-badge text-white px-3 py-1 rounded-full text-sm font-medium">인사팀</span>
+            <span class="position-badge text-white px-3 py-1 rounded-full text-sm font-medium">사원</span>
+            <div class="text-sm text-gray-600">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              2022-01-10
+            </div>
+            <span class="status-badge bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                재직
+                            </span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+              <i class="fas fa-eye mr-1"></i>
+              상세보기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Card 5 -->
+      <div class="employee-card p-6 animate-fadeInUp" style="animation-delay: 0.4s;">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              정
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">정수현</h4>
+              <p class="text-sm text-gray-500">ID: 2024006</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="dept-badge text-white px-3 py-1 rounded-full text-sm font-medium">기획팀</span>
+            <span class="position-badge text-white px-3 py-1 rounded-full text-sm font-medium">사원</span>
+            <div class="text-sm text-gray-600">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              2019-03-03
+            </div>
+            <span class="status-badge bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                                퇴사
+                            </span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+              <i class="fas fa-eye mr-1"></i>
+              상세보기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Card 6 -->
+      <div class="employee-card p-6 animate-fadeInUp" style="animation-delay: 0.5s;">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              한
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">한승민</h4>
+              <p class="text-sm text-gray-500">ID: 2024007</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="dept-badge text-white px-3 py-1 rounded-full text-sm font-medium">디자인팀</span>
+            <span class="position-badge text-white px-3 py-1 rounded-full text-sm font-medium">사원</span>
+            <div class="text-sm text-gray-600">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              2023-09-18
+            </div>
+            <span class="status-badge bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                재직
+                            </span>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+              <i class="fas fa-eye mr-1"></i>
+              상세보기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center mt-8">
+    <div class="flex items-center space-x-2">
+      <button class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg">1</button>
+      <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300">2</button>
+      <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300">3</button>
+      <span class="px-2 py-2 text-sm text-gray-500">...</span>
+      <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300">10</button>
+      <button class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition duration-300">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 호버 효과 및 상호작용을 위한 JavaScript
+  document.addEventListener('DOMContentLoaded', function() {
+    // 검색 기능 시뮬레이션
+    const searchInput = document.querySelector('input[type="text"]');
+    const employeeCards = document.querySelectorAll('.employee-card');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        employeeCards.forEach(card => {
+          const name = card.querySelector('h4').textContent.toLowerCase();
+          const id = card.querySelector('p').textContent.toLowerCase();
+
+          if (name.includes(searchTerm) || id.includes(searchTerm)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = searchTerm ? 'none' : 'block';
+          }
+        });
+      });
+    }
+
+    // 상세보기 버튼 클릭 이벤트
+    document.querySelectorAll('button').forEach(button => {
+      if (button.textContent.includes('상세보기')) {
+        button.addEventListener('click', function() {
+          const employeeName = this.closest('.employee-card').querySelector('h4').textContent;
+          alert(`${employeeName}의 상세 정보를 조회합니다.`);
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>

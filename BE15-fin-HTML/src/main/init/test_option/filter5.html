@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영수증 비용 관리</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .tab-active {
+            border-bottom: 2px solid #3B82F6;
+            color: #3B82F6;
+        }
+        .filter-button {
+            transition: all 0.2s ease;
+        }
+        .filter-button:hover {
+            background-color: #F3F4F6;
+        }
+        .filter-active {
+            background-color: #EBF8FF;
+            color: #3B82F6;
+            border-color: #3B82F6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center space-x-4">
+                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-receipt text-white text-sm"></i>
+                </div>
+                <h1 class="text-xl font-semibold text-gray-900">영수증</h1>
+                <span class="text-sm text-gray-500">비용 정리</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-user-circle text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="px-6">
+            <nav class="flex space-x-8">
+                <button class="tab-active py-3 px-1 text-sm font-medium border-b-2 border-transparent hover:text-blue-600 transition-colors">
+                    영수증 목록
+                </button>
+                <button class="py-3 px-1 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-blue-600 transition-colors">
+                    비용 분석
+                </button>
+                <button class="py-3 px-1 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-blue-600 transition-colors">
+                    카테고리 관리
+                </button>
+                <button class="py-3 px-1 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-blue-600 transition-colors">
+                    설정
+                </button>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-6 py-6">
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm mb-6">
+        <div class="p-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">영수증 필터</h2>
+            <div class="flex flex-wrap gap-3">
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-user mr-2"></i>이름별
+                </button>
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-calendar mr-2"></i>날짜
+                </button>
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-tags mr-2"></i>분류
+                </button>
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-won-sign mr-2"></i>금액순
+                </button>
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-filter mr-2"></i>필터 정보
+                </button>
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-sort mr-2"></i>필터 방식
+                </button>
+                <button class="filter-button px-4 py-2 text-sm border border-gray-300 rounded-md hover:border-blue-300">
+                    <i class="fas fa-list mr-2"></i>조건 목록
+                </button>
+            </div>
+        </div>
+
+        <!-- Active Filters Display -->
+        <div class="p-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-600">활성 필터:</span>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                            전체
+                            <button class="ml-1 text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        </span>
+                </div>
+                <button class="text-sm text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-redo mr-1"></i>필터 초기화
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="bg-white rounded-lg shadow-sm">
+        <!-- Toolbar -->
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h3 class="text-lg font-medium text-gray-900">영수증 목록</h3>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-sm rounded">0건</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>영수증 추가
+                    </button>
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-upload mr-2"></i>일괄 업로드
+                    </button>
+                    <div class="flex border border-gray-300 rounded-md">
+                        <button class="px-3 py-2 text-gray-500 hover:bg-gray-50">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="px-3 py-2 text-gray-500 hover:bg-gray-50 border-l border-gray-300">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="px-6 py-20 text-center">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-receipt text-3xl text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">마지막 영수증이 없습니다</h3>
+            <p class="text-gray-500 mb-6">새로운 영수증을 추가하여 비용 관리를 시작해보세요.</p>
+            <div class="flex justify-center space-x-3">
+                <button class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>첫 번째 영수증 추가
+                </button>
+                <button class="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-camera mr-2"></i>사진으로 추가
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Content - 실제 영수증 목록 (데모용) -->
+    <div class="bg-white rounded-lg shadow-sm mt-6" style="display: none;" id="receiptList">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900">영수증 목록</h3>
+                <span class="px-2 py-1 bg-gray-100 text-gray-600 text-sm rounded">3건</span>
+            </div>
+        </div>
+        <div class="divide-y divide-gray-200">
+            <div class="px-6 py-4 hover:bg-gray-50 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-utensils text-green-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">스타벅스 코리아</h4>
+                            <p class="text-sm text-gray-500">2024-01-15 · 음료/간식</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-gray-900">8,500원</p>
+                        <p class="text-sm text-gray-500">개인</p>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-gas-pump text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">GS칼텍스</h4>
+                            <p class="text-sm text-gray-500">2024-01-14 · 교통/주유</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-gray-900">65,000원</p>
+                        <p class="text-sm text-gray-500">업무</p>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shopping-bag text-orange-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">이마트</h4>
+                            <p class="text-sm text-gray-500">2024-01-13 · 생필품</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-gray-900">45,200원</p>
+                        <p class="text-sm text-gray-500">개인</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Tab functionality
+    document.querySelectorAll('nav button').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            document.querySelectorAll('nav button').forEach(t => {
+                t.classList.remove('tab-active');
+                t.classList.add('text-gray-500');
+            });
+
+            // Add active class to clicked tab
+            this.classList.add('tab-active');
+            this.classList.remove('text-gray-500');
+        });
+    });
+
+    // Filter functionality
+    document.querySelectorAll('.filter-button').forEach(filter => {
+        filter.addEventListener('click', function() {
+            this.classList.toggle('filter-active');
+        });
+    });
+
+    // Demo: Show receipt list when "첫 번째 영수증 추가" is clicked
+    document.querySelector('button[class*="bg-blue-600"]').addEventListener('click', function() {
+        if (this.textContent.includes('첫 번째 영수증 추가')) {
+            document.querySelector('main > div:nth-child(2)').style.display = 'none';
+            document.getElementById('receiptList').style.display = 'block';
+        }
+    });
+
+    // Search functionality (placeholder)
+    function handleSearch(query) {
+        console.log('Searching for:', query);
+    }
+
+    // Filter reset
+    document.querySelector('button[class*="text-blue-600"]:not([class*="bg-blue"])').addEventListener('click', function() {
+        document.querySelectorAll('.filter-active').forEach(filter => {
+            filter.classList.remove('filter-active');
+        });
+    });
+</script>
+</body>
+</html>

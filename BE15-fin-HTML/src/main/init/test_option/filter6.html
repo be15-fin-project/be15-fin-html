@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>영수증 관리 시스템</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+      min-width: 12rem;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      margin-top: 0.25rem;
+    }
+    .dropdown-menu.show {
+      display: block;
+    }
+    .filter-button {
+      position: relative;
+    }
+    .tab-active {
+      border-bottom: 2px solid #3b82f6;
+      color: #3b82f6;
+    }
+    .tab-inactive {
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<div class="max-w-7xl mx-auto p-6">
+  <!-- Header Tabs -->
+  <div class="mb-8">
+    <div class="flex space-x-8 border-b border-gray-200">
+      <button id="tab-receipt" class="pb-4 px-1 text-lg font-medium tab-active transition-colors duration-200">
+        영수증
+      </button>
+      <button id="tab-policy" class="pb-4 px-1 text-lg font-medium tab-inactive transition-colors duration-200">
+        비용 정책
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Area -->
+  <div id="receipt-content" class="content-panel">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">영수증 제출</h2>
+
+    <!-- Filter Section -->
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+      <!-- 미제출, 제출, 확정 상태 필터 -->
+      <div class="flex bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <button class="px-4 py-2 text-sm font-medium bg-gray-100 text-gray-900">미제출</button>
+        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">제출</button>
+        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">확정</button>
+      </div>
+
+      <!-- 작업 필요 드롭다운 -->
+      <div class="filter-button">
+        <button class="filter-btn flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+          <i class="fas fa-exclamation-triangle text-gray-500"></i>
+          <span>작업 필요</span>
+          <i class="fas fa-chevron-down text-gray-400"></i>
+        </button>
+        <div class="dropdown-menu">
+          <div class="py-1">
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">승인 대기</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">반려된 항목</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">수정 필요</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 승인 수단 드롭다운 -->
+      <div class="filter-button">
+        <button class="filter-btn flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+          <i class="fas fa-tag text-gray-500"></i>
+          <span>승인 수단</span>
+          <i class="fas fa-chevron-down text-gray-400"></i>
+        </button>
+        <div class="dropdown-menu">
+          <div class="py-1">
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">신용카드</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">현금</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">계좌이체</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">기타</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 드롭다운 -->
+      <div class="filter-button">
+        <button class="filter-btn flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+          <i class="fas fa-credit-card text-gray-500"></i>
+          <span>카드</span>
+          <i class="fas fa-chevron-down text-gray-400"></i>
+        </button>
+        <div class="dropdown-menu">
+          <div class="py-1">
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">회사 카드</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">개인 카드</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">법인 카드</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 거래 일자 드롭다운 -->
+      <div class="filter-button">
+        <button class="filter-btn flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+          <i class="fas fa-calendar text-gray-500"></i>
+          <span>거래 일자</span>
+          <i class="fas fa-chevron-down text-gray-400"></i>
+        </button>
+        <div class="dropdown-menu">
+          <div class="py-1">
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">오늘</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">이번 주</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">이번 달</button>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">직접 선택</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 필터 추가 버튼 -->
+      <button class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+        <i class="fas fa-plus text-gray-500"></i>
+        <span>필터 추가</span>
+      </button>
+    </div>
+
+    <!-- 빈 상태 메시지 -->
+    <div class="text-center py-16">
+      <div class="text-gray-400 text-lg mb-2">
+        <i class="fas fa-receipt text-4xl mb-4"></i>
+      </div>
+      <p class="text-gray-500">미제출 영수증이 없습니다.</p>
+    </div>
+  </div>
+
+  <!-- 비용 정책 콘텐츠 (숨김) -->
+  <div id="policy-content" class="content-panel hidden">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">비용 정책</h2>
+    <div class="text-center py-16">
+      <div class="text-gray-400 text-lg mb-2">
+        <i class="fas fa-file-contract text-4xl mb-4"></i>
+      </div>
+      <p class="text-gray-500">비용 정책 내용이 여기에 표시됩니다.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 탭 전환 기능
+  document.getElementById('tab-receipt').addEventListener('click', function() {
+    // 탭 스타일 변경
+    document.getElementById('tab-receipt').className = 'pb-4 px-1 text-lg font-medium tab-active transition-colors duration-200';
+    document.getElementById('tab-policy').className = 'pb-4 px-1 text-lg font-medium tab-inactive transition-colors duration-200';
+
+    // 콘텐츠 표시/숨김
+    document.getElementById('receipt-content').classList.remove('hidden');
+    document.getElementById('policy-content').classList.add('hidden');
+  });
+
+  document.getElementById('tab-policy').addEventListener('click', function() {
+    // 탭 스타일 변경
+    document.getElementById('tab-policy').className = 'pb-4 px-1 text-lg font-medium tab-active transition-colors duration-200';
+    document.getElementById('tab-receipt').className = 'pb-4 px-1 text-lg font-medium tab-inactive transition-colors duration-200';
+
+    // 콘텐츠 표시/숨김
+    document.getElementById('policy-content').classList.remove('hidden');
+    document.getElementById('receipt-content').classList.add('hidden');
+  });
+
+  // 드롭다운 기능
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+
+        // 다른 모든 드롭다운 닫기
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          if (menu !== this.nextElementSibling) {
+            menu.classList.remove('show');
+          }
+        });
+
+        // 현재 드롭다운 토글
+        const dropdown = this.nextElementSibling;
+        dropdown.classList.toggle('show');
+      });
+    });
+
+    // 외부 클릭 시 드롭다운 닫기
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+
+    // 드롭다운 내부 클릭 시 이벤트 전파 중단
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+      menu.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    });
+  });
+</script>
+</body>
+</html>

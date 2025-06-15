@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사원 목록 조회 - 스마트 필터</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <style>
+    .filter-grid {
+      display: flex;
+      gap: 30px;
+    }
+    .dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-select {
+      transition: width 0.3s ease;
+      min-width: 80px;
+      max-width: 200px;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background-color: #e6fffa;
+      color: #0d9488;
+    }
+
+    .status-inactive {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+
+    .filter-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .table-hover:hover {
+      background-color: #f8fafc;
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+    }
+
+    .shadow-soft {
+      box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">사원 목록 조회</h1>
+    <p class="text-gray-600">직원 사원의 정보를 조회하고 관리하세요</p>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="bg-white rounded-lg shadow-soft mb-6 p-6">
+    <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+      <i class="fas fa-filter text-blue-500 mr-2"></i>
+      검색 필터
+    </h2>
+
+    <div class="filter-grid">
+      <!-- 부서 Dropdown -->
+      <div class="dropdown-container">
+        <label class="block text-sm font-medium text-gray-700 mb-2">부서</label>
+        <select id="dept-select" class="dropdown-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">전체</option>
+          <option value="개발팀">개발팀</option>
+          <option value="마케팅팀">마케팅팀</option>
+          <option value="영업팀">영업팀</option>
+          <option value="인사팀">인사팀</option>
+          <option value="재무팀">재무팀</option>
+        </select>
+      </div>
+
+      <!-- 직위 Dropdown -->
+      <div class="dropdown-container">
+        <label class="block text-sm font-medium text-gray-700 mb-2">직위</label>
+        <select id="position-select" class="dropdown-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">전체</option>
+          <option value="사원">사원</option>
+          <option value="주임">주임</option>
+          <option value="대리">대리</option>
+          <option value="과장">과장</option>
+          <option value="차장">차장</option>
+          <option value="부장">부장</option>
+        </select>
+      </div>
+
+      <!-- 권한 Dropdown -->
+      <div class="dropdown-container">
+        <label class="block text-sm font-medium text-gray-700 mb-2">권한</label>
+        <select id="auth-select" class="dropdown-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">전체</option>
+          <option value="일반">일반</option>
+          <option value="관리자">관리자</option>
+          <option value="슈퍼관리자">슈퍼관리자</option>
+        </select>
+      </div>
+
+      <!-- 입사일 Range -->
+      <div class="dropdown-container">
+        <label class="block text-sm font-medium text-gray-700 mb-2">입사일</label>
+        <div class="flex items-center space-x-2">
+          <input type="date" id="date-from" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+          <span class="text-gray-500">~</span>
+          <input type="date" id="date-to" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <button onclick="applyFilters()" class="filter-badge text-white px-4 py-2 rounded-md hover:opacity-90 transition-opacity duration-200 flex items-center">
+          <i class="fas fa-search mr-2"></i>
+          검색
+        </button>
+        <button onclick="resetFilters()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors duration-200 flex items-center">
+          <i class="fas fa-undo mr-2"></i>
+          초기화
+        </button>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button onclick="exportCSV()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-200 flex items-center">
+          <i class="fas fa-download mr-2"></i>
+          CSV
+        </button>
+        <button onclick="exportExcel()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center">
+          <i class="fas fa-file-excel mr-2"></i>
+          등록
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="bg-white rounded-lg shadow-soft">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-800">
+          서류 전형
+          <span class="text-blue-600 ml-2" id="result-count">5</span>
+        </h3>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">사원명</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">사번</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">부서</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">직위</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">권한</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">입사일</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상태</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상세</th>
+        </tr>
+        </thead>
+        <tbody id="employee-table-body" class="bg-white divide-y divide-gray-200">
+        <!-- Sample data will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Sample employee data
+  const employeeData = [
+    { id: 1, name: '김태호', empId: '2024002', dept: '개발팀', position: '사원', auth: '일반', hireDate: '2023-02-01', status: '재직' },
+    { id: 2, name: '이수진', empId: '2024003', dept: '마케팅팀', position: '대리', auth: '관리자', hireDate: '2022-05-15', status: '재직' },
+    { id: 3, name: '박영호', empId: '2024004', dept: '영업팀', position: '과장', auth: '관리자', hireDate: '2021-08-10', status: '재직' },
+    { id: 4, name: '최민수', empId: '2024005', dept: '인사팀', position: '부장', auth: '슈퍼관리자', hireDate: '2020-01-20', status: '재직' },
+    { id: 5, name: '정지혜', empId: '2024006', dept: '재무팀', position: '주임', auth: '일반', hireDate: '2023-11-01', status: '휴직' }
+  ];
+
+  let filteredData = [...employeeData];
+
+  // Dynamic width adjustment for dropdowns
+  function adjustDropdownWidth(selectElement) {
+    const tempSpan = document.createElement('span');
+    tempSpan.style.visibility = 'hidden';
+    tempSpan.style.position = 'absolute';
+    tempSpan.style.fontSize = window.getComputedStyle(selectElement).fontSize;
+    tempSpan.style.fontFamily = window.getComputedStyle(selectElement).fontFamily;
+    tempSpan.textContent = selectElement.options[selectElement.selectedIndex].text;
+    document.body.appendChild(tempSpan);
+
+    const textWidth = tempSpan.offsetWidth;
+    document.body.removeChild(tempSpan);
+
+    selectElement.style.width = Math.max(80, Math.min(200, textWidth + 40)) + 'px';
+  }
+
+  // Initialize dropdown widths
+  document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('.dropdown-select');
+    selects.forEach(select => {
+      adjustDropdownWidth(select);
+      select.addEventListener('change', function() {
+        adjustDropdownWidth(this);
+      });
+    });
+
+    renderTable();
+  });
+
+  function renderTable() {
+    const tbody = document.getElementById('employee-table-body');
+    tbody.innerHTML = '';
+
+    filteredData.forEach((employee, index) => {
+      const row = document.createElement('tr');
+      row.className = 'table-hover cursor-pointer';
+      row.onclick = () => viewDetails(employee.id);
+
+      row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-8 w-8">
+                                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <i class="fas fa-user text-blue-600 text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${employee.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${employee.empId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${employee.dept}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${employee.position}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${employee.auth}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${employee.hireDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="status-badge ${employee.status === '재직' ? 'status-active' : 'status-inactive'}">
+                            ${employee.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                        <button class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors">
+                            상세보기
+                        </button>
+                    </td>
+                `;
+
+      tbody.appendChild(row);
+    });
+
+    updateResultCount();
+  }
+
+  function applyFilters() {
+    const dept = document.getElementById('dept-select').value;
+    const position = document.getElementById('position-select').value;
+    const auth = document.getElementById('auth-select').value;
+    const dateFrom = document.getElementById('date-from').value;
+    const dateTo = document.getElementById('date-to').value;
+
+    filteredData = employeeData.filter(employee => {
+      return (!dept || employee.dept === dept) &&
+              (!position || employee.position === position) &&
+              (!auth || employee.auth === auth) &&
+              (!dateFrom || employee.hireDate >= dateFrom) &&
+              (!dateTo || employee.hireDate <= dateTo);
+    });
+
+    renderTable();
+  }
+
+  function resetFilters() {
+    document.getElementById('dept-select').value = '';
+    document.getElementById('position-select').value = '';
+    document.getElementById('auth-select').value = '';
+    document.getElementById('date-from').value = '';
+    document.getElementById('date-to').value = '';
+
+    const selects = document.querySelectorAll('.dropdown-select');
+    selects.forEach(adjustDropdownWidth);
+
+    filteredData = [...employeeData];
+    renderTable();
+  }
+
+  function updateResultCount() {
+    document.getElementById('result-count').textContent = filteredData.length;
+  }
+
+  function viewDetails(employeeId) {
+    alert(`사원 ID ${employeeId}의 상세 정보를 조회합니다.`);
+  }
+
+  function exportCSV() {
+    alert('CSV 파일로 내보내기 기능을 실행합니다.');
+  }
+
+  function exportExcel() {
+    alert('새 사원 등록 페이지로 이동합니다.');
+  }
+</script>
+</body>
+</html>

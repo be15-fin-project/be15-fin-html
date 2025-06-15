@@ -1,4 +1,4 @@
-import { initChatbotEvents } from '../assets/chatbot.js';
+import { initChatbot  } from '../assets/chatbot.js';
 
 async function loadComponent(id, path, callback) {
     try {
@@ -81,8 +81,8 @@ function bindSidebarToggleEvents() {
 window.addEventListener('DOMContentLoaded', () => {
     loadComponent('sidebar-container', '../../components/sidebar.html', bindSidebarToggleEvents);
     loadComponent('chatbot-container', '../../components/chatbot.html', () => {
-        if (typeof initChatbotEvents === 'function') {
-            initChatbotEvents();
+        if (typeof initChatbot  === 'function') {
+            initChatbot();
         }
     });
 });

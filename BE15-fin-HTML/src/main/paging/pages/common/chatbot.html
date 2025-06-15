@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>스마트 챗봇 시스템</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #F9FAFB;
+        }
+
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 64px 16px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 32px;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #4B5563;
+            margin-bottom: 48px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 768px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .card i {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-text {
+            color: #4B5563;
+            font-size: 0.95rem;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="section-title">스마트 챗봇 시스템</h1>
+    <p class="section-subtitle">우측 하단의 챗봇 버튼을 클릭해보세요!</p>
+    <div class="card-grid">
+        <div class="card">
+            <i class="fas fa-robot" style="color: #4F46E5;"></i>
+            <div class="card-title">AI 챗봇</div>
+            <div class="card-text">지능형 AI가 고객의 질문에 실시간으로 답변합니다.</div>
+        </div>
+        <div class="card">
+            <i class="fas fa-question-circle" style="color: #10B981;"></i>
+            <div class="card-title">FAQ 자동 답변</div>
+            <div class="card-text">자주 묻는 질문에 대한 즉시 답변을 제공합니다.</div>
+        </div>
+        <div class="card">
+            <i class="fas fa-clock" style="color: #8B5CF6;"></i>
+            <div class="card-title">24/7 지원</div>
+            <div class="card-text">언제든지 고객 지원을 받을 수 있습니다.</div>
+        </div>
+    </div>
+</div>
+
+<div class="chat-button-container">
+    <button class="chat-button" id="chatButton">
+        <img src="../../assets/images/logo_light.png" alt="Momentum Logo" style="height: 42px;" /></button>
+</div>
+
+<div id="chatModal">
+    <div class="chat-modal-wrapper">
+        <div class="chat-modal">
+            <div class="chat-header">
+                <div class="left">
+                    <img src="../../assets/images/logo_light.png" alt="Momentum Logo" style="height: 42px;" />
+                    <div>
+                        <h3>챗봇 상담</h3>
+                        <p style="font-size: 0.75rem; opacity: 0.9;">온라인</p>
+                    </div>
+                </div>
+                <button id="closeChat"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-faq">
+                <button class="faq-btn" data-question="가격 문의">가격 문의</button>
+                <button class="faq-btn" data-question="결제 방법">결제 방법</button>
+                <button class="faq-btn" data-question="배송 정보">배송 정보</button>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="message">
+                    <div class="chat-avatar">
+                        <img src="../../assets/images/logo.png" alt="Momentum Logo" style="height: 22px;" /></div>
+                    <div class="chat-bubble-bot">안녕하세요! 삼성카드 챗봇 샘입니다. 무엇을 도와드릴까요?</div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input id="messageInput" type="text" placeholder="메시지를 입력하세요..." />
+                <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
